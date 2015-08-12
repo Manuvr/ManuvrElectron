@@ -6,6 +6,7 @@
     <!-- styles -->
     <meta name="viewport" content="width=device-width">
     <script>
+'use strict';
       var ipc           = require('ipc');
       
       var video_cam = null;
@@ -21,6 +22,7 @@
     
     
     <script>
+
       ipc.on('enableCam', function(message) {
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         var constraints = {audio: false, video: true};

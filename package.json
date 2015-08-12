@@ -4,16 +4,25 @@
   "description": "An electron front-end for Manuvrables.",
   "main": "bootstraper.js",
   "dependencies": {
+    "Connector": "git@github.com:Manuvr/Connector.git",
     "babel": "^5.8.21",
+    "babel-core": "^5.8.22",
+    "babel-loader": "^5.3.2",
     "d3": "^3.5.6",
     "electron-rebuild": "^0.2.5",
     "jquery": "^2.1.4",
-    "Connector": "git@github.com:Manuvr/Connector.git"
+    "lodash": "^3.10.1",
+    "minimist": "^1.1.3",
+    "react": "^0.13.3",
+    "webpack": "^1.11.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack-dev-server": "^1.10.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bootstraper.js"
+    "start": "node bootstraper.js",
+    "dev": "webpack-dev-server --config webpack.config.js"
   },
   "author": "Manuvr, Inc",
   "license": ""
