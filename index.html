@@ -5,14 +5,63 @@
     <title>Manuvr Electron Client</title>
     <!-- styles -->
     <meta name="viewport" content="width=device-width">
+    <script>
+      var ipc           = require('ipc');
+      
+      var video_cam = null;
+    </script>
   </head>
 
 
   <body>
-    <div class="container">
+    <div id="container">
     </div>
     <script src='node_modules/jquery/dist/jquery.min.js'></script>
     <script src='node_modules/d3/d3.min.js'></script>
+    
+    
+    <script>
+      ipc.on('enableCam', function(message) {
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        var constraints = {audio: false, video: true};
+
+        function successCallback(stream) {
+          window.stream = stream; // stream available to console
+          if (video_cam === null) {
+            video_cam = document.createElement('video');
+            video_cam.id = 'video_cam';
+            video_cam.autoplay = 'autoplay';
+          }
+          if (window.URL) {
+            video_cam.src = window.URL.createObjectURL(stream);
+          }
+          else {
+            video_cam.src = stream;
+          }
+          document.getElementById('container').appendChild(video_cam);
+        }
+
+        function errorCallback(error){
+          console.log('navigator.getUserMedia error: ', error);
+          if (video_cam) {
+            document.getElementById('container').removeChild(video_cam);
+            video_cam = null;
+          }
+        }
+
+        navigator.getUserMedia(constraints, successCallback, errorCallback);
+      });
+
+      ipc.on('disableCam', function(message) {
+        if (video_cam) {
+          video_cam.pause();
+          video_cam.src = null;
+          document.getElementById('container').removeChild(video_cam);
+          video_cam = null;
+        }
+      });
+    </script>
+
   </body>
 </html>
 

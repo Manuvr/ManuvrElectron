@@ -25,6 +25,12 @@ app.on('ready', function() {
     if (imuGraphWindow)      imuGraphWindow.close();
   });
 
+  
+  mainWindow.webContents.on('dom-ready', function() {
+    mainWindow.webContents.send('enableCam');
+  });
+
+
   mainWindow.show();
 
   // Instantiating a satalite window.
