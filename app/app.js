@@ -1,6 +1,7 @@
 'use strict';
 
-console.log('app me');
+import React from 'react';
+import Debug from './components/debug/debug';
 
-import React from "react";
-React.render(<div className="myDiv">Hello Electron!</div>, document.getElementById('content'));
+React.render(<Debug />, document.getElementById('content'));
+

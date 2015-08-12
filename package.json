@@ -2,7 +2,7 @@
   "name": "ManuvrableNativeClient",
   "version": "1.0.0",
   "description": "An electron front-end for Manuvrables.",
-  "main": "bootstraper.js",
+  "main": "main.js",
   "dependencies": {
     "Connector": "git@github.com:Manuvr/Connector.git",
     "babel": "^5.8.21",
@@ -21,7 +21,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bootstraper.js",
+    "start": "electron .",
     "dev": "webpack-dev-server --config webpack.config.js"
   },
   "author": "Manuvr, Inc",
