@@ -1,12 +1,12 @@
 import React from 'react';
-import BlueTooth from '../xport/xport';
+import BlueTooth from './xport';
 
 
 class Debug extends React.Component {
   render() {
     return (
       <div>
-        <span></span>
+        <span>I'm the Debug</span>
         <BlueTooth />
       </div>
     )

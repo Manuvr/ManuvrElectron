@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import Debug from './components/debug/debug';
+import Root from './containers/Root';
 
-React.render(<Debug />, document.getElementById('content'));
+React.render(<Root />, document.getElementById('root'));
 
