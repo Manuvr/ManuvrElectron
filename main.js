@@ -6,7 +6,147 @@ var $             = require('jquery');
 var mainWindow = null;
 var transportViewWindow = null;
 
+var packageJSON = require('./package.json');
 
+
+
+
+
+/****************************************************************************************************
+ This is stuff that should be cut out as soon as possible. It is hasty copy-pasta.
+ ****************************************************************************************************/
+var Table = require('cli-table');
+var util = require('util');
+/**
+ * This function instantiates a table with the given header and style. Prevents redundant code.
+ *
+ * @param   {array}  header     An array of strings to use as a table header.
+ * @returns {Table}
+ */
+var issueOuterTable = function(header) {
+  var table = new Table({
+    head: header,
+    chars: {
+      'top': '─',
+      'top-mid': '┬',
+      'top-left': '┌',
+      'top-right': '┐',
+      'bottom': '─',
+      'bottom-mid': '┴',
+      'bottom-left': '└',
+      'bottom-right': '┘',
+      'left': '│',
+      'left-mid': '├',
+      'mid': '─',
+      'mid-mid': '┼',
+      'right': '│',
+      'right-mid': '┤',
+      'middle': '│'
+    },
+    style: {
+      'padding-left': 0,
+      'padding-right': 0
+    }
+  });
+  return table;
+}
+
+/****************************************************************************************************
+ * Let's bring in the MHB stuff...                                                                   *
+ ****************************************************************************************************/
+var mSession = require('MHB/lib/mSession.js'); // session factory
+var sessionGenerator = new mSession();
+
+var LBTransport = require('MHB/lib/transports/loopback.js'); // loopback
+
+var lb = new LBTransport();
+
+// We track instantiated sessions with this object.
+var sessions = {};
+
+// By passing in the transports, we are returned sessions. When a session is successfully
+//   setup, the actor variable will become a reference to the specific kind of manuvrable
+//   that connected to the given transport.
+sessions.actor0 = sessionGenerator.init(lb.transport0);
+sessions.actor1 = sessionGenerator.init(lb.transport1);
+
+
+/**
+ * This function is where all toClient callbacks are funneled to (if they are not
+ *   specifically handled elsewhere). Common client broadcasts should probably be handled here.
+ *   
+ * @param   {string}  ses     The name of the session that emitted the event.
+ * @param   {string}  origin  The component of the session that emitted the event.
+ * @param   {string}  method  The method being emitted.
+ * @param   {object}  data    An object containing the arguments to the method.
+ */
+function toClientAggregation(ses, origin, method, data) {
+  var ses_obj = sessions[ses];
+  switch (method) {
+    case 'log': // Client is getting a log from somewhere.
+      if (data[1] && data[1] <= 7) {
+        console.log((Math.round(Date.now()/1000).toString()+'\t'+ses) + ' (' + origin + "):\t" + data[0]+"\n");
+      }
+      break;
+    case 'config':
+      // A session is telling us that it experienced a configuration change.
+      showSessionConfig(ses, data);
+      break;
+    default:
+      {
+        var table = issueOuterTable(['Source', 'Method', 'Arguments']);
+        table.push([ses+'->'+origin, method, util.inspect(data, {depth: 10})]);
+        console.log(table.toString());
+      }
+      break;
+  }
+}
+
+
+
+// Now, for each session that we have, we should add the toClient listener.
+// This is the means by which events are passed from other components to be
+//   shown to the user, sent via API, etc...
+sessions.actor0.on('toClient', function(origin, type, data) {
+  toClientAggregation('actor0', origin, type, data);
+});
+
+sessions.actor1.on('toClient', function(origin, type, data) {
+  toClientAggregation('actor1', origin, type, data);
+});
+
+
+/**
+ * This fxn does the cleanup required to exit gracefully, and then ends the process.
+ * This function does not return.
+ */
+function quit(exit_code) {
+  // Write a config file if the conf is dirty.
+  { //saveConfig(function(err) {
+    if (exit_code) {
+      console.log('Exiting with reason: ' + exit_code);
+    }
+    
+    if (err) {
+      console.log('Failed to save config prior to exit. Changes will be lost.');
+    }
+      process.exit(); // An hero...
+} //});
+}
+
+
+// We should bind to some things in the process, so we can clean up.
+process.on('SIGHUP',  function() { quit('SIGHUP');  });
+process.on('SIGINT',  function() { quit('SIGINT');  });
+process.on('SIGQUIT', function() { quit('SIGQUIT'); });
+process.on('SIGABRT', function() { quit('SIGABRT'); });
+process.on('SIGTERM', function() { quit('SIGTERM'); });
+
+
+
+/****************************************************************************************************
+ * This is where we setup the front-end of things...                                                 *
+ ****************************************************************************************************/
 app.on('window-all-closed', function() {
   if (process.platform != 'darwin') {
     app.quit();
@@ -27,7 +167,7 @@ app.on('ready', function() {
 
   
   mainWindow.webContents.on('dom-ready', function() {
-    mainWindow.webContents.send('enableCam');
+    sessions.actor0.emit('fromClient', 'transport', 'connect', [true]);
   });
 
 
