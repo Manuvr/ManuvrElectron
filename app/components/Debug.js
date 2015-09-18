@@ -1,5 +1,5 @@
 import React from 'react';
-import BlueTooth from './xport';
+import BlueTooth from './Xport';
 
 
 class Debug extends React.Component {
@@ -11,6 +11,6 @@ class Debug extends React.Component {
       </div>
     )
   }
-}
+} 
 
 export default Debug;
