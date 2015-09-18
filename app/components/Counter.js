@@ -20,6 +20,9 @@ class Counter extends Component {
   }
 }
 
+
+// This is a safety measure to cause logs if we violates a constraint.
+// These might be any type.
 Counter.propTypes = {
   increment: PropTypes.func.isRequired,
   incrementIfOdd: PropTypes.func.isRequired,

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Counter from '../components/Counter';
 import Debug from '../components/Debug';
 import * as CounterActions from '../actions/counter';
+import * as MHBActions from '../actions/MHBActions';
 
 class DebugApp extends Component {
   render() {

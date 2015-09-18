@@ -168,6 +168,11 @@ app.on('ready', function() {
   
   mainWindow.webContents.on('dom-ready', function() {
     sessions.actor0.emit('fromClient', 'transport', 'connect', [true]);
+    mainWindow.webContents.send('toClient', 'This made it across.');
+  });
+
+  mainWindow.webContents.on('fromClient', function(message) {
+    console.log('IPC: fromClient');    
   });
 
 
