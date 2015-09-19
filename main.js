@@ -12,46 +12,6 @@ var util = require('util');
 
 
 
-
-/****************************************************************************************************
- This is stuff that should be cut out as soon as possible. It is hasty copy-pasta.
- ****************************************************************************************************/
-var Table = require('cli-table');
-var util = require('util');
-/**
- * This function instantiates a table with the given header and style. Prevents redundant code.
- *
- * @param   {array}  header     An array of strings to use as a table header.
- * @returns {Table}
- */
-var issueOuterTable = function(header) {
-  var table = new Table({
-    head: header,
-    chars: {
-      'top': '─',
-      'top-mid': '┬',
-      'top-left': '┌',
-      'top-right': '┐',
-      'bottom': '─',
-      'bottom-mid': '┴',
-      'bottom-left': '└',
-      'bottom-right': '┘',
-      'left': '│',
-      'left-mid': '├',
-      'mid': '─',
-      'mid-mid': '┼',
-      'right': '│',
-      'right-mid': '┤',
-      'middle': '│'
-    },
-    style: {
-      'padding-left': 0,
-      'padding-right': 0
-    }
-  });
-  return table;
-}
-
 /****************************************************************************************************
  * Let's bring in the MHB stuff...                                                                   *
  ****************************************************************************************************/
@@ -109,7 +69,15 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({width: 1000, height: 600});
+  mainWindow = new BrowserWindow(
+    {
+      width: 1000,
+      height: 600, 
+      icon: './app/manuvr_transparent.png',
+      title: 'Manuvr Host Bridge',
+      'subpixel-font-scaling': true
+    }
+  );
 
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
   mainWindow.openDevTools();
@@ -149,33 +117,34 @@ app.on('ready', function() {
 
   
   mainWindow.webContents.on('dom-ready', function() {
-    //TODO:  Perhaps at this point we should push the client object back to the session factory?
     // Listener to take input from the user back into MHB.
     ipc.on('fromClient', function(event, ipc_args) {
-      if ('hub' != ipc_args[0]) {
-        sessions[ipc_args[0]].emit('fromClient', ipc_args[1], ipc_args[2], ipc_args[3]);
-      }
-      else {
-        var method = ipc_args[1];
-        // This is something that the UI wants handled in the main thread.
-        switch (method) {
-          case 'newSession':
-            buildNewSession(ipc_args[2], ipc_args[3], 
-              function(err) {
-                if (err) {
-                  console.log('Failed to add a new session because '+err);
-                }
-                else {
-                  mainWindow.webContents.send('sessionList', Object.keys(sessions));
-                }
+      var method = ipc_args.shift();
+      switch (method) {
+        case 'hub':
+          if (sessions.hasOwnProperty(method)) {
+            // This is the pass-through to instantiated sessions.
+            sessions[method].emit('fromClient', ipc_args[1], ipc_args[2], ipc_args[3]);
+          }
+          break;
+        case 'newSession':
+          buildNewSession(ipc_args[2], ipc_args[3], 
+            function(err) {
+              if (err) {
+                console.log('Failed to add a new session because '+err);
               }
-            );
-            break;
-          case 'log':
-          default:
-            console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
-            break;
-        }
+              else {
+                mainWindow.webContents.send('sessionList', Object.keys(sessions));
+              }
+            }
+          );
+          break;
+        case 'log':
+          console.log('Renderthread:\t'+ipc_args[2]);
+          break;
+        default:
+          console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
+          break;
       }
     });
     
