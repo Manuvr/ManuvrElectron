@@ -41,7 +41,7 @@ function quit(exit_code) {
     if (exit_code) {
       console.log('Exiting with reason: ' + exit_code);
     }
-    
+
     if (exit_code) {
       console.log('Failed to save config prior to exit. Changes will be lost.');
     }
@@ -72,7 +72,7 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow(
     {
       width: 1000,
-      height: 600, 
+      height: 600,
       icon: './app/manuvr_transparent.png',
       title: 'Manuvr Host Bridge',
       'subpixel-font-scaling': true
@@ -82,12 +82,12 @@ app.on('ready', function() {
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
   mainWindow.openDevTools();
 
-  mainWindow.on('closed', function() {  
+  mainWindow.on('closed', function() {
     mainWindow = null;
     // Close any open satalite windows...
   });
 
-  
+
   // By passing in the transports, we are returned sessions. When a session is successfully
   //   setup, the actor variable will become a reference to the specific kind of manuvrable
   //   that connected to the given transport.
@@ -115,7 +115,7 @@ app.on('ready', function() {
     }
   }
 
-  
+
   mainWindow.webContents.on('dom-ready', function() {
     // Listener to take input from the user back into MHB.
     ipc.on('fromClient', function(event, ipc_args) {
@@ -129,7 +129,7 @@ app.on('ready', function() {
           }
           break;
         case 'newSession':
-          buildNewSession(ipc_args[0], ipc_args[1], 
+          buildNewSession(ipc_args[0], ipc_args[1],
             function(err) {
               if (err) {
                 console.log('Failed to add a new session because '+err);
@@ -148,10 +148,10 @@ app.on('ready', function() {
           break;
       }
     });
-    
+
     // We should tell the front-end what transports we know of.
-    mainWindow.webContents.send('transportList', Object.keys(transports));
-    mainWindow.webContents.send('sessionList', Object.keys(sessions));
+    //mainWindow.webContents.send('transportList', Object.keys(transports));
+    //mainWindow.webContents.send('sessionList', Object.keys(sessions));
   });
 
   mainWindow.show();
@@ -163,4 +163,3 @@ app.on('ready', function() {
   //transportViewWindow.setMenu(null);
   //transportViewWindow.show();
 });
-

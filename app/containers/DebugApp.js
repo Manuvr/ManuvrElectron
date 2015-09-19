@@ -11,7 +11,9 @@ import Mhb from '../components/MHB';
 import * as CounterActions from '../actions/counter';
 import * as mActions from '../actions/mActions';
 
-
+ipc.on('toClient', function(...args) {
+  dispatch(mActions.incoming(args));
+})
 
 class DebugApp extends Component {
   render() {
@@ -29,10 +31,11 @@ class DebugApp extends Component {
           incrementAsync={actions.incrementAsync}
           decrement={actions.decrement}
           counter={counter}
-        />*/}
+        />
         <Debug />
+        */}
 
-        <Mhb actions={actions} mConfig={mConfig} />
+        <Mhb actions={actions} mConfig={mConfig} dispatch={dispatch} />
         <div>Connecting?: {this.props.mConfig.connecting}</div>
       </div>
     );

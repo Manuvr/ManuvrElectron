@@ -17,25 +17,25 @@ class XPort extends React.Component {
       var args   = ipc_args ? ipc_args.shift() : undefined;
       console.log('IPC: '+event+'\n' + origin+'->' +method + ipc_args);
       // TODO: Do something smart here? Move this to the store? Wat do, guise?   ---J. Ian
-      
+
     });
   }
-  
-  
+
+
   moreMoo() {
     this.setState({moo: this.state.moo+1});
     // PS.... you can send events back into MHB this way....
-    ipc.send('fromClient', ['hub', 'newSession', 'lb0', 'actor99']);
+    //ipc.send('fromClient', ['hub', 'newSession', 'lb0', 'actor99']);
   }
-  
-  
+
+
   render() {
     return (
       <div>
       <div onClick={   this.moreMoo.bind(this)  }>
         Clickable moreMoo()
       </div>
-      
+
       <div>
         { this.state.moo }
       </div>

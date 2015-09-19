@@ -2,12 +2,11 @@ import { AWAITING_CONNECTION } from '../actions/mActions';
 
 const initialState = {
   connecting: "No",
-  config: {
-    session:{},
-    engine:{},
-    transport{},
-    client:{}
-  }
+  session: "",
+  engine: "",
+  transport: "",
+  client: ""
+
 };
 
 export default function mConfig(state = initialState, action) {

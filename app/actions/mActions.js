@@ -18,16 +18,23 @@ export function disconnect() {
   };
 }
 
-export function message(sess, dest, msgType, payload) {
-  ipc.send('fromClient', [sess, dest, msgType, payload]);
-  return;
+export function message(args) {
+  //ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
+  console.log("RUNNIN! ", args);
+  return (args) => {
+    ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
+  }
 }
 
 
 // IPC RECEIVE ACTIONS
-export function incoming(sess, org, msgType, payload) {
+export function incoming(args) {
+  console.log(args[0], "(", args[1], ") :: ", args[2], " = ", args[3]);
   return {
     type: INCOMING,
-
+    sess: args[0],
+    origin: args[1],
+    msgType: args[2],
+    payload: args[3]
   }
 }
