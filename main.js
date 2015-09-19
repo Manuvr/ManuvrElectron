@@ -98,7 +98,14 @@ app.on('ready', function() {
           sessions[name] = sessionGenerator.init(transports[xport]);
           sessions[name].on('toClient', function(origin, method, data) {
               //console.log('BRDCAST TO RENDER '+ses +'(origin)'+origin+' '+ method);
-              mainWindow.webContents.send('toClient', [name, origin, method, data]);
+              switch (method) {
+                case 'log':
+                  console.log('Mainthread:\t'+data[0]);
+                  break;
+                default:
+                  mainWindow.webContents.send('toClient', [name, origin, method, data]);
+                  break;
+              }
             }
           );
         }
@@ -119,39 +126,33 @@ app.on('ready', function() {
   mainWindow.webContents.on('dom-ready', function() {
     // Listener to take input from the user back into MHB.
     ipc.on('fromClient', function(event, ipc_args) {
-      console.log(util.inspect(ipc_args));
-      var method = ipc_args.shift();
-      switch (method) {
-        case 'hub':
-          if (sessions.hasOwnProperty(method)) {
-            // This is the pass-through to instantiated sessions.
-            sessions[method].emit('fromClient', ipc_args[0], ipc_args[1], ipc_args[2]);
-          }
-          break;
-        case 'newSession':
-          buildNewSession(ipc_args[0], ipc_args[1],
-            function(err) {
-              if (err) {
-                console.log('Failed to add a new session because '+err);
-              }
-              else {
-                mainWindow.webContents.send('sessionList', Object.keys(sessions));
-              }
-            }
-          );
-          break;
-        case 'log':
-          console.log('Renderthread:\t'+ipc_args[0]);
-          break;
-        default:
-          console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(ipc_args));
-          break;
+      var ses_name = ipc_args.shift();
+      if (sessions.hasOwnProperty(ses_name)) {
+        // This is the pass-through to instantiated sessions.
+        sessions[ses_name].emit('fromClient', ipc_args[0], ipc_args[1], ipc_args[2]);
       }
     });
+      
+    ipc.on('newSession', function(event, ipc_args) {
+      buildNewSession(ipc_args[0], ipc_args[1],
+        function(err) {
+          if (err) {
+            console.log('Failed to add a new session because '+err);
+          }
+          else {
+            mainWindow.webContents.send('sessionList', Object.keys(sessions));
+          }
+        }
+      );
+    });
 
+    ipc.on('log', function(event, ipc_args) {
+      console.log('Renderthread:\t'+ipc_args[0]);
+    });
+    
     // We should tell the front-end what transports we know of.
-    //mainWindow.webContents.send('transportList', Object.keys(transports));
-    //mainWindow.webContents.send('sessionList', Object.keys(sessions));
+    mainWindow.webContents.send('transportList', Object.keys(transports));
+    mainWindow.webContents.send('sessionList', Object.keys(sessions));
   });
 
   mainWindow.show();

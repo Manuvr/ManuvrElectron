@@ -3,7 +3,7 @@ export const INCOMING = 'INCOMING'
 
 
 export function connect() {
-  //ipc.send('fromClient', ['actor0', 'transport', 'connect', true]);
+  ipc.send('fromClient', ['actor007', 'transport', 'connect', true]);
   return {
     type: AWAITING_CONNECTION,
     value: "Yes"
@@ -11,7 +11,7 @@ export function connect() {
 }
 
 export function disconnect() {
-  //ipc.send('fromClient', ['actor0', 'transport', 'connect', false]);
+  ipc.send('fromClient', ['actor007', 'transport', 'connect', false]);
   return {
     type: AWAITING_CONNECTION,
     value: "No"
@@ -20,8 +20,14 @@ export function disconnect() {
 
 export function message(args) {
   //ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
-  console.log("RUNNIN! ", args);
-  ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
+  ipc.send('fromClient', args);
+  return {};
+}
+
+
+export function toHub(method, args) {
+  //ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
+  ipc.send(method, args);
   return {};
 }
 

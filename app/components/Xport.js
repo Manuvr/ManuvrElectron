@@ -10,15 +10,15 @@ class XPort extends React.Component {
     this.state = {
       moo: 0
     };
-    ipc.on('toClient', function(event, ipc_args) {
-      var ses    = ipc_args ? ipc_args.shift() : undefined;
-      var origin = ipc_args ? ipc_args.shift() : undefined;
-      var method = ipc_args ? ipc_args.shift() : undefined;
-      var args   = ipc_args ? ipc_args.shift() : undefined;
-      console.log('IPC: '+event+'\n' + origin+'->' +method + ipc_args);
-      // TODO: Do something smart here? Move this to the store? Wat do, guise?   ---J. Ian
-
-    });
+    //ipc.on('toClient', function(event, ipc_args) {
+    //  var ses    = ipc_args ? ipc_args.shift() : undefined;
+    //  var origin = ipc_args ? ipc_args.shift() : undefined;
+    //  var method = ipc_args ? ipc_args.shift() : undefined;
+    //  var args   = ipc_args ? ipc_args.shift() : undefined;
+    //  console.log('IPC: '+event+'\n' + origin+'->' +method + ipc_args);
+    //  // TODO: Do something smart here? Move this to the store? Wat do, guise?   ---J. Ian
+    //
+    //});
   }
 
 

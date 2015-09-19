@@ -8,7 +8,7 @@ class Mhb extends Component {
 
     return (
       <div>
-        <button onClick={function(){ actions.message(['hub', 'newSession', 'lb0', 'actor007'])}}> WAT </button>
+        <button onClick={() => actions.toHub('newSession', ['lb0', 'actor007'])}> WAT </button>
         <br/>
         <button onClick={mConfig.connecting === "Yes" ? actions.disconnect : actions.connect}>
           {mConfig.connecting === "Yes" ? "Disconnect" : "Connect"}

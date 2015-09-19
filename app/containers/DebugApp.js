@@ -11,16 +11,26 @@ import Mhb from '../components/MHB';
 import * as CounterActions from '../actions/counter';
 import * as mActions from '../actions/mActions';
 
-ipc.on('toClient', function(...args) {
-  dispatch(mActions.incoming(args));
-})
 
 class DebugApp extends Component {
+  
   render() {
     // declare the state names from your reducers.index
     const { mConfig, counter, dispatch } = this.props;
     // bind your action creators with this syntax
     const actions = bindActionCreators({...mActions, ...CounterActions}, dispatch);
+
+    ipc.on('toClient', function(args) {
+        dispatch(mActions.incoming(args));
+    });
+
+    ipc.on('sessionList', function(args) {
+        console.log(args);
+    });
+
+    ipc.on('transportList', function(args) {
+        console.log(args);
+    });
 
     // Counter is set up using redux. Everything below Debug is not.
     return (
