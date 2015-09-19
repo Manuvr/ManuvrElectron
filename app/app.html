@@ -7,9 +7,12 @@
   <body>
     <div id="root"></div>
     <!--<script src="http://localhost:8080/webpack-dev-server.js"></script>-->
-<script>    
-var ipc           = require('ipc');
-</script>
+    <script>
+      // This silly-sauce is to make the IPC namespace available later on. All this is
+      //   being wrapped up by webpack, so whatever we bring in here *should* be usable 
+      //   downstream. Right??   ---J. Ian
+      var ipc           = require('ipc');
+    </script>
     <script src="http://localhost:8080/app/bundle.js"></script>
         
   </body>

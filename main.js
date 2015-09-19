@@ -8,6 +8,7 @@ var transportViewWindow = null;
 
 var packageJSON = require('./package.json');
 
+var util = require('util');
 
 
 
@@ -104,18 +105,6 @@ function toClientAggregation(ses, origin, method, data) {
 
 
 
-// Now, for each session that we have, we should add the toClient listener.
-// This is the means by which events are passed from other components to be
-//   shown to the user, sent via API, etc...
-sessions.actor0.on('toClient', function(origin, type, data) {
-  toClientAggregation('actor0', origin, type, data);
-});
-
-sessions.actor1.on('toClient', function(origin, type, data) {
-  toClientAggregation('actor1', origin, type, data);
-});
-
-
 /**
  * This fxn does the cleanup required to exit gracefully, and then ends the process.
  * This function does not return.
@@ -155,6 +144,36 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
   mainWindow = new BrowserWindow({width: 1000, height: 600});
+
+
+  // Now, for each session that we have, we should add the toClient listener.
+  // This is the means by which events are passed from other components to be
+  //   shown to the user, sent via API, etc...
+  for (var ses in sessions) {
+    if (sessions.hasOwnProperty(ses)) {
+      // Listener to inform user of goings-on inside MHB.
+      sessions[ses].on('toClient', function(origin, method, data) {
+        mainWindow.webContents.send(ses, origin, method, data);
+      });
+      
+      // Listener to take input from the user back into MHB.
+      mainWindow.webContents.on(ses, function(ses, target_module, method, args) {
+        if ('client' != target_module) {
+          sessions[ses].emit('fromClient', target_module, method, args);
+        }
+        else {
+          // This is something that the UI wants handled in the main thread.
+          switch (method) {
+            case 'log':
+            default:
+              console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
+              break;
+          }
+        }
+      });
+    }
+  }  
+
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
   mainWindow.openDevTools();
 
@@ -168,10 +187,10 @@ app.on('ready', function() {
   
   mainWindow.webContents.on('dom-ready', function() {
     sessions.actor0.emit('fromClient', 'transport', 'connect', [true]);
-    mainWindow.webContents.send('toClient', 'This made it across.');
+    //TODO:  Perhaps at this point we should push the client object back to the session factory?
   });
 
-  mainWindow.webContents.on('fromClient', function(message) {
+  mainWindow.webContents.on('fromClient', function(ses, target_module, method, args) {
     console.log('IPC: fromClient');    
   });
 
