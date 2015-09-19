@@ -165,6 +165,9 @@ app.on('ready', function() {
                 if (err) {
                   console.log('Failed to add a new session because '+err);
                 }
+                else {
+                  mainWindow.webContents.send('sessionList', Object.keys(sessions));
+                }
               }
             );
             break;
@@ -177,6 +180,8 @@ app.on('ready', function() {
     });
     
     // We should tell the front-end what transports we know of.
+    mainWindow.webContents.send('transportList', Object.keys(transports));
+    mainWindow.webContents.send('sessionList', Object.keys(sessions));
   });
 
   mainWindow.show();
