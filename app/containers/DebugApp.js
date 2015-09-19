@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+// import components that are used here
 import Counter from '../components/Counter';
 import Debug from '../components/Debug';
+import Mhb from '../components/MHB';
+
+// import action creators that are used here
 import * as CounterActions from '../actions/counter';
-import * as MHBActions from '../actions/MHBActions';
+import * as mActions from '../actions/mActions';
 
 class DebugApp extends Component {
   render() {
-    const { counter, dispatch } = this.props;
-    const actions = bindActionCreators(CounterActions, dispatch);
+    // declare the state names from your reducers.index
+    const { mConfig, counter, dispatch } = this.props;
+    // bind your action creators with this syntax
+    const actions = bindActionCreators({...mActions, ...CounterActions}, dispatch);
 
     // Counter is set up using redux. Everything below Debug is not.
     return (
@@ -21,6 +28,7 @@ class DebugApp extends Component {
           counter={counter}
         />
         <Debug />
+        <Mhb name="Connect" action={actions.connect} />
       </div>
     );
   }

@@ -1,1 +1,14 @@
+old/app/bower_components
 node_modules
+./.idea/
+.idea
+.idea/*
+.floo
+.flooignore
+temp.js
+.idea/workspace.xml
+.idea/scopes/scope_settings.xml
+.swp
+.swo
+.DS_Store
+.directory

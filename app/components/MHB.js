@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 
-
-class MHB extends Component {
+class Mhb extends Component {
   render() {
-    
+    return (
+      <div>
+        <button onClick={this.props.action}>{this.props.name}</button>
+      </div>
+    )
   }
 }
 
-
-export default MHB;
+export default Mhb;
