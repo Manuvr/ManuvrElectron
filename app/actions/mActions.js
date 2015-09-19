@@ -21,9 +21,8 @@ export function disconnect() {
 export function message(args) {
   //ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
   console.log("RUNNIN! ", args);
-  return (args) => {
-    ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
-  }
+  ipc.send('fromClient', [args[0], args[1], args[2], args[3]]);
+  return {};
 }
 
 

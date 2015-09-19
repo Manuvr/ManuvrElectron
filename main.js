@@ -144,7 +144,7 @@ app.on('ready', function() {
           console.log('Renderthread:\t'+ipc_args[0]);
           break;
         default:
-          console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
+          console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(ipc_args));
           break;
       }
     });
