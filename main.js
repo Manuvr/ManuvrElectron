@@ -168,13 +168,9 @@ app.on('ready', function() {
         });
         
         // Listener to take input from the user back into MHB.
-        ipc.on(ses, function(event, ipc_args) {
-          var target_module = ipc_args.shift();
-          var method = ipc_args.shift();
-          var args = ipc_args.shift();
-          if ('client' != target_module) {
-            console.log(util.inspect(target_module));
-            sesObj.emit('fromClient', target_module, method, args);
+        ipc.on('fromClient', function(event, ipc_args) {
+          if ('client' != ipc_args[1]) {
+            sessions[ipc_args[0]].emit('fromClient', ipc_args[1], ipc_args[2], ipc_args[3]);
           }
           else {
             // This is something that the UI wants handled in the main thread.
