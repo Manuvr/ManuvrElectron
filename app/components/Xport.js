@@ -25,7 +25,7 @@ class XPort extends React.Component {
   moreMoo() {
     this.setState({moo: this.state.moo+1});
     // PS.... you can send events back into MHB this way....
-    ipc.send('fromClient', ['actor0', 'transport', 'connect', true]);
+    ipc.send('fromClient', ['hub', 'newSession', 'lb0', 'actor99']);
   }
   
   

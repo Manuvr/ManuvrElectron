@@ -62,48 +62,14 @@ var LBTransport = require('MHB/lib/transports/loopback.js'); // loopback
 
 var lb = new LBTransport();
 
+
+var transports = {
+  lb0: lb.transport0,
+  lb1: lb.transport1
+};
+
 // We track instantiated sessions with this object.
 var sessions = {};
-
-// By passing in the transports, we are returned sessions. When a session is successfully
-//   setup, the actor variable will become a reference to the specific kind of manuvrable
-//   that connected to the given transport.
-sessions.actor0 = sessionGenerator.init(lb.transport0);
-sessions.actor1 = sessionGenerator.init(lb.transport1);
-
-
-/**
- * This function is where all toClient callbacks are funneled to (if they are not
- *   specifically handled elsewhere). Common client broadcasts should probably be handled here.
- *   
- * @param   {string}  ses     The name of the session that emitted the event.
- * @param   {string}  origin  The component of the session that emitted the event.
- * @param   {string}  method  The method being emitted.
- * @param   {object}  data    An object containing the arguments to the method.
- */
-function toClientAggregation(ses, origin, method, data) {
-  var ses_obj = sessions[ses];
-  switch (method) {
-    case 'log': // Client is getting a log from somewhere.
-      if (data[1] && data[1] <= 7) {
-        console.log((Math.round(Date.now()/1000).toString()+'\t'+ses) + ' (' + origin + "):\t" + data[0]+"\n");
-      }
-      break;
-    case 'config':
-      // A session is telling us that it experienced a configuration change.
-      showSessionConfig(ses, data);
-      break;
-    default:
-      {
-        var table = issueOuterTable(['Source', 'Method', 'Arguments']);
-        table.push([ses+'->'+origin, method, util.inspect(data, {depth: 10})]);
-        console.log(table.toString());
-      }
-      break;
-  }
-}
-
-
 
 /**
  * This fxn does the cleanup required to exit gracefully, and then ends the process.
@@ -154,37 +120,63 @@ app.on('ready', function() {
   });
 
   
-  mainWindow.webContents.on('dom-ready', function() {
-    // Now, for each session that we have, we should add the toClient listener.
-    // This is the means by which events are passed from other components to be
-    //   shown to the user, sent via API, etc...
-    for (var ses in sessions) {
-      if (sessions.hasOwnProperty(ses)) {
-        var sesObj = sessions[ses];
-        // Listener to inform user of goings-on inside MHB.
-        sesObj.on('toClient', function(origin, method, data) {
-          //console.log('BRDCAST TO RENDER '+ses +'(origin)'+origin+' '+ method);
-          mainWindow.webContents.send('toClient', [ses, origin, method, data]);
-        });
-        
-        // Listener to take input from the user back into MHB.
-        ipc.on('fromClient', function(event, ipc_args) {
-          if ('client' != ipc_args[1]) {
-            sessions[ipc_args[0]].emit('fromClient', ipc_args[1], ipc_args[2], ipc_args[3]);
-          }
-          else {
-            // This is something that the UI wants handled in the main thread.
-            switch (method) {
-              case 'log':
-              default:
-                console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
-                break;
+  // By passing in the transports, we are returned sessions. When a session is successfully
+  //   setup, the actor variable will become a reference to the specific kind of manuvrable
+  //   that connected to the given transport.
+  var buildNewSession =function(xport, name, callback) {
+    if (transports.hasOwnProperty(xport)) {
+      if (name != undefined && name !== '') {
+        if (!sessions.hasOwnProperty(name)) {
+          sessions[name] = sessionGenerator.init(transports[xport]);
+          sessions[name].on('toClient', function(origin, method, data) {
+              //console.log('BRDCAST TO RENDER '+ses +'(origin)'+origin+' '+ method);
+              mainWindow.webContents.send('toClient', [name, origin, method, data]);
             }
-          }
-        });
+          );
+        }
+        else {
+          callback('a session by that name already exists.');
+        }
       }
-    }  
+      else {
+        callback('the provided session name is invalid.');
+      }
+    }
+    else {
+      callback('the named transport cannot be found.');
+    }
+  }
+
+  
+  mainWindow.webContents.on('dom-ready', function() {
     //TODO:  Perhaps at this point we should push the client object back to the session factory?
+    // Listener to take input from the user back into MHB.
+    ipc.on('fromClient', function(event, ipc_args) {
+      if ('hub' != ipc_args[0]) {
+        sessions[ipc_args[0]].emit('fromClient', ipc_args[1], ipc_args[2], ipc_args[3]);
+      }
+      else {
+        var method = ipc_args[1];
+        // This is something that the UI wants handled in the main thread.
+        switch (method) {
+          case 'newSession':
+            buildNewSession(ipc_args[2], ipc_args[3], 
+              function(err) {
+                if (err) {
+                  console.log('Failed to add a new session because '+err);
+                }
+              }
+            );
+            break;
+          case 'log':
+          default:
+            console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
+            break;
+        }
+      }
+    });
+    
+    // We should tell the front-end what transports we know of.
   });
 
   mainWindow.show();
