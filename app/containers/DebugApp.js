@@ -11,6 +11,8 @@ import Mhb from '../components/MHB';
 import * as CounterActions from '../actions/counter';
 import * as mActions from '../actions/mActions';
 
+
+
 class DebugApp extends Component {
   render() {
     // declare the state names from your reducers.index
@@ -21,14 +23,17 @@ class DebugApp extends Component {
     // Counter is set up using redux. Everything below Debug is not.
     return (
       <div>
+        {/*
         <Counter increment={actions.increment}
           incrementIfOdd={actions.incrementIfOdd}
           incrementAsync={actions.incrementAsync}
           decrement={actions.decrement}
           counter={counter}
-        />
+        />*/}
         <Debug />
-        <Mhb name="Connect" action={actions.connect} />
+
+        <Mhb actions={actions} mConfig={mConfig} />
+        <div>Connecting?: {this.props.mConfig.connecting}</div>
       </div>
     );
   }
@@ -36,7 +41,8 @@ class DebugApp extends Component {
 
 function mapStateToProps(state) {
   return {
-    counter: state.counter
+    counter: state.counter,
+    mConfig: state.mConfig
   }
 }
 

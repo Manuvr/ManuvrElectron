@@ -1,9 +1,19 @@
 import { AWAITING_CONNECTION } from '../actions/mActions';
 
-export default function mConfig(state = { connecting: false }, action) {
+const initialState = {
+  connecting: "No",
+  config: {
+    session:{},
+    engine:{},
+    transport{},
+    client:{}
+  }
+};
+
+export default function mConfig(state = initialState, action) {
   switch (action.type) {
   case AWAITING_CONNECTION:
-    return { ...state, connecting: true} ;
+    return { ...state, connecting: action.value} ;
   default:
     return state;
   }

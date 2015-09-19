@@ -2,9 +2,15 @@ import React, { Component, PropTypes } from 'react';
 
 class Mhb extends Component {
   render() {
+    const { actions, mConfig } = this.props;
+
     return (
       <div>
-        <button onClick={this.props.action}>{this.props.name}</button>
+
+        <br/>
+        <button onClick={mConfig.connecting === "Yes" ? actions.disconnect : actions.connect}>
+          {mConfig.connecting === "Yes" ? "Disconnect" : "Connect"}
+        </button>
       </div>
     )
   }
