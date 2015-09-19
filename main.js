@@ -119,16 +119,17 @@ app.on('ready', function() {
   mainWindow.webContents.on('dom-ready', function() {
     // Listener to take input from the user back into MHB.
     ipc.on('fromClient', function(event, ipc_args) {
+      console.log(util.inspect(ipc_args));
       var method = ipc_args.shift();
       switch (method) {
         case 'hub':
           if (sessions.hasOwnProperty(method)) {
             // This is the pass-through to instantiated sessions.
-            sessions[method].emit('fromClient', ipc_args[1], ipc_args[2], ipc_args[3]);
+            sessions[method].emit('fromClient', ipc_args[0], ipc_args[1], ipc_args[2]);
           }
           break;
         case 'newSession':
-          buildNewSession(ipc_args[2], ipc_args[3], 
+          buildNewSession(ipc_args[0], ipc_args[1], 
             function(err) {
               if (err) {
                 console.log('Failed to add a new session because '+err);
@@ -140,7 +141,7 @@ app.on('ready', function() {
           );
           break;
         case 'log':
-          console.log('Renderthread:\t'+ipc_args[2]);
+          console.log('Renderthread:\t'+ipc_args[0]);
           break;
         default:
           console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
