@@ -116,7 +116,7 @@ function quit(exit_code) {
       console.log('Exiting with reason: ' + exit_code);
     }
     
-    if (err) {
+    if (exit_code) {
       console.log('Failed to save config prior to exit. Changes will be lost.');
     }
       process.exit(); // An hero...
@@ -145,55 +145,51 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   mainWindow = new BrowserWindow({width: 1000, height: 600});
 
-
-  // Now, for each session that we have, we should add the toClient listener.
-  // This is the means by which events are passed from other components to be
-  //   shown to the user, sent via API, etc...
-  for (var ses in sessions) {
-    if (sessions.hasOwnProperty(ses)) {
-      // Listener to inform user of goings-on inside MHB.
-      sessions[ses].on('toClient', function(origin, method, data) {
-        mainWindow.webContents.send(ses, origin, method, data);
-      });
-      
-      // Listener to take input from the user back into MHB.
-      mainWindow.webContents.on(ses, function(ses, target_module, method, args) {
-        if ('client' != target_module) {
-          sessions[ses].emit('fromClient', target_module, method, args);
-        }
-        else {
-          // This is something that the UI wants handled in the main thread.
-          switch (method) {
-            case 'log':
-            default:
-              console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
-              break;
-          }
-        }
-      });
-    }
-  }  
-
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
   mainWindow.openDevTools();
 
   mainWindow.on('closed', function() {  
     mainWindow = null;
     // Close any open satalite windows...
-    if (transportViewWindow) transportViewWindow.close();
-    if (imuGraphWindow)      imuGraphWindow.close();
   });
 
   
   mainWindow.webContents.on('dom-ready', function() {
-    sessions.actor0.emit('fromClient', 'transport', 'connect', [true]);
+    // Now, for each session that we have, we should add the toClient listener.
+    // This is the means by which events are passed from other components to be
+    //   shown to the user, sent via API, etc...
+    for (var ses in sessions) {
+      if (sessions.hasOwnProperty(ses)) {
+        var sesObj = sessions[ses];
+        // Listener to inform user of goings-on inside MHB.
+        sesObj.on('toClient', function(origin, method, data) {
+          //console.log('BRDCAST TO RENDER '+ses +'(origin)'+origin+' '+ method);
+          mainWindow.webContents.send('toClient', [ses, origin, method, data]);
+        });
+        
+        // Listener to take input from the user back into MHB.
+        ipc.on(ses, function(event, ipc_args) {
+          var target_module = ipc_args.shift();
+          var method = ipc_args.shift();
+          var args = ipc_args.shift();
+          if ('client' != target_module) {
+            console.log(util.inspect(target_module));
+            sesObj.emit('fromClient', target_module, method, args);
+          }
+          else {
+            // This is something that the UI wants handled in the main thread.
+            switch (method) {
+              case 'log':
+              default:
+                console.log('Main thread received IPC message back. Logging it...\n'+method+'\n'+util.inspect(args));
+                break;
+            }
+          }
+        });
+      }
+    }  
     //TODO:  Perhaps at this point we should push the client object back to the session factory?
   });
-
-  mainWindow.webContents.on('fromClient', function(ses, target_module, method, args) {
-    console.log('IPC: fromClient');    
-  });
-
 
   mainWindow.show();
 
