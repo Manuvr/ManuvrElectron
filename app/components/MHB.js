@@ -11,6 +11,7 @@ class Mhb extends Component {
         <button onClick={() => actions.toHub('newSession', ['lb0', 'actor007'])}> WAT </button>
         <br/>
         <button onClick={() => actions.toHub('window', ['dev_tools'])}> DevTools </button>
+        <button onClick={() => actions.toHub('window', ['dump_sessions'])}> Sessiondump </button>
         <br/>
         <button onClick={mConfig.connecting === "Yes" ? actions.disconnect : actions.connect}>
           {mConfig.connecting === "Yes" ? "Disconnect" : "Connect"}

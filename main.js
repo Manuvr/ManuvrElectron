@@ -151,6 +151,11 @@ app.on('ready', function() {
     
     ipc.on('window', function(event, ipc_args) {
       switch (ipc_args.shift()) {
+        case 'dump_sessions':
+          for (var ses in sessions) {
+            console.log(util.inspect(sessions[ses]) + '\n\n');
+          }
+          break;
         case 'dev_tools':
           if (ipc_args.length > 0) {
             //if () {
