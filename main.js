@@ -80,7 +80,6 @@ app.on('ready', function() {
   );
 
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
-  mainWindow.openDevTools();
 
   mainWindow.on('closed', function() {
     mainWindow = null;
@@ -148,6 +147,25 @@ app.on('ready', function() {
 
     ipc.on('log', function(event, ipc_args) {
       console.log('Renderthread:\t'+ipc_args[0]);
+    });
+    
+    ipc.on('window', function(event, ipc_args) {
+      switch (ipc_args.shift()) {
+        case 'dev_tools':
+          if (ipc_args.length > 0) {
+            //if () {
+            //}
+          }
+          else {
+            if (mainWindow.webContents.isDevToolsOpened()) {
+              mainWindow.webContents.closeDevTools();
+            }
+            else {
+              mainWindow.webContents.openDevTools({detach: true});
+            }
+          }
+          break;
+      }
     });
     
     // We should tell the front-end what transports we know of.
