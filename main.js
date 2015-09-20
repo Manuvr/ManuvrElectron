@@ -1,6 +1,7 @@
 var app           = require('app');
 var BrowserWindow = require('browser-window');
 var ipc           = require('ipc');
+var fs            = require('fs');
 var $             = require('jquery');
 
 var mainWindow = null;
@@ -10,6 +11,124 @@ var packageJSON = require('./package.json');
 
 var util = require('util');
 
+
+
+/** This object stores our presently-active config. This config is the default.
+ *  It may be clobbered by loadConfig().
+ */
+var config = {
+  writtenByVersion:    packageJSON.version,
+  verbosity:           7,
+  logPath:             './logs/'
+};
+
+/** If we have an open log file, this will be a file-descriptor. */
+var current_log_file = false;
+
+
+/**
+ * Open a new log file at the given path.
+ *
+ * @param   {string}  path  The filesystem path where the log directory is located.
+ */
+function openLogFile(path) {
+  fs.open(path, 'ax',
+    function(err, fd) {
+      if (err) {
+        console.log('Failed to create log file (' + path +
+          ') with error (' + err + '). Logging disabled.');
+      } else {
+        current_log_file = fd;
+      }
+    }
+  );
+}
+
+
+/**
+ * Save the current config, if it is dirty.
+ *
+ * @param   {callback}  callback  The function to call when the operation is finished.
+ */
+function saveConfig(callback) {
+  if (config.dirty) {
+    delete config.dirty;
+    config.writtenByVersion = packageJSON.version;
+    if (!callback) {
+      callback = function(err) {
+        if (err) {
+          config.dirty = true;
+          console.log('Error saving configuration: ' + err);
+        } else {
+          console.log('Config was saved.');
+        }
+      }
+    }
+
+    fs.writeFile('./config.json', JSON.stringify(config), callback);
+  } else {
+    // If we don't need to save, fire the callback with no error condition.
+    if (callback) callback(false);
+  }
+}
+
+
+/**
+ * Tries to load a conf file from the given path, or the default path if no path
+ *   is provided. If config load fails, function will populate config with a default
+ *   and mark it dirty.
+ *
+ * @param   {string}  path  The filesystem path where the log directory is located.
+ */
+function loadConfig(path) {
+  if (!path) {
+    path = './config.json';
+  }
+  
+  try {
+    fs.existsSync(path, fs.R_OK);
+    var data = fs.readFileSync(path, 'ascii');
+    if (data) {
+      var temp_config = JSON.parse(data);
+      config = temp_config;
+    }
+    else {
+      console.log('The config file '+path+' seems to be empty. Using config defaults...');
+      config.dirty = true;
+    }
+  }
+  catch (err) {
+    console.log('We experienced an while trying to load config from '+path+'. Error was '+err+'\nUsing config defaults...');
+    config.dirty = true;
+  }
+
+  // Now we should setup logging if we need it...
+  if (config.logPath) {
+    fs.exists(config.logPath,
+      function(exists) {
+        if (exists) {
+          openLogFile(config.logPath + 'mhb-' + Math.floor(new Date() / 1000) + '.log');
+        }
+        else {
+          fs.mkdir(config.logPath,
+            function(err) {
+              if (err) {
+                console.log('Log directory (' + config.logPath + ') does not exist and could not be created. Logging disabled.');
+              }
+              else {
+                openLogFile(config.logPath + 'mhb-' + Math.floor(new Date() / 1000) + '.log');
+              }
+            }
+          );
+        }
+      }
+    );
+  }
+}
+
+
+// Load configuration.
+loadConfig();
 
 
 /****************************************************************************************************
@@ -36,17 +155,20 @@ var sessions = {};
  * This function does not return.
  */
 function quit(exit_code) {
+  if (exit_code) {
+    console.log('Exiting with reason: ' + exit_code);
+  }
+  
   // Write a config file if the conf is dirty.
-  { //saveConfig(function(err) {
-    if (exit_code) {
-      console.log('Exiting with reason: ' + exit_code);
+  saveConfig(function(err) {
+    if (err) {
+      console.log('Failed to save config prior to exit. with error '+err+' Changes will be lost.');
     }
-
-    if (exit_code) {
-      console.log('Failed to save config prior to exit. Changes will be lost.');
+    if (process.platform != 'darwin') {
+      app.quit();
     }
-      process.exit(); // An hero...
-} //});
+    process.exit(); // An hero...
+  });
 }
 
 
@@ -63,9 +185,7 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
  * This is where we setup the front-end of things...                                                 *
  ****************************************************************************************************/
 app.on('window-all-closed', function() {
-  if (process.platform != 'darwin') {
-    app.quit();
-  }
+  quit('SIGQUIT');
 });
 
 app.on('ready', function() {
