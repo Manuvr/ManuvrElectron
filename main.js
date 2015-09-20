@@ -17,9 +17,11 @@ var util = require('util');
  *  It may be clobbered by loadConfig().
  */
 var config = {
-  writtenByVersion:    packageJSON.version,
-  verbosity:           7,
-  logPath:             './logs/'
+  window_size:      [1000, 700],
+  window_location:  [0, 0],
+  writtenByVersion: packageJSON.version,
+  verbosity:        7,
+  logPath:          './logs/'
 };
 
 /** If we have an open log file, this will be a file-descriptor. */
@@ -134,8 +136,8 @@ loadConfig();
 /****************************************************************************************************
  * Let's bring in the MHB stuff...                                                                   *
  ****************************************************************************************************/
-var mSession = require('MHB/lib/mSession.js'); // session factory
-var sessionGenerator = new mSession();
+var sessionGenerator = require('MHB/lib/mSession.js'); // session factory
+var mSession = new sessionGenerator();
 
 var LBTransport = require('MHB/lib/transports/loopback.js'); // loopback
 
@@ -191,19 +193,38 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   mainWindow = new BrowserWindow(
     {
-      width: 1000,
-      height: 600,
+      width:  (config.window_size) ? config.window_size[0] : 800,
+      height: (config.window_size) ? config.window_size[1] : 600,
+      
       icon: './app/manuvr_transparent.png',
       title: 'Manuvr Host Bridge',
       'subpixel-font-scaling': true
     }
   );
+  
+  if (config.window_position) {
+    mainWindow.setPosition(config.window_position[0], config.window_position[1]);
+  }
+  else {
+    mainWindow.center();
+  }
 
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
 
   mainWindow.on('closed', function() {
     mainWindow = null;
     // Close any open satalite windows...
+  });
+
+
+  mainWindow.on('resize', function(event) {
+    config.window_size = mainWindow.getSize();
+    config.dirty = true;
+  });
+
+  mainWindow.on('move', function(event) {
+    config.window_position = mainWindow.getPosition();
+    config.dirty = true;
   });
 
 
@@ -214,7 +235,7 @@ app.on('ready', function() {
     if (transports.hasOwnProperty(xport)) {
       if (name != undefined && name !== '') {
         if (!sessions.hasOwnProperty(name)) {
-          sessions[name] = sessionGenerator.init(transports[xport]);
+          sessions[name] = mSession.init(transports[xport]);
           sessions[name].on('toClient', function(origin, method, data) {
               //console.log('BRDCAST TO RENDER '+ses +'(origin)'+origin+' '+ method);
               switch (method) {
