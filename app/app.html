@@ -5,15 +5,14 @@
     <title>Manuvr Debug</title>
   </head>
   <body>
+    <!-- React attachment point -->
     <div id="root"></div>
     <!--<script src="http://localhost:8080/webpack-dev-server.js"></script>-->
-    <script>
-      // This silly-sauce is to make the IPC namespace available later on. All this is
-      //   being wrapped up by webpack, so whatever we bring in here *should* be usable 
-      //   downstream. Right??   ---J. Ian
-      var ipc           = require('ipc');
-    </script>
+
+    <!-- LOADS IPC FROM ELECTRON -->
+    <script>  var ipc = require('ipc'); </script>
+    <!-- LOADS THE WEBPACK BUNDLE -->
     <script src="http://localhost:8080/app/bundle.js"></script>
-        
+
   </body>
 </html>
