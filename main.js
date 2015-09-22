@@ -7,6 +7,7 @@ var $             = require('jquery');
 var mainWindow = null;
 var transportViewWindow = null;
 
+// This is the client's version information.
 var packageJSON = require('./package.json');
 
 var util = require('util');
@@ -23,28 +24,6 @@ var config = {
   verbosity:        7,
   logPath:          './logs/'
 };
-
-/** If we have an open log file, this will be a file-descriptor. */
-var current_log_file = false;
-
-
-/**
- * Open a new log file at the given path.
- *
- * @param   {string}  path  The filesystem path where the log directory is located.
- */
-function openLogFile(path) {
-  fs.open(path, 'ax',
-    function(err, fd) {
-      if (err) {
-        console.log('Failed to create log file (' + path +
-          ') with error (' + err + '). Logging disabled.');
-      } else {
-        current_log_file = fd;
-      }
-    }
-  );
-}
 
 
 /**
@@ -136,10 +115,8 @@ loadConfig();
 /****************************************************************************************************
  * Let's bring in the MHB stuff...                                                                   *
  ****************************************************************************************************/
-var sessionGenerator = require('MHB/lib/mSession.js'); // session factory
-var mSession = new sessionGenerator();
 
-var LBTransport = require('MHB/lib/transports/loopback.js'); // loopback
+
 
 var lb = new LBTransport();
 
@@ -149,8 +126,6 @@ var transports = {
   lb1: lb.transport1
 };
 
-// We track instantiated sessions with this object.
-var sessions = {};
 
 /**
  * This fxn does the cleanup required to exit gracefully, and then ends the process.
@@ -228,53 +203,23 @@ app.on('ready', function() {
   });
 
 
-  // By passing in the transports, we are returned sessions. When a session is successfully
-  //   setup, the actor variable will become a reference to the specific kind of manuvrable
-  //   that connected to the given transport.
-  var buildNewSession =function(xport, name, callback) {
-    if (transports.hasOwnProperty(xport)) {
-      if (name != undefined && name !== '') {
-        if (!sessions.hasOwnProperty(name)) {
-          sessions[name] = mSession.init(transports[xport]);
-          sessions[name].on('toClient', function(origin, method, data) {
-              //console.log('BRDCAST TO RENDER '+ses +'(origin)'+origin+' '+ method);
-              switch (method) {
-                case 'log':
-                  console.log('Mainthread:\t'+data[0]);
-                  break;
-                default:
-                  mainWindow.webContents.send('toClient', [name, origin, method, data]);
-                  break;
-              }
-            }
-          );
-        }
-        else {
-          callback('a session by that name already exists.');
-        }
-      }
-      else {
-        callback('the provided session name is invalid.');
-      }
-    }
-    else {
-      callback('the named transport cannot be found.');
-    }
-  }
-
-
   mainWindow.webContents.on('dom-ready', function() {
+    var hub = new mHub(this, config);
+    
     // Listener to take input from the user back into MHB.
     ipc.on('fromClient', function(event, ipc_args) {
-      var ses_name = ipc_args.shift();
-      if (sessions.hasOwnProperty(ses_name)) {
-        // This is the pass-through to instantiated sessions.
-        sessions[ses_name].emit('fromClient', ipc_args[0], ipc_args[1], ipc_args[2]);
-      }
+      // This is the pass-through to instantiated sessions.
+      hub.fromClient(ipc_args[0], ipc_args[1], ipc_args[2], ipc_args[3]);
+    });
+      
+    // Listener to take input from the user back into MHB.
+    ipc.on('fromClient', function(event, ipc_args) {
+      // This is the pass-through to instantiated sessions.
+      hub.fromClient(ipc_args[0], ipc_args[1], ipc_args[2], ipc_args[3]);
     });
       
     ipc.on('newSession', function(event, ipc_args) {
-      buildNewSession(ipc_args[0], ipc_args[1],
+      hub.buildNewSession(ipc_args[0], ipc_args[1],
         function(err) {
           if (err) {
             console.log('Failed to add a new session because '+err);
@@ -287,7 +232,13 @@ app.on('ready', function() {
     });
 
     ipc.on('log', function(event, ipc_args) {
-      console.log('Renderthread:\t'+ipc_args[0]);
+      // This is the client, so we observe logging in a manner appropriate for us,
+      //   likely respecting some filter. But we still pass back into the hub to
+      //   write to the log file.
+      var body      = ipc_args.shift();
+      var verbosity = (ipc_args.length > 0) ? ipc_args.shift() : 7;
+      console.log('Renderthread:\t'+body);
+      hub.log('client', body, verbosity);
     });
     
     ipc.on('window', function(event, ipc_args) {
@@ -314,9 +265,7 @@ app.on('ready', function() {
       }
     });
     
-    // We should tell the front-end what transports we know of.
-    mainWindow.webContents.send('transportList', Object.keys(transports));
-    mainWindow.webContents.send('sessionList', Object.keys(sessions));
+    hub.clientReady();
   });
 
   mainWindow.show();
