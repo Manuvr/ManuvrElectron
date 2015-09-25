@@ -32,14 +32,14 @@ module.exports = {
       exclude: /node_modules/,
       include: __dirname
     },
-    //{
-      //test: /\.js$/,
-      //loaders: ['babel'],
-      //include: path.join(__dirname, '..', '..', 'src')
-    //},
+   {
+      test: /\.less/,
+      loaders: ['style-loader', 'css-loader', 'less-loader'],
+      include: __dirname
+    },
     {
       test: /\.css?$/,
-      loaders: ['style', 'raw'],
+      loaders: ['style-loader','css-loader'],
       include: __dirname
     }]
   },
