@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Row, Col } from 'elemental';
+import * as Elemental from 'elemental';
 
-import topNav from './topNav';
+import topNav from './topNav.js';
 
 class Mhb extends Component {
 
@@ -11,17 +11,18 @@ class Mhb extends Component {
 
   render() {
     const { mConfig, cb } = this.props;
-    let Elemental.Row
 
     var sessionName = "actor007";
 
+    let Button = Elemental.Button
+    let Row = Elemental.Row
+    let Topnav = topNav
+
     //actions.message(['hub', 'newSession', 'lb0', 'actor69'])
-
-
     return (
       <div>
         <Row>
-          <topNav mConfig={mConfig} cb={cb} />
+          <Topnav />
         </Row>
         <Row>
           Everything Else

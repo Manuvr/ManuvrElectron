@@ -1,74 +1,43 @@
-export default defaultState {
+export default {
 
-  "uiConfig": {
-    "currentSession": "",
-    "uiColorScheme": ""
-  },
-
-  "mConfig": {
-    "window": {
-      state: {
-
-      },
-      inputs: {
-        "toggleDevTools": { label: "Toggle Dev Tools", }
-      },
-      outputs: {
-
-      }
-    }
-
-    "hub": {
-      state: {
-
-      },
-      inputs: {
-        "newSession": { label: "New Session", type: ["string", "string"], labels: ["Session Name", "Transport Name"] }
-      },
-      outputs: {
-
-      }
+    "uiConfig": {
+      "currentSession": "",
+      "uiColorScheme": ""
     },
 
-    "transports": {
-      "transportIdHere": {
+    "mConfig": {
+      "window": {
         state: {
 
         },
         inputs: {
-
+          "toggleDevTools": {
+            label: "Toggle Dev Tools",
+          }
         },
         outputs: {
 
         }
-      }
-    },
+      },
 
-    "sessions": {
-      "sessionIdHere": {
-        "session": {
-          state: {
+      "hub": {
+        state: {
 
-          },
-          inputs: {
-
-          },
-          outputs: {
-
+        },
+        inputs: {
+          "newSession": {
+            label: "New Session",
+            type: ["string", "string"],
+            labels: ["Session Name", "Transport Name"]
           }
         },
-        "transport": {
-          state: {
+        outputs: {
 
-          },
-          inputs: {
+        }
+      },
 
-          },
-          outputs: {
-
-          }
-        },
-        "engine": {
+      "transports": {
+        "transportIdHere": {
           state: {
 
           },
@@ -79,7 +48,44 @@ export default defaultState {
 
           }
         }
+      },
+
+      "sessions": {
+        "sessionIdHere": {
+          "session": {
+            state: {
+
+            },
+            inputs: {
+
+            },
+            outputs: {
+
+            }
+          },
+          "transport": {
+            state: {
+
+            },
+            inputs: {
+
+            },
+            outputs: {
+
+            }
+          },
+          "engine": {
+            state: {
+
+            },
+            inputs: {
+
+            },
+            outputs: {
+
+            }
+          }
+        }
       }
     }
-  }
 }

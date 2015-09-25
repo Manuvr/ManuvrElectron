@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 
-import Debug from '../components/Debug';
 import Mhb from '../components/MHB';
 
 import fromHub from '../utils/inboundFunctions';
 import {callbackChain, direct} from '../utils/actions';
-import defaultState from '..utils/defaultState'
+import * as defaultState from '../utils/defaultState'
 
 class DebugApp extends Component {
-  getInitialState() {
-    return defaultState;
-  };
+
+  constructor() {
+    super();
+    this.render = this.render.bind(this);
+    this.state = defaultState;
+  }
 
   mySetState() {
     return this.setState
@@ -22,15 +24,15 @@ class DebugApp extends Component {
     });
   };
 
-  compCb(cbObject, state, this.setState) {
-    callbackChain(cbObject, state, mySetState());
+  compCb(cbObject, state) {
+    callbackChain(cbObject, state, this.setState);
   };
 
   render() {
 
     return (
       <div>
-        <Mhb mConfig={mConfig} cb={compCb} />
+        <Mhb mConfig={this.state} cb={this.compCb} />
       </div>
     );
   }
