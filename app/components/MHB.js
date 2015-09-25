@@ -9,6 +9,10 @@ class Mhb extends Component {
     console.log("I ACTUALLY DID SOMETHING");
   }
 
+  toggleDevTools() {
+    this.props.cb({ origin: "window", method: "toggleDevTools", data: true})
+  }
+
   render() {
     const { mConfig, cb } = this.props;
 
@@ -27,7 +31,9 @@ class Mhb extends Component {
         <Row>
           Everything Else
           <Button onClick={this.handleClick}>This does nothing!</Button>
+          <Button onClick={this.toggleDevTools.bind(this)}>Toggle Dev Tools</Button>
         </Row>
+        Dev Tools Status: {mConfig.mConfig.window.state.toggleDevTools.value.toString()}
 
       </div>
     )
