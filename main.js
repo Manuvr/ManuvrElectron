@@ -136,6 +136,17 @@ process.on('SIGABRT', function() { quit('SIGABRT'); });
 process.on('SIGTERM', function() { quit('SIGTERM'); });
 
 
+/**
+* origin
+* method
+* data
+* module
+* identity
+*/
+function sendMessageToFrontend(message) {
+  mainWindow.webContents.send('api', message);  
+}
+
 
 /****************************************************************************************************
  * This is where we setup the front-end of things...                                                 *
@@ -181,59 +192,59 @@ app.on('ready', function() {
     config.dirty = true;
   });
 
+  
+  var toWindow = function(ipc_args) {
+    switch(ipc_args.method) {
+      case 'toggleDevTools':
+        if (mainWindow.webContents.isDevToolsOpened()) {
+          mainWindow.webContents.closeDevTools();
+        }
+        else {
+          mainWindow.webContents.openDevTools({detach: true});
+        }
+        break;
+      default:
+        console.log('No method named '+ipc_args.method+' in toWindow().');
+        break
+    }
+  };
 
+
+  
   mainWindow.webContents.on('dom-ready', function() {
     var hub = new mHub(config);
 
     // Listener to take input from the user back into MHB.
-    ipc.on('fromClient', function(event, ipc_args) {
-      // This is the pass-through to instantiated sessions.
-      hub.fromClient(ipc_args[0], ipc_args[1], ipc_args[2], ipc_args[3]);
-    });
-      
-    ipc.on('newSession', function(event, ipc_args) {
-      hub.buildNewSession(ipc_args[0], ipc_args[1],
-        function(err) {
-          if (err) {
-            console.log('Failed to add a new session because '+err);
-          }
-          else {
-            mainWindow.webContents.send('sessionList', Object.keys(sessions));
-          }
-        }
-      );
-    });
-
-    ipc.on('log', function(event, ipc_args) {
-      // This is the client, so we observe logging in a manner appropriate for us,
-      //   likely respecting some filter. But we still pass back into the hub to
-      //   write to the log file.
-      var body      = ipc_args.shift();
-      var verbosity = (ipc_args.length > 0) ? ipc_args.shift() : 7;
-      console.log('Renderthread:\t'+body);
-      hub.log('client', body, verbosity);
-    });
-    
-    ipc.on('window', function(event, ipc_args) {
-      switch (ipc_args.shift()) {
-        case 'dump_sessions':
-          for (var ses in sessions) {
-            console.log(util.inspect(sessions[ses]) + '\n\n');
-          }
+    ipc.on('api', function(event, message) {
+      // This is the pass-through to the hub (or the window)
+      switch (message.origin) {
+        case 'transport':
+          // These are messages directed at MHB (the nominal case).
+          hub.toTransport(message);
           break;
-        case 'dev_tools':
-          if (ipc_args.length > 0) {
-            //if () {
-            //}
+        case 'session':
+          // These are messages directed at MHB (the nominal case).
+          hub.toSession(message);
+          break;
+        case 'hub':
+          // These are messages directed at MHB (the nominal case).
+          if (message.method === 'log') {
+            // This is the client, so we observe logging in a manner appropriate for us,
+            //   likely respecting some filter. But we still pass back into the hub to
+            //   write to the log file.
+            var body      = message.data.body;
+            var verbosity = (message.data.verbosity) ? message.data.verbosity : 7;
+            console.log('Renderthread:\t'+body);
           }
-          else {
-            if (mainWindow.webContents.isDevToolsOpened()) {
-              mainWindow.webContents.closeDevTools();
-            }
-            else {
-              mainWindow.webContents.openDevTools({detach: true});
-            }
-          }
+          hub.toHub(message);
+          break;
+        case 'window':
+          // Window operations follow this flow. The hub doesn't know anything
+          //   about the nature of this particular client.
+          that.toWindow(message);
+          break;
+        default:
+          console.log('No origin named '+message.origin+'.');
           break;
       }
     });
