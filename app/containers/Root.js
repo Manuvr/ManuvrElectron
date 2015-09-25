@@ -12,30 +12,25 @@ class DebugApp extends Component {
     return defaultState;
   };
 
+  mySetState() {
+    return this.setState
+  }
+
   componentDidMount() {
-    ipc.on('toClient', function(args){
-        fromHub(args, state, this.setState));
-    });
-
-    ipc.on('sessionList', function(args) {
-        console.log(args);
-    });
-
-    ipc.on('transportList', function(args) {
-        console.log(args);
+    ipc.on('api', function(args){
+        fromHub(args, state, mySetState());
     });
   };
 
-  handleChange(cbObject, state, this.setState) {
-    callbackChain(cbObject, state, this.setState);
+  compCb(cbObject, state, this.setState) {
+    callbackChain(cbObject, state, mySetState());
   };
 
   render() {
 
-
     return (
       <div>
-        <MHBmain mConfig={mConfig} cb={this.handleChange} />
+        <Mhb mConfig={mConfig} cb={compCb} />
       </div>
     );
   }

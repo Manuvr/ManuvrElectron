@@ -1,18 +1,19 @@
 /*
   cbObject:
   {
-    type: (toSession, toTransport, toHub, electronWindow, localState)
+    destination: (hub, window, session, transport)
+    method: (connect, input, other input types)
+    module: (session, engine, transport)
+    data: (typed from the input config)
+    identity: (sessionID, transportID),
 
-    target: (sessionID, transportID),
-    destination: (transport, engine, session),
-    input: (connect, sendToHost, etc),
-    data: ? whatever the data is
   }
  */
 
 export function callbackChain(cbObject, currentState, setState) {
   // DO NOT MANIPULATE CURRENTSTATE
-  switch(cbObject.type) {
+
+  switch(cbObject.destination) {
     case "local":
       break;
     case "sessionID":
