@@ -1,29 +1,31 @@
-import * from _merge from 'lodash.merge'
+import * as _merge from 'lodash.merge'
 
 export function fromHub(args, currentState, setState) {
+
   // DO NOT MUTATE currentState EVAR
-  const origin   = args[0];  // HUB, Session, Transport
-  const ident    = args[1];  // hubID ??, sessionID, transportID
+  // This is just a monkey patch for checking the previous state
 
-  console.log("");
+  const origin    = args.origin; // HUB, Session, Transport, Window
+  const method    = args.method; 
+  const module    = args.module;
+  const data      = args.data;
+  const identity  = args.identity;
 
-  switch(name) {
-    case "hub":
-      const method   = args[2];  // config.output name
-      const data     = args[3];  // data
+  switch(origin) {
+    case "hub":  // config.output name
 
       break;
-    case "session":
-      const module   = args[2];  // hub, session, transport, etc
-      const method   = args[3];  // config.output name
-      const data     = args[4];  // data
-
-      //do something
+    case "session": // data
 
       break;
     case "transport":
 
       break;
+
+    case "window":
+
+      break;
+
     default:
       break;
 
@@ -34,7 +36,7 @@ export function fromHub(args, currentState, setState) {
     case "config":
       let temp = {};
       temp[session, ]
-      setState(_merge({}, currentState, data))
+      setState(_merge({}, currentState["mConfig"], data))
     case ""
   }
 

@@ -1,5 +1,3 @@
-
-
 export default defaultState {
 
   "uiConfig": {
@@ -8,12 +6,24 @@ export default defaultState {
   },
 
   "mConfig": {
+    "window": {
+      state: {
+
+      },
+      inputs: {
+        "toggleDevTools": { label: "Toggle Dev Tools", }
+      },
+      outputs: {
+
+      }
+    }
+
     "hub": {
       state: {
 
       },
       inputs: {
-
+        "newSession": { label: "New Session", type: ["string", "string"], labels: ["Session Name", "Transport Name"] }
       },
       outputs: {
 
@@ -34,16 +44,40 @@ export default defaultState {
       }
     },
 
-    "transports": {
+    "sessions": {
       "sessionIdHere": {
-        state: {
+        "session": {
+          state: {
 
+          },
+          inputs: {
+
+          },
+          outputs: {
+
+          }
         },
-        inputs: {
+        "transport": {
+          state: {
 
+          },
+          inputs: {
+
+          },
+          outputs: {
+
+          }
         },
-        outputs: {
+        "engine": {
+          state: {
 
+          },
+          inputs: {
+
+          },
+          outputs: {
+
+          }
         }
       }
     }
