@@ -12,6 +12,8 @@ var packageJSON = require('./package.json');
 
 var util = require('util');
 
+var mHub = require('MHB/lib/mHub.js');
+
 
 
 /** This object stores our presently-active config. This config is the default.
@@ -82,29 +84,6 @@ function loadConfig(path) {
     console.log('We experienced an while trying to load config from '+path+'. Error was '+err+'\nUsing config defaults...');
     config.dirty = true;
   }
-
-  // Now we should setup logging if we need it...
-  if (config.logPath) {
-    fs.exists(config.logPath,
-      function(exists) {
-        if (exists) {
-          openLogFile(config.logPath + 'mhb-' + Math.floor(new Date() / 1000) + '.log');
-        }
-        else {
-          fs.mkdir(config.logPath,
-            function(err) {
-              if (err) {
-                console.log('Log directory (' + config.logPath + ') does not exist and could not be created. Logging disabled.');
-              }
-              else {
-                openLogFile(config.logPath + 'mhb-' + Math.floor(new Date() / 1000) + '.log');
-              }
-            }
-          );
-        }
-      }
-    );
-  }
 }
 
 
@@ -118,13 +97,13 @@ loadConfig();
 
 
 
-var lb = new LBTransport();
-
-
-var transports = {
-  lb0: lb.transport0,
-  lb1: lb.transport1
-};
+//var lb = new LBTransport();
+//
+//
+//var transports = {
+//  lb0: lb.transport0,
+//  lb1: lb.transport1
+//};
 
 
 /**
@@ -204,14 +183,8 @@ app.on('ready', function() {
 
 
   mainWindow.webContents.on('dom-ready', function() {
-    var hub = new mHub(this, config);
-    
-    // Listener to take input from the user back into MHB.
-    ipc.on('fromClient', function(event, ipc_args) {
-      // This is the pass-through to instantiated sessions.
-      hub.fromClient(ipc_args[0], ipc_args[1], ipc_args[2], ipc_args[3]);
-    });
-      
+    var hub = new mHub(config);
+
     // Listener to take input from the user back into MHB.
     ipc.on('fromClient', function(event, ipc_args) {
       // This is the pass-through to instantiated sessions.
