@@ -136,17 +136,6 @@ process.on('SIGABRT', function() { quit('SIGABRT'); });
 process.on('SIGTERM', function() { quit('SIGTERM'); });
 
 
-/**
-* origin
-* method
-* data
-* module
-* identity
-*/
-function sendMessageToFrontend(message) {
-  mainWindow.webContents.send('api', message);  
-}
-
 
 /****************************************************************************************************
  * This is where we setup the front-end of things...                                                 *
@@ -210,9 +199,29 @@ app.on('ready', function() {
   };
 
 
+  var dom_loaded = false;
   
   mainWindow.webContents.on('dom-ready', function() {
+    if (dom_loaded) {
+      // TODO: Unload listener?
+      return;
+    }
+    dom_loaded = true;
+
     var hub = new mHub(config);
+    
+    hub.on('toClient', 
+      function(message) {
+        /*
+        * origin
+        * method
+        * data
+        * module
+        * identity
+        */
+        mainWindow.webContents.send('api', message);
+      }
+    );
 
     // Listener to take input from the user back into MHB.
     ipc.on('api', function(event, message) {
