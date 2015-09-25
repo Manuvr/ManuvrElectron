@@ -3,14 +3,14 @@ var BrowserWindow = require('browser-window');
 var ipc           = require('ipc');
 var fs            = require('fs');
 var $             = require('jquery');
+var util          = require('util');
+
 
 var mainWindow = null;
 var transportViewWindow = null;
 
 // This is the client's version information.
 var packageJSON = require('./package.json');
-
-var util = require('util');
 
 var mHub = require('MHB/lib/mHub.js');
 
@@ -23,8 +23,7 @@ var config = {
   window_size:      [1000, 700],
   window_location:  [0, 0],
   writtenByVersion: packageJSON.version,
-  verbosity:        7,
-  logPath:          './logs/'
+  verbosity:        7
 };
 
 
