@@ -67,7 +67,7 @@ function loadConfig(path) {
   if (!path) {
     path = './config.json';
   }
-  
+
   try {
     fs.existsSync(path, fs.R_OK);
     var data = fs.readFileSync(path, 'ascii');
@@ -114,7 +114,7 @@ function quit(exit_code) {
   if (exit_code) {
     console.log('Exiting with reason: ' + exit_code);
   }
-  
+
   // Write a config file if the conf is dirty.
   saveConfig(function(err) {
     if (err) {
@@ -149,13 +149,13 @@ app.on('ready', function() {
     {
       width:  (config.window_size) ? config.window_size[0] : 800,
       height: (config.window_size) ? config.window_size[1] : 600,
-      
+
       icon: './app/manuvr_transparent.png',
       title: 'Manuvr Host Bridge',
       'subpixel-font-scaling': true
     }
   );
-  
+
   if (config.window_position) {
     mainWindow.setPosition(config.window_position[0], config.window_position[1]);
   }
@@ -181,7 +181,7 @@ app.on('ready', function() {
     config.dirty = true;
   });
 
-  
+
   var toWindow = function(ipc_args) {
     switch(ipc_args.method) {
       case 'toggleDevTools':
@@ -200,7 +200,7 @@ app.on('ready', function() {
 
 
   var dom_loaded = false;
-  
+
   mainWindow.webContents.on('dom-ready', function() {
     if (dom_loaded) {
       // TODO: Unload listener?
@@ -209,8 +209,8 @@ app.on('ready', function() {
     dom_loaded = true;
 
     var hub = new mHub(config);
-    
-    hub.on('toClient', 
+
+    hub.on('toClient',
       function(message) {
         /*
         * origin
@@ -250,14 +250,14 @@ app.on('ready', function() {
         case 'window':
           // Window operations follow this flow. The hub doesn't know anything
           //   about the nature of this particular client.
-          that.toWindow(message);
+          toWindow(message);
           break;
         default:
           console.log('No origin named '+message.origin+'.');
           break;
       }
     });
-    
+
     hub.clientReady();
   });
 

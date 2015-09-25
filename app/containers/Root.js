@@ -24,8 +24,8 @@ class DebugApp extends Component {
     });
   };
 
-  compCb(cbObject, state) {
-    callbackChain(cbObject, state, this.setState);
+  compCb(cbObject) {
+    callbackChain(cbObject, this.state, this.setState);
   };
 
   render() {

@@ -15,8 +15,12 @@ export function fromHub(args, currentState, setState) {
     case "hub": // config.output name
       switch (method) {
         case "config":
-          let temp = {};
-          setState(merge({}, currentState["mConfig"], data))
+          //let temp = {};
+          setState(merge({}, currentState["mConfig"], data));
+          break;
+        case "transportList":
+
+          break;
       }
 
       break;
