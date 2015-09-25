@@ -1,13 +1,13 @@
-import merge from 'lodash'
+import {merge, set} from 'lodash'
 
-export function fromHub(args, currentState, setState) {
+export default function fromHub(args, currentState) {
 
   // DO NOT MUTATE currentState EVAR
   // This is just a monkey patch for checking the previous state
 
   const origin = args.origin; // HUB, Session, Transport, Window
   const method = args.method;
-  const module = args.module;
+  const module = args.module; //
   const data = args.data;
   const identity = args.identity;
 
@@ -16,7 +16,7 @@ export function fromHub(args, currentState, setState) {
       switch (method) {
         case "config":
           //let temp = {};
-          setState(merge({}, currentState["mConfig"], data));
+          return { "mConfig" : merge({}, currentState["mConfig"], data) };
           break;
         case "transportList":
 
@@ -32,7 +32,15 @@ export function fromHub(args, currentState, setState) {
       break;
 
     case "window":
+      console.log("got to window")
+      var tempObj = {};
+      // tempObj["mConfig"] = {}
+      // tempObj["mConfig"][origin] = {};
+      // tempObj["mConfig"][origin]["state"] = {};
+      set(tempObj, ["mConfig", origin, "state", method, "value"], data);
 
+      console.log(tempObj)
+      return tempObj;
       break;
 
     default:

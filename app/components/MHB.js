@@ -33,6 +33,7 @@ class Mhb extends Component {
           <Button onClick={this.handleClick}>This does nothing!</Button>
           <Button onClick={this.toggleDevTools.bind(this)}>Toggle Dev Tools</Button>
         </Row>
+        Dev Tools Status: {mConfig.mConfig.window.state.toggleDevTools.value.toString()}
 
       </div>
     )

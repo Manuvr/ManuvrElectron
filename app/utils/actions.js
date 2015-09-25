@@ -27,4 +27,5 @@ export function callbackChain(cbObject, currentState, setState) {
     default:
       console.log("wut?");
   }
+  return {};
 }

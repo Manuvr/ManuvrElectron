@@ -2,13 +2,14 @@ export default {
 
     "uiConfig": {
       "currentSession": "",
-      "uiColorScheme": ""
+      "uiColorScheme": "",
+      "toggleDevTools": false
     },
 
     "mConfig": {
       "window": {
         state: {
-
+          "toggleDevTools": { value: false }
         },
         inputs: {
           "toggleDevTools": {

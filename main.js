@@ -187,9 +187,19 @@ app.on('ready', function() {
       case 'toggleDevTools':
         if (mainWindow.webContents.isDevToolsOpened()) {
           mainWindow.webContents.closeDevTools();
+          mainWindow.webContents.send('api', {
+            origin: "window",
+            method: "toggleDevTools",
+            data: false
+          })
         }
         else {
           mainWindow.webContents.openDevTools({detach: true});
+          mainWindow.webContents.send('api', {
+            origin: "window",
+            method: "toggleDevTools",
+            data: true
+          })
         }
         break;
       default:

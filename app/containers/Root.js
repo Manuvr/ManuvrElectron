@@ -10,22 +10,23 @@ class DebugApp extends Component {
 
   constructor() {
     super();
-    this.render = this.render.bind(this);
+    // This is !@#$ing stupid. ES5 revert soon if we have to manually bind every freaking thing.
     this.state = defaultState;
+    this.render = this.render.bind(this);
+    this.ipcInput = this.ipcInput.bind(this);
+    this.compCb = this.compCb.bind(this);
   }
 
-  mySetState() {
-    return this.setState
+  ipcInput(data) {
+    this.setState(fromHub(data, this.state));
   }
 
   componentDidMount() {
-    ipc.on('api', function(args){
-        fromHub(args, state, mySetState());
-    });
+    ipc.on('api', this.ipcInput);
   };
 
   compCb(cbObject) {
-    callbackChain(cbObject, this.state, this.setState);
+    this.setState(callbackChain(cbObject, this.state));
   };
 
   render() {
