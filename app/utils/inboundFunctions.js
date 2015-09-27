@@ -20,7 +20,7 @@ export default function fromHub(msgObj, intSpec) {
   var val = msgObj.target[msgObj.target.length - 1];
 
   if(val === "_adjunctDef") {
-    //_set(intSpec, path, {});
+    _set(intSpec, path, {});
     _set(retObj, path, msgObj.data);
   } else {
     var outState = _get(intSpec, path.concat("schema", "output", val, "state"));

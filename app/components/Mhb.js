@@ -10,6 +10,7 @@ class Mhb extends Component {
   constructor() {
     super();
     this.toggleDevTools = this.toggleDevTools.bind(this);
+    this.domReady = this.domReady.bind(this);
   }
 
   handleClick() {
@@ -18,6 +19,10 @@ class Mhb extends Component {
 
   toggleDevTools() {
     this.props.cb({ target: ["window", "toggleDevTools"], data: true})
+  }
+
+  domReady() {
+    this.props.cb({ target: ["window", "ready"], data: true })
   }
 
   render() {
@@ -36,12 +41,13 @@ class Mhb extends Component {
           Examples:
           <Button onClick={this.handleClick}>This does nothing!</Button>
           <Button onClick={this.toggleDevTools}>Toggle Dev Tools</Button>
+          <Button onClick={this.domReady}>Dom Ready</Button>
 
 
           <br/><br/>
           <pre>{JSON.stringify(config, null, 2)}</pre>
 
-          
+
       </div>
     )
   }
