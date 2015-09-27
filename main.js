@@ -172,7 +172,7 @@ app.on('ready', function() {
 
 
   var toWindow = function(ipc_args) {
-    switch(ipc_args.method) {
+    switch(ipc_args[0]) {
       case 'ready':
         // The react front-end is ready.
         hub.clientReady();
@@ -182,16 +182,14 @@ app.on('ready', function() {
         if (mainWindow.webContents.isDevToolsOpened()) {
           mainWindow.webContents.closeDevTools();
           mainWindow.webContents.send('api', {
-            origin: "window",
-            method: "toggleDevTools",
+            target: ["window", "toggleDevTools"],
             data: false
           })
         }
         else {
           mainWindow.webContents.openDevTools({detach: true});
           mainWindow.webContents.send('api', {
-            origin: "window",
-            method: "toggleDevTools",
+            target: ["window", "toggleDevTools"],
             data: true
           })
         }
@@ -214,15 +212,10 @@ app.on('ready', function() {
 
     var hub = new mHub(config);
 
-    hub.on('toClient',
+    hub.on('output',
       function(message) {
-        /*
-        * origin
-        * method
-        * data
-        * module
-        * identity
-        */
+        console.log(util.inspect(message));
+        message.target.unshift(['hub']);
         mainWindow.webContents.send('api', message);
       }
     );
@@ -230,18 +223,10 @@ app.on('ready', function() {
     // Listener to take input from the user back into MHB.
     ipc.on('api', function(event, message) {
       // This is the pass-through to the hub (or the window)
-      switch (message.origin) {
-        case 'transport':
-          // These are messages directed at MHB (the nominal case).
-          hub.toTransport(message);
-          break;
-        case 'session':
-          // These are messages directed at MHB (the nominal case).
-          hub.toSession(message);
-          break;
+      switch (message.target[0]) {
         case 'hub':
           // These are messages directed at MHB (the nominal case).
-          if (message.method === 'log') {
+          if (message.target[1] === 'log') {
             // This is the client, so we observe logging in a manner appropriate for us,
             //   likely respecting some filter. But we still pass back into the hub to
             //   write to the log file.
@@ -254,6 +239,7 @@ app.on('ready', function() {
         case 'window':
           // Window operations follow this flow. The hub doesn't know anything
           //   about the nature of this particular client.
+          message.target.shift();
           toWindow(message);
           break;
         default:
