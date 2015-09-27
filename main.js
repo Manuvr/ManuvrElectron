@@ -201,82 +201,83 @@ app.on('ready', function() {
 
 
   var dom_loaded = false;
+  var hub = new mHub(config);
 
+  var toWindow = function(ipc_args) {
+    switch(ipc_args.target[0]) {
+      case 'ready':
+        // The react front-end is ready.
+        hub.clientReady();
+        break;
+
+      case 'toggleDevTools':
+        if (mainWindow.webContents.isDevToolsOpened()) {
+          mainWindow.webContents.closeDevTools();
+        }
+        else {
+          mainWindow.webContents.openDevTools({detach: true});
+        }
+        mainWindow.webContents.send('api', {
+          target: ["window", "toggleDevTools"],
+          data:   mainWindow.webContents.isDevToolsOpened()
+        })
+        break;
+      default:
+        console.log('No method named '+ipc_args.target[0]+' in toWindow().');
+        break
+    }
+  };
+  
+  hub.on('output',
+    function(message) {
+      console.log(util.inspect(message));
+      message.target.unshift(['hub']);
+      if ((message.target.length == 2) && ('_adjunctDef' == message.target[1])) {
+        // If this is a full re-def from hub, we intercept it and glom it into our own.
+        interface_spec.adjuncts.hubs.mHub = _clonedeep(message.data);;
+        message.data = interface_spec;
+        message.target.unshift(['window']);
+      }
+      mainWindow.webContents.send('api', message);
+    }
+  );
+
+
+  // Listener to take input from the user back into MHB.
+  ipc.on('api', function(event, message) {
+    // This is the pass-through to the hub (or the window)
+    switch (message.target[0]) {
+      case 'hub':
+        // These are messages directed at MHB (the nominal case).
+        if (message.target[1] === 'log') {
+          // This is the client, so we observe logging in a manner appropriate for us,
+          //   likely respecting some filter. But we still pass back into the hub to
+          //   write to the log file.
+          var body      = message.data.body;
+          var verbosity = (message.data.verbosity) ? message.data.verbosity : 7;
+          console.log('Renderthread:\t'+body);
+        }
+        hub.toHub(message);
+        break;
+      case 'window':
+        // Window operations follow this flow. The hub doesn't know anything
+        //   about the nature of this particular client.
+        message.target.shift();
+        toWindow(message);
+        break;
+      default:
+        console.log('No origin named '+message.origin+'.');
+        break;
+    }
+  });
+
+  
   mainWindow.webContents.on('dom-ready', function() {
     if (dom_loaded) {
       // TODO: Unload listener?
       return;
     }
     dom_loaded = true;
-
-    var hub = new mHub(config);
-
-    var toWindow = function(ipc_args) {
-      switch(ipc_args.target[0]) {
-        case 'ready':
-          // The react front-end is ready.
-          hub.clientReady();
-          break;
-
-        case 'toggleDevTools':
-          if (mainWindow.webContents.isDevToolsOpened()) {
-            mainWindow.webContents.closeDevTools();
-          }
-          else {
-            mainWindow.webContents.openDevTools({detach: true});
-          }
-          mainWindow.webContents.send('api', {
-            target: ["window", "toggleDevTools"],
-            data:   mainWindow.webContents.isDevToolsOpened()
-          })
-          break;
-        default:
-          console.log('No method named '+ipc_args.target[0]+' in toWindow().');
-          break
-      }
-    };
-
-    hub.on('output',
-      function(message) {
-        console.log(util.inspect(message));
-        message.target.unshift(['hub']);
-        if ((message.target.length == 2) && ('_adjunctDef' == message.target[0])) {
-          // If this is a full re-def from hub, we intercept it and glom it into our own.
-          interface_spec.adjuncts.hubs.mHub = _clonedeep(data);;
-          data = interface_spec;
-          message.target.unshift(['window']);
-        }
-        mainWindow.webContents.send('api', message);
-      }
-    );
-
-    // Listener to take input from the user back into MHB.
-    ipc.on('api', function(event, message) {
-      // This is the pass-through to the hub (or the window)
-      switch (message.target[0]) {
-        case 'hub':
-          // These are messages directed at MHB (the nominal case).
-          if (message.target[1] === 'log') {
-            // This is the client, so we observe logging in a manner appropriate for us,
-            //   likely respecting some filter. But we still pass back into the hub to
-            //   write to the log file.
-            var body      = message.data.body;
-            var verbosity = (message.data.verbosity) ? message.data.verbosity : 7;
-            console.log('Renderthread:\t'+body);
-          }
-          hub.toHub(message);
-          break;
-        case 'window':
-          // Window operations follow this flow. The hub doesn't know anything
-          //   about the nature of this particular client.
-          message.target.shift();
-          toWindow(message);
-          break;
-        default:
-          console.log('No origin named '+message.origin+'.');
-          break;
-      }
-    });
   });
 
   mainWindow.show();
