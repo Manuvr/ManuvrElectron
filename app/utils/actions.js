@@ -8,6 +8,7 @@ export function callbackChain(cbObject, currentState) {
         // and return some setState object
         break;
       default:
+        console.log("actions:" + JSON.stringify(cbObject));
         ipc.send('api', cbObject);
     }
     // only gets here without a return... IE: emits only.

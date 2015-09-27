@@ -2,8 +2,33 @@ export default {
 
 
   "window": {
-    schema: {},
-    adjuncts: {}
+    schema: {
+      state: {
+        'toggleDevTools': {
+          value: false
+        }
+      },
+      input: {
+        'quit': {
+          label: 'Quit',
+          type: 'boolean'
+        },
+        'toggleDevTools': {
+          label: 'OpenTools',
+          type: 'boolean'
+        }
+      },
+      output: {
+        'toggleDevTools': {
+          label: 'Dev tools Open',
+          type: 'boolean'
+        }
+      }
+    },
+    adjuncts: {
+      hubs: {
+      }
+    }
   },
   "mHub": {
     schema: {},

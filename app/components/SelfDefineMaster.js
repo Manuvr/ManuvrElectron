@@ -10,6 +10,7 @@ class SelfDefineMaster extends Component {
   constructor() {
     super();
     this.layerCallback = this.layerCallback.bind(this);
+    this.render = this.render.bind(this);
   }
 
   layerCallback(object) {
@@ -22,6 +23,7 @@ class SelfDefineMaster extends Component {
 
     let Row = Elemental.Row
     let Col = Elemental.Col
+    let layerCallback = this.layerCallback
 
     let compList = [];
 

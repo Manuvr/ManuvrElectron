@@ -22,8 +22,6 @@ class SchemaGroup extends Component {
     let Col = Elemental.Col
 
     let compList = [];
-    let schema = config.schema;
-    let adjuncts = config.adjuncts;
 
     _forOwn(vals, function(value, key) {
       compList.push(<div> {key} </div>);

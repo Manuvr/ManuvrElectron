@@ -22,6 +22,7 @@ class Schema extends Component {
 
     let Row = Elemental.Row
     let Col = Elemental.Col
+    let layerCallback = this.layerCallback;
 
     let compList = [];
 

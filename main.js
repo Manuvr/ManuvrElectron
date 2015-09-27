@@ -156,8 +156,8 @@ var interface_spec = {
     }
   }
 };
- 
- 
+
+
 app.on('window-all-closed', function() {
   quit('SIGQUIT');
 });
@@ -201,6 +201,8 @@ app.on('ready', function() {
 
 
   var toWindow = function(ipc_args) {
+    console.log(ipc_args)
+
     switch(ipc_args[0]) {
       case 'ready':
         // The react front-end is ready.
@@ -254,6 +256,7 @@ app.on('ready', function() {
     // Listener to take input from the user back into MHB.
     ipc.on('api', function(event, message) {
       // This is the pass-through to the hub (or the window)
+        console.log("EVENT: " + JSON.stringify(event) + " : " +  JSON.stringify(message));
       switch (message.target[0]) {
         case 'hub':
           // These are messages directed at MHB (the nominal case).
@@ -270,8 +273,8 @@ app.on('ready', function() {
         case 'window':
           // Window operations follow this flow. The hub doesn't know anything
           //   about the nature of this particular client.
-          message.target.shift();
-          toWindow(message);
+          //message.target.shift();
+          hub.toWindow(message);
           break;
         default:
           console.log('No origin named '+message.origin+'.');
