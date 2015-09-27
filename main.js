@@ -95,16 +95,6 @@ loadConfig();
  ****************************************************************************************************/
 
 
-
-//var lb = new LBTransport();
-//
-//
-//var transports = {
-//  lb0: lb.transport0,
-//  lb1: lb.transport1
-//};
-
-
 /**
  * This fxn does the cleanup required to exit gracefully, and then ends the process.
  * This function does not return.
@@ -183,6 +173,11 @@ app.on('ready', function() {
 
   var toWindow = function(ipc_args) {
     switch(ipc_args.method) {
+      case 'ready':
+        // The react front-end is ready.
+        hub.clientReady();
+        break;
+
       case 'toggleDevTools':
         if (mainWindow.webContents.isDevToolsOpened()) {
           mainWindow.webContents.closeDevTools();
@@ -266,8 +261,6 @@ app.on('ready', function() {
           break;
       }
     });
-
-    hub.clientReady();
   });
 
   mainWindow.show();
