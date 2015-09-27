@@ -5,6 +5,7 @@ var fs            = require('fs');
 var $             = require('jquery');
 var util          = require('util');
 
+var _clonedeep    = require('lodash.clonedeep');
 
 var mainWindow = null;
 var transportViewWindow = null;
@@ -129,6 +130,34 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 /****************************************************************************************************
  * This is where we setup the front-end of things...                                                 *
  ****************************************************************************************************/
+var interface_spec = {
+  schema: {
+    state: {
+    },
+    input: {
+      'quit': {
+        label: 'Quit',
+        type: 'boolean'
+      },
+      'toggleDevTools': {
+        label: 'OpenTools',
+        type: 'boolean'
+      }
+    },
+    output: {
+      'toggleDevTools': {
+        label: 'Dev tools Open',
+        type: 'boolean'
+      }
+    }
+  },
+  adjuncts: {
+    hubs: {
+    }
+  }
+};
+ 
+ 
 app.on('window-all-closed', function() {
   quit('SIGQUIT');
 });
@@ -172,7 +201,7 @@ app.on('ready', function() {
 
 
   var toWindow = function(ipc_args) {
-    switch(ipc_args.method) {
+    switch(ipc_args[0]) {
       case 'ready':
         // The react front-end is ready.
         hub.clientReady();
@@ -181,20 +210,14 @@ app.on('ready', function() {
       case 'toggleDevTools':
         if (mainWindow.webContents.isDevToolsOpened()) {
           mainWindow.webContents.closeDevTools();
-          mainWindow.webContents.send('api', {
-            origin: "window",
-            method: "toggleDevTools",
-            data: false
-          })
         }
         else {
           mainWindow.webContents.openDevTools({detach: true});
-          mainWindow.webContents.send('api', {
-            origin: "window",
-            method: "toggleDevTools",
-            data: true
-          })
         }
+        mainWindow.webContents.send('api', {
+          target: ["window", "toggleDevTools"],
+          data:   mainWindow.webContents.isDevToolsOpened()
+        })
         break;
       default:
         console.log('No method named '+ipc_args.method+' in toWindow().');
@@ -214,15 +237,16 @@ app.on('ready', function() {
 
     var hub = new mHub(config);
 
-    hub.on('toClient',
+    hub.on('output',
       function(message) {
-        /*
-        * origin
-        * method
-        * data
-        * module
-        * identity
-        */
+        console.log(util.inspect(message));
+        message.target.unshift(['hub']);
+        if ((message.target.length == 2) && ('_adjunctDef' == message.target[0])) {
+          // If this is a full re-def from hub, we intercept it and glom it into our own.
+          interface_spec.adjuncts.hubs.mHub = _clonedeep(data);;
+          data = interface_spec;
+          message.target.unshift(['window']);
+        }
         mainWindow.webContents.send('api', message);
       }
     );
@@ -230,18 +254,10 @@ app.on('ready', function() {
     // Listener to take input from the user back into MHB.
     ipc.on('api', function(event, message) {
       // This is the pass-through to the hub (or the window)
-      switch (message.origin) {
-        case 'transport':
-          // These are messages directed at MHB (the nominal case).
-          hub.toTransport(message);
-          break;
-        case 'session':
-          // These are messages directed at MHB (the nominal case).
-          hub.toSession(message);
-          break;
+      switch (message.target[0]) {
         case 'hub':
           // These are messages directed at MHB (the nominal case).
-          if (message.method === 'log') {
+          if (message.target[1] === 'log') {
             // This is the client, so we observe logging in a manner appropriate for us,
             //   likely respecting some filter. But we still pass back into the hub to
             //   write to the log file.
@@ -254,6 +270,7 @@ app.on('ready', function() {
         case 'window':
           // Window operations follow this flow. The hub doesn't know anything
           //   about the nature of this particular client.
+          message.target.shift();
           toWindow(message);
           break;
         default:
