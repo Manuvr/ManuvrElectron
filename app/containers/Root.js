@@ -17,13 +17,15 @@ class DebugApp extends Component {
     this.compCb = this.compCb.bind(this);
   }
 
+  componentDidMount() {
+    ipc.on('api', this.ipcInput);
+    ipc.send('api', { origin: "window", method:"listenerReady", data: true});
+  };
+
   ipcInput(data) {
     this.setState(fromHub(data, this.state));
   }
 
-  componentDidMount() {
-    ipc.on('api', this.ipcInput);
-  };
 
   compCb(cbObject) {
     this.setState(callbackChain(cbObject, this.state));
