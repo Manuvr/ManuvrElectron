@@ -5,6 +5,7 @@ var fs            = require('fs');
 var $             = require('jquery');
 var util          = require('util');
 
+var _clonedeep    = require('lodash.clonedeep');
 
 var mainWindow = null;
 var transportViewWindow = null;
@@ -129,6 +130,34 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 /****************************************************************************************************
  * This is where we setup the front-end of things...                                                 *
  ****************************************************************************************************/
+var interface_spec = {
+  schema: {
+    state: {
+    },
+    input: {
+      'quit': {
+        label: 'Quit',
+        type: 'boolean'
+      },
+      'toggleDevTools': {
+        label: 'OpenTools',
+        type: 'boolean'
+      }
+    },
+    output: {
+      'toggleDevTools': {
+        label: 'Dev tools Open',
+        type: 'boolean'
+      }
+    }
+  },
+  adjuncts: {
+    hubs: {
+    }
+  }
+};
+ 
+ 
 app.on('window-all-closed', function() {
   quit('SIGQUIT');
 });
@@ -181,18 +210,14 @@ app.on('ready', function() {
       case 'toggleDevTools':
         if (mainWindow.webContents.isDevToolsOpened()) {
           mainWindow.webContents.closeDevTools();
-          mainWindow.webContents.send('api', {
-            target: ["window", "toggleDevTools"],
-            data: false
-          })
         }
         else {
           mainWindow.webContents.openDevTools({detach: true});
-          mainWindow.webContents.send('api', {
-            target: ["window", "toggleDevTools"],
-            data: true
-          })
         }
+        mainWindow.webContents.send('api', {
+          target: ["window", "toggleDevTools"],
+          data:   mainWindow.webContents.isDevToolsOpened()
+        })
         break;
       default:
         console.log('No method named '+ipc_args.method+' in toWindow().');
@@ -216,6 +241,12 @@ app.on('ready', function() {
       function(message) {
         console.log(util.inspect(message));
         message.target.unshift(['hub']);
+        if ((message.target.length == 2) && ('_adjunctDef' == message.target[0])) {
+          // If this is a full re-def from hub, we intercept it and glom it into our own.
+          interface_spec.adjuncts.hubs.mHub = _clonedeep(data);;
+          data = interface_spec;
+          message.target.unshift(['window']);
+        }
         mainWindow.webContents.send('api', message);
       }
     );
