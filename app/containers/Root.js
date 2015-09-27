@@ -35,7 +35,7 @@ class DebugApp extends Component {
 
     return (
       <div>
-        <Mhb mConfig={this.state} cb={this.compCb} />
+        <Mhb config={this.state} cb={this.compCb} />
       </div>
     );
   }

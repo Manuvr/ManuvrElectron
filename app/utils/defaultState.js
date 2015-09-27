@@ -2,8 +2,7 @@ export default {
 
     "uiConfig": {
       "currentSession": "",
-      "uiColorScheme": "",
-      "toggleDevTools": false
+      "uiColorScheme": ""
     },
 
     "mConfig": {
@@ -23,17 +22,65 @@ export default {
 
       "hub": {
         state: {
-
-        },
-        inputs: {
-          "newSession": {
-            label: "New Session",
-            type: ["string", "string"],
-            labels: ["Session Name", "Transport Name"]
+          'userEnginePath': {
+            type: 'string',
+            value: './userEngines/'
+          },
+          'logPath': {
+            type: 'string',
+            value: './logs/'
+          },
+          'sessionList': {
+            type: 'array',
+            value: []
+          },
+          'engineList': {
+            type: 'array',
+            value: []
+          },
+          'transportList': {
+            type: 'array',
+            value: []
           }
         },
-        outputs: {
-
+        input: {
+          'quit': {
+            label: 'Quit',
+            type: 'boolean'
+          },
+          'newSession': {
+            label: 'Create Session',
+            type: 'string'
+          },
+          'assignEngine': {
+            label: 'Assign Engine',
+            type: 'object'
+          }
+        },
+        output: {
+          'config': {
+            type: 'object',
+            label: 'ConfigObj'
+          },
+          'log': {
+            type: 'array',
+            label: 'Log'
+          },
+          'sessionList': {
+            type: 'array',
+            label: 'Session list',
+            state: 'sessionList'
+          },
+          'engineList': {
+            type: 'array',
+            label: 'Engine list',
+            state: 'engineList'
+          },
+          'transportList': {
+            type: 'array',
+            label: 'Transport list',
+            state: 'transportList'
+          }
         }
       },
 
