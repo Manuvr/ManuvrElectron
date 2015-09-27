@@ -3,7 +3,9 @@ import * as Elemental from 'elemental';
 
 import {forOwn as _forOwn} from 'lodash';
 
-class SchemaGroup extends Component {
+import SchemaElement from './SchemaElement';
+
+class SchemaType extends Component {
 
   constructor() {
     super();
@@ -27,7 +29,7 @@ class SchemaGroup extends Component {
       compList.push({vals})
     } else {
       _forOwn(vals, function(value, key) {
-          compList.push(<li> {key} </li>)
+          compList.push(<li><SchemaElement type={name} name={key} def={value} /> </li>)
       })
     }
 
@@ -40,4 +42,4 @@ class SchemaGroup extends Component {
   }
 }
 
-export default SchemaGroup;
+export default SchemaType;

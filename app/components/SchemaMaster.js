@@ -3,9 +3,9 @@ import * as Elemental from 'elemental';
 
 import {forOwn as _forOwn} from 'lodash';
 
-import SchemaGroup from './SchemaGroup';
+import SchemaType from './SchemaType';
 
-class Schema extends Component {
+class SchemaMaster extends Component {
 
   constructor() {
     super();
@@ -27,7 +27,7 @@ class Schema extends Component {
     let compList = [];
 
     _forOwn(schema, function(value, key) {
-      compList.push(<SchemaGroup name={key} vals={value} callback={layerCallback}/>);
+      compList.push(<SchemaType name={key} vals={value} callback={layerCallback}/>);
     })
 
     return (
@@ -38,4 +38,4 @@ class Schema extends Component {
   }
 }
 
-export default Schema;
+export default SchemaMaster;

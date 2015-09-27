@@ -3,7 +3,7 @@ import * as Elemental from 'elemental';
 
 import {forOwn as _forOwn } from 'lodash';
 
-import Schema from './Schema';
+import SchemaMaster from './SchemaMaster';
 // **** Class recursion wasn't working, so I switched back to ES5 style ***
 //
 // class Adjunct extends Component {
@@ -70,9 +70,9 @@ var Adjunct = React.createClass({
 
     return (
       <div>
-        {name}
-        <Schema schema={schema} callback={layerCallback} />
-        <ul>{compList}</ul>
+        {name}<br/>
+        Schema:<SchemaMaster schema={schema} callback={layerCallback} />
+        Adjuncts:<ul>{compList}</ul>
       </div>
     )
   }
