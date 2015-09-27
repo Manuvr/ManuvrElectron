@@ -23,15 +23,19 @@ class SchemaGroup extends Component {
 
     let compList = [];
 
-    _forOwn(vals, function(value, key) {
-      compList.push(<div> {key} </div>);
-    })
+    if (name === "name") {
+      compList.push({vals})
+    } else {
+      _forOwn(vals, function(value, key) {
+          compList.push(<li> {key} </li>)
+      })
+    }
 
     return (
-      <div>
-        {name}
-        {compList}
-      </div>
+      <ul>
+        <li>{name}</li>
+        <ul>{compList}</ul>
+      </ul>
     )
   }
 }

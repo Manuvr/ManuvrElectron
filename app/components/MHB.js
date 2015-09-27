@@ -30,18 +30,16 @@ class Mhb extends Component {
 
     return (
       <div>
-        <Row>
           <Topnav />
-        </Row>
-        <Row>
           <SelfDefineMaster config={config} callback={callback} />
-        </Row>
-        <Row>
+
           Examples:
           <Button onClick={this.handleClick}>This does nothing!</Button>
           <Button onClick={this.toggleDevTools}>Toggle Dev Tools</Button>
-          Dev Tools Status: {config.window.schema.state.toggleDevTools.value.toString()}
-        </Row>
+          
+
+          <br/><br/>
+          <pre>{JSON.stringify(config, null, 2)}</pre>
 
       </div>
     )

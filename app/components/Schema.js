@@ -33,7 +33,7 @@ class Schema extends Component {
     return (
       <div>
         {compList}
-      </div>
+        </div>
     )
   }
 }

@@ -4,7 +4,8 @@ import * as Elemental from 'elemental';
 import {forOwn as _forOwn } from 'lodash';
 
 import Schema from './Schema';
-
+// **** Class recursion wasn't working, so I switched back to ES5 style ***
+//
 // class Adjunct extends Component {
 //
 //   constructor() {
@@ -64,14 +65,14 @@ var Adjunct = React.createClass({
     let layerCallback = this.layerCallback
 
     _forOwn(adjuncts, function(value, key) {
-      compList.push(<Adjunct name={key} config={value} callback={layerCallback}/>);
+      compList.push(<li><Adjunct name={key} config={value} callback={layerCallback}/></li>);
     })
 
     return (
       <div>
         {name}
         <Schema schema={schema} callback={layerCallback} />
-        {compList}
+        <ul>{compList}</ul>
       </div>
     )
   }
