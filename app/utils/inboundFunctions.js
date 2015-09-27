@@ -1,50 +1,33 @@
-import {merge, set} from 'lodash'
+import {merge as _merge, set as _set, get as _get, has as _has, forEach as _forEach} from 'lodash'
 
-export default function fromHub(args, currentState) {
-
-  // DO NOT MUTATE currentState EVAR
-  // This is just a monkey patch for checking the previous state
-
-  const origin = args.origin; // HUB, Session, Transport, Window
-  const method = args.method;
-  const module = args.module; //
-  const data = args.data;
-  const identity = args.identity;
-
-  switch (origin) {
-    case "hub": // config.output name
-      switch (method) {
-        case "config":
-          //let temp = {};
-          return { "mConfig" : merge({}, currentState["mConfig"], data) };
-          break;
-        case "transportList":
-
-          break;
-      }
-
-      break;
-    case "session": // data
-
-      break;
-    case "transport":
-
-      break;
-
-    case "window":
-      console.log("got to window")
-      var tempObj = {};
-      // tempObj["mConfig"] = {}
-      // tempObj["mConfig"][origin] = {};
-      // tempObj["mConfig"][origin]["state"] = {};
-      set(tempObj, ["mConfig", origin, "state", method, "value"], data);
-
-      console.log(tempObj)
-      return tempObj;
-      break;
-
-    default:
-      break;
-
+var buildPath = function(target) {
+  var tempArray = []
+  if(target.length > 2) {
+    _forEach(target.slice(0, target.length - 2), function(n){
+      tempArray.push(n, "adjuncts");
+    })
   }
+  tempArray.push(msgObj.target[output.length - 2])
+  return tempArray;
+}
+
+export default function fromHub(msgObj, intSpec) {
+
+  // DO NOT MUTATE intSpec
+
+  var retObj = {};
+  var path = buildPath(msgObj.target);
+  var val = msgObj.target[msgObject.target.length - 1];
+
+  if(val === "_adjunctDef") {
+    _set(retObj, path, data);
+  } else {
+    var outState = _get(intSpec, path.concat("schema", "output", val, "state"));
+    if(outState !== undefined  && _has(intSpec, path.concat("schema", "state", outState))){
+      _set(retObj, path.concat("schema", "state", outState, "value"), data);
+    }
+  }
+  //Emit? Log? Console?
+  console.log(JSON.stringify(msgOBj));
+  return retObj
 }

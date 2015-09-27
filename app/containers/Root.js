@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Mhb from '../components/MHB';
+import Mhb from '../components/Mhb';
 
 import fromHub from '../utils/inboundFunctions';
 import {callbackChain, direct} from '../utils/actions';
@@ -19,7 +19,10 @@ class DebugApp extends Component {
 
   componentDidMount() {
     ipc.on('api', this.ipcInput);
-    ipc.send('api', { origin: "window", method:"listenerReady", data: true});
+    ipc.send('api', {
+        target: ['window', 'ready'],
+        data: true
+    });
   };
 
   ipcInput(data) {

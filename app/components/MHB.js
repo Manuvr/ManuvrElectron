@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import * as Elemental from 'elemental';
+import { map as _map } from 'lodash';
 
-import topNav from './topNav.js';
+import topNav from './topNav';
+import SelfDefineMaster from './SelfDefineMaster';
 
 class Mhb extends Component {
 
@@ -15,34 +17,31 @@ class Mhb extends Component {
   }
 
   toggleDevTools() {
-    this.props.cb({ origin: "window", method: "toggleDevTools", data: true})
+    this.props.cb({ target: ["window", "toggleDevTools"], data: true})
   }
 
   render() {
     const { config, callback } = this.props;
-
-    var sessionName = "actor007";
 
     let Button = Elemental.Button
     let Row = Elemental.Row
     let Col = Elemental.Col
     let Topnav = topNav
 
-    //actions.message(['hub', 'newSession', 'lb0', 'actor69'])
     return (
       <div>
         <Row>
           <Topnav />
         </Row>
         <Row>
-
+          <SelfDefineMaster config={config} callback={callback} />
         </Row>
         <Row>
-          Stuff in MHB below here
+          Examples:
           <Button onClick={this.handleClick}>This does nothing!</Button>
           <Button onClick={this.toggleDevTools}>Toggle Dev Tools</Button>
+          Dev Tools Status: {config.window.schema.state.toggleDevTools.value.toString()}
         </Row>
-        Dev Tools Status: {config.mConfig.window.state.toggleDevTools.value.toString()}
 
       </div>
     )
