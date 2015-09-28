@@ -9,12 +9,12 @@ class SelfDefineMaster extends Component {
 
   constructor() {
     super();
-    this.layerCallback = this.layerCallback.bind(this);
     this.render = this.render.bind(this);
+    this.layerCallback = this.layerCallback.bind(this);
   }
 
   layerCallback(object) {
-    // do nothing!
+    //console.log(JSON.stringify(object, null, 2))
     this.props.callback(object)
   }
 

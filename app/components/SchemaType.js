@@ -22,14 +22,15 @@ class SchemaType extends Component {
 
     let Row = Elemental.Row
     let Col = Elemental.Col
+    let layerCallback = this.layerCallback
 
     let compList = [];
 
-    if (name === "name") {
+    if (name !== "inputs" && name !== "outputs" && name !== "state") {
       compList.push({vals})
     } else {
       _forOwn(vals, function(value, key) {
-          compList.push(<li><SchemaElement type={name} name={key} def={value} /> </li>)
+          compList.push(<li><SchemaElement type={name} name={key} def={value} callback={layerCallback}/> </li>)
       })
     }
 

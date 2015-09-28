@@ -11,6 +11,7 @@ class Mhb extends Component {
     super();
     this.toggleDevTools = this.toggleDevTools.bind(this);
     this.domReady = this.domReady.bind(this);
+    this.layerCallback = this.layerCallback.bind(this)
   }
 
   handleClick() {
@@ -25,6 +26,10 @@ class Mhb extends Component {
     this.props.cb({ target: ["window", "ready"], data: true })
   }
 
+  layerCallback(object) {
+    this.props.cb(object)
+  }
+
   render() {
     const { config, callback } = this.props;
 
@@ -32,11 +37,12 @@ class Mhb extends Component {
     let Row = Elemental.Row
     let Col = Elemental.Col
     let Topnav = topNav
+    let layerCallback = this.layerCallback;
 
     return (
       <div>
           <Topnav />
-          <SelfDefineMaster config={config} callback={callback} />
+          <SelfDefineMaster config={config} callback={layerCallback} />
 
           Examples:
           <Button onClick={this.handleClick}>This does nothing!</Button>

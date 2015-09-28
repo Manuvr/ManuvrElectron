@@ -49,7 +49,9 @@ import SchemaMaster from './SchemaMaster';
 var Adjunct = React.createClass({
 
   layerCallback: function(object) {
-    object.unshift(this.props.name);
+    if(this.props.name) {
+        object.target.unshift(this.props.name);
+    }
     this.props.callback(object)
   },
 
@@ -71,8 +73,10 @@ var Adjunct = React.createClass({
     return (
       <div>
         {name}<br/>
-        Schema:<SchemaMaster schema={schema} callback={layerCallback} />
-        Adjuncts:<ul>{compList}</ul>
+        <ul>
+        <li>scm: <SchemaMaster schema={schema} callback={layerCallback} /></li>
+        <li>adj:<ul>{compList}</ul></li>
+        </ul>
       </div>
     )
   }
