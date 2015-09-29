@@ -5,9 +5,9 @@ var fs            = require('fs');
 var util          = require('util');
 
 // I changed this....
-var _cloneDeep    = require('lodash').clonedeep;
+var _cloneDeep    = require('lodash').cloneDeep;
 var _has          = require('lodash').has;
-var _defaultsDeep = require('lodash').defaultsdeep;
+var _defaultsDeep = require('lodash').defaultsDeep;
 
 var mainWindow = null;
 var transportViewWindow = null;
@@ -213,6 +213,10 @@ app.on('ready', function() {
     switch(ipc_args.target[0]) {
       case 'ready':
         // The react front-end is ready.
+        mainWindow.webContents.send('api', {
+          target: ["window", "_adjunctDef"],
+          data:   interface_spec
+        });
         hub.clientReady();
         break;
 
@@ -239,16 +243,17 @@ app.on('ready', function() {
 
   hub.on('output',
     function(message) {
-      console.log(util.inspect(message));
+      //console.log(util.inspect(message));
       if ('_adjunctDef' == message.target[message.target.length-1]) {
         // If this is a _adjunctDef, we intercept it and glom it into our own.
         //var level = message.target.slice(0, message.target.length-1);
-        //_defaultsDeep(interface_spec.mHub, _cloneDeep(message.data));
-        message.target.unshift(['window']);
+        //_defaultsDeep(interface_spec.adjuncts.mHub, _cloneDeep(message.data));
+        //message.target.unshift(['window']);
       }
       else {
-        message.target.unshift(['mHub']);
+        //message.target.unshift(['mHub']);
       }
+      message.target.unshift(['mHub']);
       mainWindow.webContents.send('api', message);
     }
   );
