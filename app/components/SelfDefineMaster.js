@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import * as Elemental from 'elemental';
 
 import {forOwn as _forOwn} from 'lodash';
 
@@ -21,8 +20,6 @@ class SelfDefineMaster extends Component {
   render() {
     const { config, callback } = this.props;
 
-    let Row = Elemental.Row
-    let Col = Elemental.Col
     let layerCallback = this.layerCallback
 
     let compList = [];

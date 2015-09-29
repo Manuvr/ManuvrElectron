@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import * as Elemental from 'elemental';
 
 import {forOwn as _forOwn } from 'lodash';
 
@@ -58,8 +57,6 @@ var Adjunct = React.createClass({
   render: function() {
     const { name, config, callback } = this.props;
 
-    let Row = Elemental.Row
-    let Col = Elemental.Col
 
     let compList = [];
     let schema = config.schema;

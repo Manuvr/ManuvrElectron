@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import * as Elemental from 'elemental';
 
 import {forOwn as _forOwn} from 'lodash';
 

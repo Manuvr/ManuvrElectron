@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { map as _map } from 'lodash';
 
 // styling and components
-import * as Elemental from 'elemental';
-require('../site.less');
 
 import SelfDefineMaster from './SelfDefineMaster';
 
@@ -23,8 +21,6 @@ class Mhb extends Component {
   render() {
     const { config, callback } = this.props;
 
-    let Row = Elemental.Row
-    let Col = Elemental.Col
     let layerCallback = this.layerCallback;
 
     return (
