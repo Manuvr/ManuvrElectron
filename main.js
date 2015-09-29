@@ -252,7 +252,7 @@ app.on('ready', function() {
   ipc.on('api', function(event, message) {
     // This is the pass-through to the hub (or the window)
     switch (message.target[0]) {
-      case 'hub':
+      case 'mHub':
         // These are messages directed at MHB (the nominal case).
         if (message.target[1] === 'log') {
           // This is the client, so we observe logging in a manner appropriate for us,
