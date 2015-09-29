@@ -23,12 +23,13 @@ export default function fromHub(msgObj, intSpec) {
     _set(intSpec, path, {});
     _set(retObj, path, msgObj.data);
   } else {
-    var outState = _get(intSpec, path.concat("schema", "output", val, "state"));
+    console.log("Received: " + JSON.stringify(msgObj, null, 2));
+    var outState = _get(intSpec, path.concat("schema", "outputs", val, "state"));
     if(outState !== undefined  && _has(intSpec, path.concat("schema", "state", outState))){
       _set(retObj, path.concat("schema", "state", outState, "value"), msgObj.data);
     }
   }
+
   //Emit? Log? Console?
-  console.log(JSON.stringify(msgObj, null, 2));
-  return retObj
+  return _merge({}, intSpec, retObj);
 }

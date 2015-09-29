@@ -152,7 +152,8 @@ var interface_spec = {
     outputs: {
       'toggleDevTools': {
         label: 'Dev tools Open',
-        type: 'boolean'
+        type: 'boolean',
+        state: 'toggleDevTools'
       }
     }
   },
@@ -214,15 +215,18 @@ app.on('ready', function() {
         break;
 
       case 'toggleDevTools':
+        var toggle;
         if (mainWindow.webContents.isDevToolsOpened()) {
+          toggle = false;
           mainWindow.webContents.closeDevTools();
         }
         else {
+          toggle = true;
           mainWindow.webContents.openDevTools({detach: true});
         }
         mainWindow.webContents.send('api', {
           target: ["window", "toggleDevTools"],
-          data:   mainWindow.webContents.isDevToolsOpened()
+          data:   toggle
         })
         break;
       default:
