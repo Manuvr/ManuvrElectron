@@ -2,12 +2,12 @@ var app           = require('app');
 var BrowserWindow = require('browser-window');
 var ipc           = require('ipc');
 var fs            = require('fs');
-var $             = require('jquery');
 var util          = require('util');
 
-var _cloneDeep    = require('lodash.clonedeep');
-var _has          = require('lodash.has');
-var _defaultsDeep = require('lodash.defaultsdeep');
+// I changed this....
+var _cloneDeep    = require('lodash').clonedeep;
+var _has          = require('lodash').has;
+var _defaultsDeep = require('lodash').defaultsdeep;
 
 var mainWindow = null;
 var transportViewWindow = null;

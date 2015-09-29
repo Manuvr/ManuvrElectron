@@ -24,16 +24,16 @@ class SchemaType extends Component {
     let compList = [];
 
     if (name !== "inputs" && name !== "outputs" && name !== "state") {
-      compList.push({vals})
+      compList.push("???: " + {vals})
     } else {
       _forOwn(vals, function(value, key) {
-          compList.push(<li><SchemaElement type={name} name={key} def={value} callback={layerCallback}/> </li>)
+          compList.push(<SchemaElement key={key} type={name} name={key} def={value} callback={layerCallback}/>)
       })
     }
 
     return (
       <ul>
-        <li>{name}</li>
+        {name}
         <ul>{compList}</ul>
       </ul>
     )

@@ -6,6 +6,11 @@ import { map as _map } from 'lodash';
 import SelfDefineMaster from './SelfDefineMaster';
 
 
+// styling
+import AppBar from 'material-ui/lib/app-bar';
+import FlatButton from 'material-ui/lib/flat-button';
+import {Card, CardHeader, CardText, CardActions} from 'material-ui/lib/card'
+
 class Mhb extends Component {
 
   constructor() {
@@ -25,10 +30,19 @@ class Mhb extends Component {
 
     return (
       <div>
-          <SelfDefineMaster config={config} callback={layerCallback} />
+        <AppBar title="Manuvr Debug" iconElementRight={<FlatButton label="???" />} />
+        <SelfDefineMaster config={config} callback={layerCallback} />
           <br/><br/>
-          <br/>
-          <pre >{JSON.stringify(config, null, 2)}</pre>
+
+          <Card initiallyExpanded={false}>
+            <CardHeader
+              title="Current JSON interface state"
+              showExpandableButton={true}>
+            </CardHeader>
+            <CardText expandable={true}>
+              <pre >{JSON.stringify(config, null, 2)}</pre>
+            </CardText>
+          </Card>
       </div>
     )
   }

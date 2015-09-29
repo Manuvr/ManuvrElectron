@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 
 import Mhb from '../components/Mhb';
 
-import fromHub from '../utils/inboundFunctions';
-import {callbackChain, direct} from '../utils/actions';
+import socketActions from '../utils/socketActions';
+import uiActions from '../utils/uiActions';
 import * as defaultState from '../utils/defaultState'
 
 class DebugApp extends Component {
 
   constructor() {
     super();
-    // This is !@#$ing stupid. ES5 revert soon if we have to manually bind every freaking thing.
+    // This is !@#$ing stupid.
     this.state = defaultState;
     this.render = this.render.bind(this);
     this.ipcInput = this.ipcInput.bind(this);
@@ -25,20 +25,19 @@ class DebugApp extends Component {
     });
   };
 
+  // emits coming in.  capable of setting state.  Should ONLY touch state.interface
   ipcInput(data) {
-    this.setState(fromHub(data, this.state));
+    this.setState(socketActions(data, this.state));
   }
 
-
+  // actions from our components... mostly will emit, but capable of state setting
   compCb(cbObject) {
-    this.setState(callbackChain(cbObject, this.state));
+    this.setState(uiActions(cbObject, this.state));
   };
 
   render() {
     return (
-      <div>
-        <Mhb config={this.state} cb={this.compCb} />
-      </div>
+        <Mhb config={this.state.interface} cb={this.compCb} /> 
     );
   }
 }

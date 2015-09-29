@@ -12,3 +12,7 @@ temp.js
 .swo
 .DS_Store
 .directory
+1
+logs
+npm-debug.log
+config.json

@@ -26,14 +26,14 @@ class SelfDefineMaster extends Component {
 
     _forOwn(config, function(value, key) {
       compList.push(
-        <Adjunct name={key} config={value} callback={layerCallback}/>
+        <Adjunct key={key} name={key} config={value} callback={layerCallback}/>
       );
     })
 
     return (
       <div>
         {compList}
-        </div>
+      </div>
     )
   }
 }

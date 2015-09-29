@@ -27,7 +27,7 @@ module.exports = {
   },
   module: {
     loaders: [{
-      test: /\.js$/,
+      test: /\.(js|jsx)$/,
       loaders: ['react-hot', 'babel'],
       exclude: /node_modules/,
       include: __dirname
@@ -50,6 +50,6 @@ module.exports = {
     //alias: {
       //'redux': path.join(__dirname, '..', '..', 'src')
     //},
-    extensions: ['', '.js']
+    extensions: ['', '.js', '.jsx']
   }
 }

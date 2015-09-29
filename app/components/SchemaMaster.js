@@ -4,6 +4,9 @@ import {forOwn as _forOwn} from 'lodash';
 
 import SchemaType from './SchemaType';
 
+import { Grid, Cell } from 'react-flexr';
+import 'react-flexr/styles.css'
+
 class SchemaMaster extends Component {
 
   constructor() {
@@ -24,13 +27,21 @@ class SchemaMaster extends Component {
     let compList = [];
 
     _forOwn(schema, function(value, key) {
-      compList.push(<SchemaType name={key} vals={value} callback={layerCallback}/>);
+      if(key === "inputs" || key === "state")
+      compList.push(
+        <Cell><SchemaType
+          key={key}
+          name={key}
+          vals={value}
+          callback={layerCallback}
+        /></Cell>
+      );
     })
 
     return (
-      <div>
+      <Grid>
         {compList}
-        </div>
+      </Grid>
     )
   }
 }
