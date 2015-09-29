@@ -152,8 +152,6 @@ var interface_spec = {
     }
   },
   adjuncts: {
-    hubs: {
-    }
   }
 };
 
@@ -231,10 +229,9 @@ app.on('ready', function() {
   hub.on('output',
     function(message) {
       console.log(util.inspect(message));
-      message.target.unshift(['hub']);
-      if ((message.target.length == 2) && ('_adjunctDef' == message.target[1])) {
+      if ((message.target.length == 1) && ('_adjunctDef' == message.target[0])) {
         // If this is a full re-def from hub, we intercept it and glom it into our own.
-        interface_spec.adjuncts.hubs.mHub = _clonedeep(message.data);;
+        interface_spec.adjuncts.mHub = _clonedeep(message.data);;
         message.data = interface_spec;
         message.target.unshift(['window']);
       }
