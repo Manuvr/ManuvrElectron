@@ -133,6 +133,11 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 var interface_spec = {
   schema: {
     state: {
+      'toggleDevTools': {
+        label: 'Dev tools Open',
+        type: 'boolean',
+        value:  false
+      }
     },
     inputs: {
       'quit': {
@@ -234,6 +239,9 @@ app.on('ready', function() {
         interface_spec.adjuncts.mHub = _clonedeep(message.data);;
         message.data = interface_spec;
         message.target.unshift(['window']);
+      }
+      else {
+        message.target.unshift(['mHub']);
       }
       mainWindow.webContents.send('api', message);
     }
