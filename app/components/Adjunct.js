@@ -15,7 +15,7 @@ import IconButton from 'material-ui/lib/icon-button'
 var Adjunct = React.createClass({
 
   getInitialState: function() {
-    return { tabsValue: "z"};
+    return { tabsValue: "none"};
   },
 
   layerCallback: function(object) {
@@ -44,23 +44,31 @@ var Adjunct = React.createClass({
     let state = this.state
 
     let compList = [];
-    _forOwn(adjuncts, function(value, key) {
-      compList.push(
+
+    let title = (<h1>{name}</h1>)
+    let tabHead = (<div />)
+
+    if (adjuncts !== undefined && Object.keys(adjuncts).length > 0) {
+      _forOwn(adjuncts, function(value, key) {
+        compList.push(
           <Tab label={key} value={key}>
-          <Adjunct
-          key={key}
-          name={key}
-          config={value}
-          callback={layerCallback}
-          />
-        </Tab>)
-    })
+            <Adjunct key={key} name={key} config={value} callback={layerCallback} />
+          </Tab>)
+      });
+      tabHead = (<Tabs valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange}}><Tab label="--hide adjuncts--" value="none"></Tab>{compList}</Tabs>);
+    }
+
+    // if(compList.length > 0) {
+    //   tabHead = (<CardText expandable={true}><Tabs valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange}}>);
+    //   tabBot = (</Tabs></CardText>)
+    // }
+
 
     return (
       <div>
         <Card initiallyExpanded={true}>
           <CardHeader
-            title={name}
+            avatar={title}
             showExpandableButton={true}>
           </CardHeader>
           <CardText expandable={true}>
@@ -68,18 +76,13 @@ var Adjunct = React.createClass({
               key="schema"
               schema={schema}
               callback={layerCallback} />
-
           </CardText>
+
           <CardText expandable={true}>
-            <Tabs
-              valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange.bind(this)}}>
-              {compList}
-            </Tabs>
+          {tabHead}
           </CardText>
 
         </Card>
-
-
       </div>
     )
   }

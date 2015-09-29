@@ -50,6 +50,7 @@ module.exports = {
     //alias: {
       //'redux': path.join(__dirname, '..', '..', 'src')
     //},
+    "react": __dirname + './node_modules/react',
     extensions: ['', '.js', '.jsx']
   }
 }

@@ -4,6 +4,7 @@ import {forOwn as _forOwn} from 'lodash';
 
 import SchemaElement from './SchemaElement';
 
+
 class SchemaType extends Component {
 
   constructor() {
@@ -33,8 +34,9 @@ class SchemaType extends Component {
 
     return (
       <ul>
-        {name}
-        <ul>{compList}</ul>
+        <h2>{name}</h2>
+
+        {compList}
       </ul>
     )
   }

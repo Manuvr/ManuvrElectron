@@ -4,6 +4,8 @@ import {forOwn as _forOwn} from 'lodash';
 
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
+import Paper from 'material-ui/lib/paper';
+import {Grid, Cell} from 'react-flexr';
 
 class SchemaElement extends Component {
 
@@ -31,12 +33,14 @@ class SchemaElement extends Component {
     this.setState({data: e.target.value})
   }
 
-
   render() {
     const { type, name, def, callback } = this.props;
 
     let layerCallback = this.layerCallback
     let compList = [];
+
+    let displayLabel = def.label ? def.label : name;
+    let stateString = def.value !== undefined && def.value.toString() !== "" ? def.value.toString() : "(undefined)";
 
 
     switch(type) {
@@ -51,25 +55,20 @@ class SchemaElement extends Component {
         compList.push(<RaisedButton label="=>" secondary={true} onClick={layerCallback} />);
         break;
       case ("outputs"):
-        compList.push(<div>{def.label ? def.label : name}: {def.type}</div>);
+        compList.push(<div>{displayLabel}: {def.type}</div>);
         break;
       case ("state"):
         //compList.push(<div>{def.label ? def.label : name}: {def.value.toString()}</div>)
-        compList.push(<TextField
-          value={def.value}
-          disabled={true}
-          floatingLabelText={def.label ? def.label : name} />)
+        compList.push(<Paper ><strong style={{color: "grey"}}> {displayLabel}: </strong>{stateString}</Paper>)
         break;
       default:
-        compList.push(<div>{def.label ? def.label : name}: {def}</div>)
+        compList.push(<Paper zDepth={2}><strong style={{color: "grey"}}>{displayLabel}: </strong>{def}</Paper>)
         break;
     }
 
     return (
       <div>
-        <li>
         {compList}
-        </li>
       </div>
     )
   }

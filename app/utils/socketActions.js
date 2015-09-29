@@ -36,8 +36,8 @@ export default function socketActions(msgObj, intSpec) {
       console.log("Received: " + JSON.stringify(msgObj, null, 2));
 
       // checks if state needs to be updated... if not, no object is returned.
-      var outState = _get(intSpec, path.concat("schema", "outputs", val, "state"));
-      if(outState !== undefined  && _has(intSpec, path.concat("schema", "state", outState))){
+      var outState = _get(intSpec.interface, path.concat("schema", "outputs", val, "state"));
+      if(outState !== undefined  && _has(intSpec.interface, path.concat("schema", "state", outState))){
         _set(retObj, path.concat("schema", "state", outState, "value"), msgObj.data);
       }
   }
