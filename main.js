@@ -5,7 +5,9 @@ var fs            = require('fs');
 var $             = require('jquery');
 var util          = require('util');
 
-var _clonedeep    = require('lodash.clonedeep');
+var _cloneDeep    = require('lodash.clonedeep');
+var _has          = require('lodash.has');
+var _defaultsDeep = require('lodash.defaultsdeep');
 
 var mainWindow = null;
 var transportViewWindow = null;
@@ -238,10 +240,10 @@ app.on('ready', function() {
   hub.on('output',
     function(message) {
       console.log(util.inspect(message));
-      if ((message.target.length == 1) && ('_adjunctDef' == message.target[0])) {
-        // If this is a full re-def from hub, we intercept it and glom it into our own.
-        interface_spec.adjuncts.mHub = _clonedeep(message.data);;
-        message.data = interface_spec;
+      if ('_adjunctDef' == message.target[message.target.length-1]) {
+        // If this is a _adjunctDef, we intercept it and glom it into our own.
+        //var level = message.target.slice(0, message.target.length-1);
+        //_defaultsDeep(interface_spec.mHub, _cloneDeep(message.data));
         message.target.unshift(['window']);
       }
       else {
@@ -275,7 +277,7 @@ app.on('ready', function() {
         toWindow(message);
         break;
       default:
-        console.log('No origin named '+message.origin+'.');
+        console.log('No origin named '+message.message.target[0]+'.');
         break;
     }
   });
