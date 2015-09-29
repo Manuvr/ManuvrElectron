@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import Mhb from '../components/Mhb';
 
-import socketActions from '../utils/socketActions';
-import uiActions from '../utils/uiActions';
-import * as defaultState from '../utils/defaultState'
+import socketActions from '../utils/socketActions.js';
+import uiActions from '../utils/uiActions.js';
+import * as defaultState from '../utils/defaultState';
 
 class DebugApp extends Component {
 
@@ -37,7 +37,7 @@ class DebugApp extends Component {
 
   render() {
     return (
-        <Mhb config={this.state.interface} cb={this.compCb} /> 
+        <Mhb config={this.state.interface} cb={this.compCb} />
     );
   }
 }
