@@ -23,6 +23,7 @@ export default function fromHub(msgObj, intSpec) {
     _set(intSpec, path, {});
     _set(retObj, path, msgObj.data);
   } else {
+    
     console.log("Received: " + JSON.stringify(msgObj, null, 2));
     var outState = _get(intSpec, path.concat("schema", "outputs", val, "state"));
     if(outState !== undefined  && _has(intSpec, path.concat("schema", "state", outState))){
