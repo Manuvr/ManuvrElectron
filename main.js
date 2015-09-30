@@ -220,6 +220,18 @@ app.on('ready', function() {
         hub.clientReady();
         break;
 
+      case 'quit':
+        // User wants to bail.
+        hub.quit(
+          function(err) {
+            if (err) {
+              console.log(err);
+            }
+            quit();
+          }
+        );
+        break;
+
       case 'toggleDevTools':
         var toggle;
         if (mainWindow.webContents.isDevToolsOpened()) {
