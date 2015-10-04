@@ -142,14 +142,18 @@ var interface_spec = {
       }
     },
     inputs: {
-      'quit': {
-        label: 'Quit',
-        type: 'boolean'
-      },
+      'quit': [
+        {
+          label: 'Quit',
+          type: 'boolean'
+        }
+      ],
       'toggleDevTools': {
-        label: 'OpenTools',
-        type: 'boolean'
-      }
+        {
+          label: 'OpenTools',
+          type: 'boolean'
+        }
+      ]
     },
     outputs: {
       'toggleDevTools': {
