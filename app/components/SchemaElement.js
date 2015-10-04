@@ -76,7 +76,7 @@ class SchemaElement extends Component {
             compList.push(
               <Checkbox
                 key={index}
-                value={state[index]}
+                value={state.data[index]}
                 onCheck={handleCheck.bind(null, index)}
                 label={displayLabel}
                 />
