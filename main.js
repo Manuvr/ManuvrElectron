@@ -264,12 +264,13 @@ app.on('ready', function() {
         // If this is a _adjunctDef, we intercept it and glom it into our own.
         //var level = message.target.slice(0, message.target.length-1);
         //_defaultsDeep(interface_spec.adjuncts.mHub, _cloneDeep(message.data));
-        //message.target.unshift(['window']);
+        //message.target.unshift('window');
       }
       else {
-        //message.target.unshift(['mHub']);
+        //message.target.unshift('mHub');
       }
-      message.target.unshift(['mHub']);
+      console.log(util.inspect(message));
+      message.target.unshift('mHub');
       mainWindow.webContents.send('api', message);
     }
   );
@@ -278,10 +279,10 @@ app.on('ready', function() {
   // Listener to take input from the user back into MHB.
   ipc.on('api', function(event, message) {
     // This is the pass-through to the hub (or the window)
-    switch (message.target[0]) {
+    switch (message.target.shift()) {
       case 'mHub':
         // These are messages directed at MHB (the nominal case).
-        if (message.target[1] === 'log') {
+        if (message.target[0] === 'log') {
           // This is the client, so we observe logging in a manner appropriate for us,
           //   likely respecting some filter. But we still pass back into the hub to
           //   write to the log file.
@@ -294,11 +295,10 @@ app.on('ready', function() {
       case 'window':
         // Window operations follow this flow. The hub doesn't know anything
         //   about the nature of this particular client.
-        message.target.shift();
         toWindow(message);
         break;
       default:
-        console.log('No origin named '+message.message.target[0]+'.');
+        console.log('The named origin doesn\'t exist..');
         break;
     }
   });
