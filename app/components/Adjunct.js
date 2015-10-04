@@ -62,8 +62,6 @@ var Adjunct = React.createClass({
     //   tabHead = (<CardText expandable={true}><Tabs valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange}}>);
     //   tabBot = (</Tabs></CardText>)
     // }
-
-
     return (
       <div>
         <Card initiallyExpanded={true}>

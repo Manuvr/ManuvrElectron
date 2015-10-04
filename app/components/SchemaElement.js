@@ -5,7 +5,11 @@ import {forOwn as _forOwn} from 'lodash';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Paper from 'material-ui/lib/paper';
+import Checkbox from 'material-ui/lib/checkbox';
 import {Grid, Cell} from 'react-flexr';
+
+
+// input types: boolean, string, number
 
 class SchemaElement extends Component {
 
@@ -17,6 +21,7 @@ class SchemaElement extends Component {
     this.layerCallback = this.layerCallback.bind(this);
     this.render        = this.render.bind(this);
     this.handleChange  = this.handleChange.bind(this);
+    this.handleCheck  = this.handleCheck.bind(this);
   }
 
   layerCallback() {
@@ -35,6 +40,17 @@ class SchemaElement extends Component {
     this.setState({data: newArray})
   }
 
+  handleCheck(id, e) {
+    e.preventDefault()
+    let newArray = this.state.data.slice();
+    if(e.target.value === "on") {
+      newArray[id] = true;
+    } else {
+      newArray[id] = false;
+    }
+    this.setState({data: newArray})
+  }
+
   render() {
     const { type, name, def, callback } = this.props;
 
@@ -43,6 +59,7 @@ class SchemaElement extends Component {
     let layerCallback = this.layerCallback;
     let state = this.state;
     let handleChange = this.handleChange;
+    let handleCheck = this.handleCheck;
     let that = this;
     let compList = [];
 
@@ -55,12 +72,23 @@ class SchemaElement extends Component {
         // compList.push(<button onClick={layerCallback}>Submit</button>)
         def.map(function(currVal, index, fullArr) {
           let displayLabel = currVal.label ? currVal.label : name;
-          compList.push(<TextField
-            key={index}
-            value={state.data[index]}
-            onChange={handleChange.bind(null, index)}
-            hintText={currVal.type}
-            floatingLabelText={displayLabel} />);
+          if(currVal.type === "boolean") {
+            compList.push(
+              <Checkbox
+                key={index}
+                value={state[index]}
+                onCheck={handleCheck.bind(null, index)}
+                label={displayLabel}
+                />
+            )
+          } else  {
+            compList.push(<TextField
+              key={index}
+              value={state.data[index]}
+              onChange={handleChange.bind(null, index)}
+              hintText={currVal.type}
+              floatingLabelText={displayLabel} />);
+            }
         })
         compList.push(<RaisedButton key="button" label="=>" secondary={true} onClick={layerCallback} />);
         break;
