@@ -29,7 +29,7 @@ class SchemaMaster extends Component {
     _forOwn(schema, function(value, key) {
       if(key === "inputs" || key === "state")
       compList.push(
-        <Cell><SchemaType
+        <Cell key={key + "a"}><SchemaType
           key={key}
           name={key}
           vals={value}

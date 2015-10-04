@@ -12,7 +12,7 @@ class SchemaElement extends Component {
   constructor() {
     super();
     this.state = {
-      data: ""
+      data: []
     }
     this.layerCallback = this.layerCallback.bind(this);
     this.render        = this.render.bind(this);
@@ -28,36 +28,47 @@ class SchemaElement extends Component {
     )
   }
 
-  handleChange(e) {
+  handleChange(id, e) {
     e.preventDefault()
-    this.setState({data: e.target.value})
+    let newArray = this.state.data.slice();
+    newArray[id] = e.target.value
+    this.setState({data: newArray})
   }
 
   render() {
     const { type, name, def, callback } = this.props;
 
-    let layerCallback = this.layerCallback
+    // def will be an array on INPUT only
+
+    let layerCallback = this.layerCallback;
+    let state = this.state;
+    let handleChange = this.handleChange;
+    let that = this;
     let compList = [];
 
     let displayLabel = def.label ? def.label : name;
-    let stateString = def.value !== undefined && def.value.toString() !== "" ? def.value.toString() : "(undefined)";
-
 
     switch(type) {
       case("inputs"):
         // compList.push(<label>{def.label ? def.label : name}</label>)
         // compList.push(<input type="text" value={this.state.data} onChange={this.handleChange} placeholder={def.type}/>)
         // compList.push(<button onClick={layerCallback}>Submit</button>)
-        compList.push(<TextField
-          value={this.state.data}
-          hintText={def.type}
-          floatingLabelText={def.label ? def.label : name} />);
-        compList.push(<RaisedButton label="=>" secondary={true} onClick={layerCallback} />);
+        def.map(function(currVal, index, fullArr) {
+          let displayLabel = currVal.label ? currVal.label : name;
+          compList.push(<TextField
+            key={index}
+            value={state.data[index]}
+            onChange={handleChange.bind(null, index)}
+            hintText={currVal.type}
+            floatingLabelText={displayLabel} />);
+        })
+        compList.push(<RaisedButton key="button" label="=>" secondary={true} onClick={layerCallback} />);
         break;
       case ("outputs"):
         compList.push(<div>{displayLabel}: {def.type}</div>);
         break;
       case ("state"):
+        let stateString = def.value !== undefined && def.value.toString() !== "" ? def.value.toString() : "(undefined)";
         //compList.push(<div>{def.label ? def.label : name}: {def.value.toString()}</div>)
         compList.push(<Paper ><strong style={{color: "grey"}}> {displayLabel}: </strong>{stateString}</Paper>)
         break;
@@ -67,9 +78,7 @@ class SchemaElement extends Component {
     }
 
     return (
-      <div>
-        {compList}
-      </div>
+      <div>{compList}</div>
     )
   }
 }

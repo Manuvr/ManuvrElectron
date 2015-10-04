@@ -51,11 +51,11 @@ var Adjunct = React.createClass({
     if (adjuncts !== undefined && Object.keys(adjuncts).length > 0) {
       _forOwn(adjuncts, function(value, key) {
         compList.push(
-          <Tab label={key} value={key}>
+          <Tab key={key + "a"} label={key} value={key}>
             <Adjunct key={key} name={key} config={value} callback={layerCallback} />
           </Tab>)
       });
-      tabHead = (<Tabs valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange}}><Tab label="--hide adjuncts--" value="none"></Tab>{compList}</Tabs>);
+      tabHead = (<Tabs valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange}}><Tab key="wut" label="--hide adjuncts--" value="none"></Tab>{compList}</Tabs>);
     }
 
     // if(compList.length > 0) {
