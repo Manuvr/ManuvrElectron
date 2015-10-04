@@ -90,7 +90,7 @@ class SchemaElement extends Component {
               floatingLabelText={displayLabel} />);
             }
         })
-        compList.push(<RaisedButton key="button" label="=>" secondary={true} onClick={layerCallback} />);
+        compList.push(<RaisedButton key="button" label={name} secondary={true} onClick={layerCallback} />);
         break;
       case ("outputs"):
         compList.push(<div>{displayLabel}: {def.type}</div>);
