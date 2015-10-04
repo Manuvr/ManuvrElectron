@@ -148,7 +148,7 @@ var interface_spec = {
           type: 'boolean'
         }
       ],
-      'toggleDevTools': {
+      'toggleDevTools': [
         {
           label: 'OpenTools',
           type: 'boolean'
