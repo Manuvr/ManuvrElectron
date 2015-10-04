@@ -41,13 +41,10 @@ class SchemaElement extends Component {
   }
 
   handleCheck(id, e) {
-    e.preventDefault()
+    console.log(id);
+    console.log(e);
     let newArray = this.state.data.slice();
-    if(e.target.value === "on") {
-      newArray[id] = true;
-    } else {
-      newArray[id] = false;
-    }
+    newArray[id] = e.target.checked;
     this.setState({data: newArray})
   }
 
@@ -76,8 +73,8 @@ class SchemaElement extends Component {
             compList.push(
               <Checkbox
                 key={index}
-                value={state.data[index]}
-                onCheck={handleCheck.bind(null, index)}
+                checked={state.data[index]}
+                onCheck={handleCheck.bind(this, index)}
                 label={displayLabel}
                 />
             )
@@ -85,7 +82,7 @@ class SchemaElement extends Component {
             compList.push(<TextField
               key={index}
               value={state.data[index]}
-              onChange={handleChange.bind(null, index)}
+              onChange={handleChange.bind(this, index)}
               hintText={currVal.type}
               floatingLabelText={displayLabel} />);
             }
