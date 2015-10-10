@@ -3,9 +3,11 @@ var BrowserWindow = require('browser-window');
 var ipc           = require('ipc');
 var fs            = require('fs');
 var util          = require('util');
+var inherits = require('util').inherits;
+var ee = require('events').EventEmitter;
+
 
 // I changed this....
-var _cloneDeep    = require('lodash').cloneDeep;
 var _has          = require('lodash').has;
 var _defaultsDeep = require('lodash').defaultsDeep;
 
@@ -16,6 +18,8 @@ var transportViewWindow = null;
 var packageJSON = require('./package.json');
 
 var mHub = require('MHB/lib/mHub.js');
+var messageHandler = require('MHB/lib/messageHandler')
+
 
 
 
@@ -132,40 +136,110 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 /****************************************************************************************************
  * This is where we setup the front-end of things...                                                 *
  ****************************************************************************************************/
-var interface_spec = {
-  schema: {
-    state: {
-      'toggleDevTools': {
-        label: 'Dev tools Open',
-        type: 'boolean',
-        value:  false
+var window = function() {
+  ee.call(this);
+  var that = this;
+
+  //window.mH.addAdjunct("window1", new mHub());
+
+  this.interface_spec = {
+    schema: {
+      state: {
+        'toggleDevTools': {
+          label: 'Dev tools Open',
+          type: 'boolean',
+          value:  false
+        }
+      },
+      inputs: {
+        'quit': {
+          label: "Quit",
+          args: [ { label: '?', type: 'boolean' } ],
+          func: function(me, data) {
+            quit();
+          }
+        },
+        'toggleDevTools': {
+          label: "Toggle Dev Tools",
+          args: [{ label: 'OpenTools', type: 'boolean' } ],
+          func: function(me, data) {
+            var toggle;
+            if (mainWindow.webContents.isDevToolsOpened()) {
+              toggle = false;
+              mainWindow.webContents.closeDevTools();
+            }
+            else {
+              toggle = true;
+              mainWindow.webContents.openDevTools({detach: true});
+            }
+            mainWindow.webContents.send('api', {
+              target: ["window", "toggleDevTools"],
+              data:   toggle
+            })
+          }
+        },
+        'ready' : {
+          label: "ready",
+          args: [ { label: "Ready", type: "boolean"}],
+          func: function(me, data){
+            mainWindow.webContents.send('api', {
+                target: ["window", "_adjunctDef"],
+                data:   me.getIntSpec()
+            });
+            console.log(util.inspect(me.getIntSpec()));
+            // The react front-end is ready.
+            //hub.clientReady();
+          },
+          hidden: true
+        },
+
+
+        'test' : {
+          label: "derp",
+          args: [ { label: "Something", type: "boolean"}],
+          func: function(me, data){
+            console.log("Got this in test: " + util.inspect(data))
+            console.log("Current Adj: " + util.inspect(Object.keys(me.interface_spec.adjuncts)));
+            me.mH.sendToOutput({target:["log"], data: "I'm data!"});
+          }
+        }
+      },
+      outputs: {
+        'toggleDevTools': {
+          label: 'Dev tools Open',
+          type: 'boolean',
+          state: 'toggleDevTools'
+        }
       }
     },
-    inputs: {
-      'quit': [
-        {
-          label: 'Quit',
-          type: 'boolean'
-        }
-      ],
-      'toggleDevTools': [
-        {
-          label: 'OpenTools',
-          type: 'boolean'
-        }
-      ]
+    adjuncts: {
+      // "mHub1": {
+      //   aInstance: someVar,
+      //   type: "mHub",
+      //   schema: {},
+      //   adjuncts: {}
+      // }
     },
-    outputs: {
-      'toggleDevTools': {
-        label: 'Dev tools Open',
-        type: 'boolean',
-        state: 'toggleDevTools'
+    adjunctOutputTap: {
+      "mHub": {
+        "data": function(me, msg, adjunctID){
+          me.someFunction(msg.data);
+          return false; // don't emit
+        }
       }
+
     }
-  },
-  adjuncts: {
-  }
-};
+  };
+
+  // instantiate handler
+  this.mH = new messageHandler(this.interface_spec, this);
+
+}
+
+inherits(window, ee);
+
+
+var window = new window();
 
 
 app.on('window-all-closed', function() {
@@ -211,96 +285,29 @@ app.on('ready', function() {
 
 
   var dom_loaded = false;
-  var hub = new mHub(config);
 
-  var toWindow = function(ipc_args) {
-    switch(ipc_args.target[0]) {
-      case 'ready':
-        // The react front-end is ready.
-        mainWindow.webContents.send('api', {
-          target: ["window", "_adjunctDef"],
-          data:   interface_spec
-        });
-        hub.clientReady();
-        break;
-
-      case 'quit':
-        // User wants to bail.
-        hub.quit(
-          function(err) {
-            if (err) {
-              console.log(err);
-            }
-            quit();
-          }
-        );
-        break;
-
-      case 'toggleDevTools':
-        var toggle;
-        if (mainWindow.webContents.isDevToolsOpened()) {
-          toggle = false;
-          mainWindow.webContents.closeDevTools();
-        }
-        else {
-          toggle = true;
-          mainWindow.webContents.openDevTools({detach: true});
-        }
-        mainWindow.webContents.send('api', {
-          target: ["window", "toggleDevTools"],
-          data:   toggle
-        })
-        break;
-      default:
-        console.log('No method named '+ipc_args.target[0]+' in toWindow().');
-        break
-    }
-  };
-
-  hub.on('output',
-    function(message) {
-      //console.log(util.inspect(message));
-      if ('_adjunctDef' == message.target[message.target.length-1]) {
-        // If this is a _adjunctDef, we intercept it and glom it into our own.
-        //var level = message.target.slice(0, message.target.length-1);
-        //_defaultsDeep(interface_spec.adjuncts.mHub, _cloneDeep(message.data));
-        //message.target.unshift('window');
-      }
-      else {
-        //message.target.unshift('mHub');
-      }
-      console.log(util.inspect(message));
-      message.target.unshift('mHub');
-      mainWindow.webContents.send('api', message);
-    }
-  );
+//  hub.on('output',
+//    function(message) {
+//      //console.log(util.inspect(message));
+//      if ('_adjunctDef' == message.target[message.target.length-1]) {
+//        // If this is a _adjunctDef, we intercept it and glom it into our own.
+//        //var level = message.target.slice(0, message.target.length-1);
+//        //_defaultsDeep(interface_spec.adjuncts.mHub, _cloneDeep(message.data));
+//        //message.target.unshift('window');
+//      }
+//      else {
+//        //message.target.unshift('mHub');
+//      }
+//      console.log(util.inspect(message));
+//      message.target.unshift('mHub');
+//      mainWindow.webContents.send('api', message);
+//    }
+//  );
 
 
   // Listener to take input from the user back into MHB.
   ipc.on('api', function(event, message) {
-    // This is the pass-through to the hub (or the window)
-    switch (message.target.shift()) {
-      case 'mHub':
-        // These are messages directed at MHB (the nominal case).
-        if (message.target[0] === 'log') {
-          // This is the client, so we observe logging in a manner appropriate for us,
-          //   likely respecting some filter. But we still pass back into the hub to
-          //   write to the log file.
-          var body      = message.data.body;
-          var verbosity = (message.data.verbosity) ? message.data.verbosity : 7;
-          console.log('Renderthread:\t'+body);
-        }
-        hub.toHub(message);
-        break;
-      case 'window':
-        // Window operations follow this flow. The hub doesn't know anything
-        //   about the nature of this particular client.
-        toWindow(message);
-        break;
-      default:
-        console.log('The named origin doesn\'t exist..');
-        break;
-    }
+      window.emit('input', message)
   });
 
 
@@ -313,6 +320,7 @@ app.on('ready', function() {
   });
 
   mainWindow.show();
+window.emit('input', {target:['ready']});
 
   // Instantiating a satalite window.
   //transportViewWindow = new BrowserWindow({ width: 100, height: 80 });
