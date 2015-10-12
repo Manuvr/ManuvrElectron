@@ -142,6 +142,7 @@ var window = function() {
   var that = this;
 
   this.interface_spec = {
+    type:  'window',
     schema: {
       state: {
         'toggleDevTools': {
@@ -219,7 +220,7 @@ var window = function() {
       //   adjuncts: {}
       // }
     },
-    adjunctOutputTap: {
+    taps: {
       "mHub": {
         "data": function(me, msg, adjunctID){
           me.someFunction(msg.data);
