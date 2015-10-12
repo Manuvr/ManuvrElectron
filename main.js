@@ -18,7 +18,7 @@ var transportViewWindow = null;
 var packageJSON = require('./package.json');
 
 var mHub = require('MHB/lib/mHub.js');
-var messageHandler = require('MHB/lib/messageHandler')
+var messageHandler = require('MHB/lib/messageHandler.js')
 
 
 
@@ -30,6 +30,7 @@ var config = {
   window_size:      [1000, 700],
   window_location:  [0, 0],
   writtenByVersion: packageJSON.version,
+  logPath: __dirname+'/log/',
   verbosity:        7
 };
 
@@ -140,8 +141,6 @@ var window = function() {
   ee.call(this);
   var that = this;
 
-  //window.mH.addAdjunct("window1", new mHub());
-
   this.interface_spec = {
     schema: {
       state: {
@@ -188,7 +187,7 @@ var window = function() {
             });
             console.log(util.inspect(me.getIntSpec()));
             // The react front-end is ready.
-            //hub.clientReady();
+            that.emit('ready', {});
           },
           hidden: true
         },
@@ -233,7 +232,7 @@ var window = function() {
 
   // instantiate handler
   this.mH = new messageHandler(this.interface_spec, this);
-
+  this.mH.addAdjunct("mHub", new mHub(config));
 }
 
 inherits(window, ee);
