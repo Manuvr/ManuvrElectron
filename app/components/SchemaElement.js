@@ -67,15 +67,17 @@ class SchemaElement extends Component {
         // compList.push(<label>{def.label ? def.label : name}</label>)
         // compList.push(<input type="text" value={this.state.data} onChange={this.handleChange} placeholder={def.type}/>)
         // compList.push(<button onClick={layerCallback}>Submit</button>)
-        def.map(function(currVal, index, fullArr) {
-          let displayLabel = currVal.label ? currVal.label : name;
+        compList.push(<br></br>);
+        if(Array.isArray(def.args)) {
+        def.args.map(function(currVal, index, fullArr) {
+          let localLabel = currVal.label ? currVal.label : name;
           if(currVal.type === "boolean") {
             compList.push(
               <Checkbox
                 key={index}
                 checked={state.data[index]}
                 onCheck={handleCheck.bind(this, index)}
-                label={displayLabel}
+                label={localLabel}
                 />
             )
           } else  {
@@ -84,10 +86,11 @@ class SchemaElement extends Component {
               value={state.data[index]}
               onChange={handleChange.bind(this, index)}
               hintText={currVal.type}
-              floatingLabelText={displayLabel} />);
+              floatingLabelText={localLabel} />);
             }
         })
-        compList.push(<RaisedButton key="button" label={name} secondary={true} onClick={layerCallback} />);
+        compList.push(<RaisedButton key="button" label={displayLabel} secondary={true} onClick={layerCallback} />);
+      }
         break;
       case ("outputs"):
         compList.push(<div>{displayLabel}: {def.type}</div>);

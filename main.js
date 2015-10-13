@@ -186,9 +186,8 @@ var window = function() {
                 target: ["window", "_adjunctDef"],
                 data:   me.getIntSpec()
             });
-            console.log(util.inspect(me.getIntSpec()));
             // The react front-end is ready.
-            that.emit('ready', {});
+            me.emit('ready', {});
           },
           hidden: true
         },
@@ -307,7 +306,11 @@ app.on('ready', function() {
 
   // Listener to take input from the user back into MHB.
   ipc.on('api', function(event, message) {
+      if(message.target[0] === "window") {
+        message.target.shift();
+      }
       window.emit('input', message)
+      //console.log("sent a client msg:" + util.inspect(message))
   });
 
 
@@ -320,7 +323,7 @@ app.on('ready', function() {
   });
 
   mainWindow.show();
-window.emit('input', {target:['ready']});
+  //window.emit('input', {target:['ready']});
 
   // Instantiating a satalite window.
   //transportViewWindow = new BrowserWindow({ width: 100, height: 80 });

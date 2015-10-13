@@ -14,7 +14,6 @@ var buildPath = function(target) {
 export default function socketActions(msgObj, intSpec) {
 
   // DO NOT MUTATE intSpec
-
   // we'll pass spec (the full config) to be merged with state, but reference the interface layer here as retObj
   var spec = {}
   spec.interface = {}
