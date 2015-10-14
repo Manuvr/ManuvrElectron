@@ -30,7 +30,7 @@ var config = {
   window_size:      [1000, 700],
   window_location:  [0, 0],
   writtenByVersion: packageJSON.version,
-  logPath: __dirname+'/log/',
+  logPath: __dirname+'/logs/',
   verbosity:        7
 };
 
@@ -199,7 +199,6 @@ var window = function() {
           func: function(me, data){
             console.log("Got this in test: " + util.inspect(data))
             console.log("Current Adj: " + util.inspect(Object.keys(me.interface_spec.adjuncts)));
-            me.mH.sendToOutput({target:["log"], data: "I'm data!"});
           }
         }
       },
@@ -311,6 +310,16 @@ app.on('ready', function() {
       }
       window.emit('input', message)
       //console.log("sent a client msg:" + util.inspect(message))
+  });
+
+  // Listener to take input from the user back into MHB.
+  window.on('output', function(message) {
+      message.target.unshift('window');
+      if (message.target[message.target.length-1] === '_adjunctUpdate') {
+        message.target[message.target.length-1] = '_adjunctDef';
+        message.data = window.getIntSpec();
+      }
+      mainWindow.webContents.send('api', message)
   });
 
 
