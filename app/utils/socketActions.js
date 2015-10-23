@@ -32,7 +32,13 @@ export default function socketActions(msgObj, intSpec) {
 
     default:
       // logging all output type packets....
-      console.log("Received: " + JSON.stringify(msgObj, null, 2));
+      //console.log("Received: " + JSON.stringify(msgObj, null, 2));
+      console.log("ui in: \""
+        + msgObj.target[msgObj.target.length - 1]
+        + "\" from \""
+        + msgObj.target[msgObj.target.length - 2]
+        + "\" : "
+        + msgObj.data )
 
       // checks if state needs to be updated... if not, no object is returned.
       var outState = _get(intSpec.interface, path.concat("schema", "outputs", val, "state"));

@@ -1,6 +1,12 @@
 export default function uiActions(cbObject, currentState) {
   // DO NOT MANIPULATE CURRENTSTATE
-  console.log(JSON.stringify(cbObject, null, 4));
+  console.log("ui out: \""
+    + cbObject.target[cbObject.target.length - 1]
+    + "\" to \""
+    + cbObject.target[cbObject.target.length - 2]
+    + "\" : "
+    + cbObject.data);
+    
   if (undefined !== cbObject.target)
     switch (cbObject.target[0]) {
       case ("local"):
