@@ -3,7 +3,7 @@ import {merge as _merge, set as _set, get as _get, has as _has, forEachRight as 
 var buildPath = function(target) {
   var tempArray = []
   if(target.length > 2) {
-    _forEachRight(target.slice(2, target.length - 1), function(n){
+    _forEachRight(target.slice(2, target.length), function(n){
       tempArray.push(n, "adjuncts");
     })
   }
