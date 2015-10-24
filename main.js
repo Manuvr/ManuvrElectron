@@ -190,16 +190,6 @@ var window = function() {
             me.emit('ready', {});
           },
           hidden: true
-        },
-
-
-        'test' : {
-          label: "derp",
-          args: [ { label: "Something", type: "boolean"}],
-          func: function(me, data){
-            console.log("Got this in test: " + util.inspect(data))
-            console.log("Current Adj: " + util.inspect(Object.keys(me.interface_spec.adjuncts)));
-          }
         }
       },
       outputs: {
@@ -211,21 +201,8 @@ var window = function() {
       }
     },
     adjuncts: {
-      // "mHub1": {
-      //   aInstance: someVar,
-      //   type: "mHub",
-      //   schema: {},
-      //   adjuncts: {}
-      // }
     },
     taps: {
-      "mHub": {
-        "data": function(me, msg, adjunctID){
-          me.someFunction(msg.data);
-          return false; // don't emit
-        }
-      }
-
     }
   };
 
@@ -283,25 +260,6 @@ app.on('ready', function() {
 
 
   var dom_loaded = false;
-
-//  hub.on('output',
-//    function(message) {
-//      //console.log(util.inspect(message));
-//      if ('_adjunctDef' == message.target[message.target.length-1]) {
-//        // If this is a _adjunctDef, we intercept it and glom it into our own.
-//        //var level = message.target.slice(0, message.target.length-1);
-//        //_defaultsDeep(interface_spec.adjuncts.mHub, _cloneDeep(message.data));
-//        //message.target.unshift('window');
-//      }
-//      else {
-//        //message.target.unshift('mHub');
-//      }
-//      console.log(util.inspect(message));
-//      message.target.unshift('mHub');
-//      mainWindow.webContents.send('api', message);
-//    }
-//  );
-
 
   // Listener to take input from the user back into MHB.
   ipc.on('api', function(event, message) {
