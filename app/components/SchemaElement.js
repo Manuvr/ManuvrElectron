@@ -41,8 +41,6 @@ class SchemaElement extends Component {
   }
 
   handleCheck(id, e) {
-    console.log(id);
-    console.log(e);
     let newArray = this.state.data.slice();
     newArray[id] = e.target.checked;
     this.setState({data: newArray})
