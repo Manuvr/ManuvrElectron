@@ -173,7 +173,7 @@ var window = function() {
               mainWindow.webContents.openDevTools({detach: true});
             }
             mainWindow.webContents.send('api', {
-              target: ["window", "toggleDevTools"],
+              target: ["toggleDevTools", "window"],
               data:   toggle
             })
           }
@@ -183,7 +183,7 @@ var window = function() {
           args: [ { label: "Ready", type: "boolean"}],
           func: function(me, data){
             mainWindow.webContents.send('api', {
-                target: ["window", "_adjunctDef"],
+                target: ["_adjunctDef", "window"],
                 data:   me.getIntSpec()
             });
             // The react front-end is ready.
@@ -305,8 +305,8 @@ app.on('ready', function() {
 
   // Listener to take input from the user back into MHB.
   ipc.on('api', function(event, message) {
-      if(message.target[0] === "window") {
-        message.target.shift();
+      if(message.target[message.target.length - 1] === "window") {
+        message.target.pop();
       }
       window.emit('input', message)
       //console.log("sent a client msg:" + util.inspect(message))
@@ -314,9 +314,9 @@ app.on('ready', function() {
 
   // Listener to take input from the user back into MHB.
   window.on('output', function(message) {
-      message.target.unshift('window');
-      if (message.target[message.target.length-1] === '_adjunctUpdate') {
-        message.target[message.target.length-1] = '_adjunctDef';
+      message.target.push('window');
+      if (message.target[0] === '_adjunctUpdate') {
+        message.target[0] = '_adjunctDef';
         message.data = window.getIntSpec();
       }
       mainWindow.webContents.send('api', message)

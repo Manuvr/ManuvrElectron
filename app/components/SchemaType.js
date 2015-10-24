@@ -14,7 +14,7 @@ class SchemaType extends Component {
 
   layerCallback(object) {
     // nothing for schema...
-    this.props.callback(object)
+    this.props.callback(object);
   }
 
   render() {

@@ -20,7 +20,7 @@ class DebugApp extends Component {
   componentDidMount() {
     ipc.on('api', this.ipcInput);
     ipc.send('api', {
-        target: ['window', 'ready'],
+        target: ['ready', 'window'],
         data: true
     });
   };

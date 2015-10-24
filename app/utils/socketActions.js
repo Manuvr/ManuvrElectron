@@ -1,13 +1,13 @@
-import {merge as _merge, set as _set, get as _get, has as _has, forEach as _forEach} from 'lodash'
+import {merge as _merge, set as _set, get as _get, has as _has, forEachRight as _forEachRight} from 'lodash'
 
 var buildPath = function(target) {
   var tempArray = []
   if(target.length > 2) {
-    _forEach(target.slice(0, target.length - 2), function(n){
+    _forEachRight(target.slice(2, target.length - 1), function(n){
       tempArray.push(n, "adjuncts");
     })
   }
-  tempArray.push(target[target.length - 2])
+  tempArray.push(target[1])
   return tempArray;
 }
 
@@ -20,7 +20,7 @@ export default function socketActions(msgObj, intSpec) {
   var retObj = spec.interface;
 
   var path = buildPath(msgObj.target);
-  var val = msgObj.target[msgObj.target.length - 1];
+  var val = msgObj.target[0];
 
   switch(val) {
     case("_adjunctDef") :
@@ -31,12 +31,12 @@ export default function socketActions(msgObj, intSpec) {
     case("log") :
 
     default:
-      // logging all output type packets....
+      //logging all output type packets....
       //console.log("Received: " + JSON.stringify(msgObj, null, 2));
       console.log("ui in: \""
-        + msgObj.target[msgObj.target.length - 1]
+        + msgObj.target[0]
         + "\" from \""
-        + msgObj.target[msgObj.target.length - 2]
+        + msgObj.target[1]
         + "\" : "
         + msgObj.data )
 

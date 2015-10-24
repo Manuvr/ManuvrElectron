@@ -20,7 +20,7 @@ var Adjunct = React.createClass({
 
   layerCallback: function(object) {
     if(this.props.name) {
-        object.target.unshift(this.props.name);
+        object.target.push(this.props.name);
     }
     this.props.callback(object)
   },
