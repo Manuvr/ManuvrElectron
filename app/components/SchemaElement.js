@@ -94,7 +94,7 @@ class SchemaElement extends Component {
         compList.push(<div>{displayLabel}: {def.type}</div>);
         break;
       case ("state"):
-        let stateString = def.value !== undefined && def.value.toString() !== "" ? def.value.toString() : "(undefined)";
+        let stateString = (def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
         //compList.push(<div>{def.label ? def.label : name}: {def.value.toString()}</div>)
         compList.push(<Paper ><strong style={{color: "grey"}}> {displayLabel}: </strong>{stateString}</Paper>)
         break;
