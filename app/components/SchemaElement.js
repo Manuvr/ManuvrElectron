@@ -65,7 +65,7 @@ class SchemaElement extends Component {
         // compList.push(<label>{def.label ? def.label : name}</label>)
         // compList.push(<input type="text" value={this.state.data} onChange={this.handleChange} placeholder={def.type}/>)
         // compList.push(<button onClick={layerCallback}>Submit</button>)
-        compList.push(<br></br>);
+        compList.push(<br key="break"></br>);
         if(Array.isArray(def.args)) {
         def.args.map(function(currVal, index, fullArr) {
           let localLabel = currVal.label ? currVal.label : name;
@@ -91,15 +91,15 @@ class SchemaElement extends Component {
       }
         break;
       case ("outputs"):
-        compList.push(<div>{displayLabel}: {def.type}</div>);
+        compList.push(<div key="out">{displayLabel}: {def.type}</div>);
         break;
       case ("state"):
         let stateString = (def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
         //compList.push(<div>{def.label ? def.label : name}: {def.value.toString()}</div>)
-        compList.push(<Paper ><strong style={{color: "grey"}}> {displayLabel}: </strong>{stateString}</Paper>)
+        compList.push(<Paper key="state"><strong style={{color: "grey"}}> {displayLabel}: </strong>{stateString}</Paper>)
         break;
       default:
-        compList.push(<Paper zDepth={2}><strong style={{color: "grey"}}>{displayLabel}: </strong>{def}</Paper>)
+        compList.push(<Paper zDepth={2} key="wat"><strong style={{color: "grey"}}>{displayLabel}: </strong>{def}</Paper>)
         break;
     }
 
