@@ -108,6 +108,10 @@ loadConfig();
  * This function does not return.
  */
 function quit(exit_code) {
+  if (loggerWindow) {
+    loggerWindow.close();
+  }
+  
   if (exit_code) {
     console.log('Exiting with reason: ' + exit_code);
   }
@@ -189,18 +193,20 @@ var window = function() {
           func: function(me, data) {
             // Instantiating a satalite window to view log.
             if (!loggerWindow) {
-              loggerWindow = new BrowserWindow({ width: 400, height: 100 });
+              loggerWindow = new BrowserWindow({ width: 800, height: 400 });
               loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
               loggerWindow.on('closed', 
                 function() {
                   loggerWindow = false;
-                  mainWindow.webContents.send('api', {
-                    target: ["showLogWindow", "window"],
-                    data:   false
-                  });
+                  if (mainWindow.webContents) {
+                    mainWindow.webContents.send('api', {
+                        target: ["showLogWindow", "window"],
+                        data:   false
+                    });
+                  }
                 }
               );
-              loggerWindow.setMenu(null);
+              //loggerWindow.setMenu(null);
               mainWindow.webContents.send('api', {
                 target: ["showLogWindow", "window"],
                 data:   true
@@ -243,6 +249,13 @@ var window = function() {
     adjuncts: {
     },
     taps: {
+      "mHub": {
+        'log': function(me, msg, adjunctID) {
+          if (loggerWindow) {
+            loggerWindow.webContents.send('log', message)
+          }
+        }
+      }
     }
   };
 
