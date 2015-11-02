@@ -12,7 +12,7 @@ var _has          = require('lodash').has;
 var _defaultsDeep = require('lodash').defaultsDeep;
 
 var mainWindow = null;
-var transportViewWindow = null;
+var loggerWindow = null;
 
 // This is the client's version information.
 var packageJSON = require('./package.json');
@@ -140,6 +140,7 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 var window = function() {
   ee.call(this);
   var that = this;
+  var loggerWindow = false;
 
   this.interface_spec = {
     type:  'window',
@@ -147,6 +148,11 @@ var window = function() {
       state: {
         'toggleDevTools': {
           label: 'Dev tools Open',
+          type: 'boolean',
+          value:  false
+        },
+        'logWindowOpen': {
+          label: 'Log window Open',
           type: 'boolean',
           value:  false
         }
@@ -178,6 +184,35 @@ var window = function() {
             })
           }
         },
+        'showLogWindow': {
+          args: [ ],
+          func: function(me, data) {
+            // Instantiating a satalite window to view log.
+            if (!loggerWindow) {
+              loggerWindow = new BrowserWindow({ width: 400, height: 100 });
+              loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
+              loggerWindow.on('closed', 
+                function() {
+                  loggerWindow = false;
+                  mainWindow.webContents.send('api', {
+                    target: ["showLogWindow", "window"],
+                    data:   false
+                  });
+                }
+              );
+              loggerWindow.setMenu(null);
+              mainWindow.webContents.send('api', {
+                target: ["showLogWindow", "window"],
+                data:   true
+              });
+              loggerWindow.show();
+            }
+            else {
+              loggerWindow.close();
+            }
+          },
+          hidden: true
+        },
         'ready' : {
           label: "ready",
           args: [ { label: "Ready", type: "boolean"}],
@@ -197,6 +232,11 @@ var window = function() {
           label: 'Dev tools Open',
           type: 'boolean',
           state: 'toggleDevTools'
+        },
+        'loggerWindowOpen': {
+          label: 'Log window Open',
+          type: 'boolean',
+          state: 'logWindowOpen'
         }
       }
     },
@@ -245,6 +285,9 @@ app.on('ready', function() {
   mainWindow.on('closed', function() {
     mainWindow = null;
     // Close any open satalite windows...
+    if (loggerWindow) {
+      loggerWindow.close();
+    }
   });
 
 
@@ -291,11 +334,4 @@ app.on('ready', function() {
 
   mainWindow.show();
   //window.emit('input', {target:['ready']});
-
-  // Instantiating a satalite window.
-  //transportViewWindow = new BrowserWindow({ width: 100, height: 80 });
-  //transportViewWindow.loadUrl('file://' + __dirname + '/html/xport-view.html');
-  //transportViewWindow.on('closed', function() {  transportViewWindow = null;  });
-  //transportViewWindow.setMenu(null);
-  //transportViewWindow.show();
 });
