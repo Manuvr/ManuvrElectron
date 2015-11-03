@@ -50,8 +50,8 @@
       }
       
       function rerender_log() {
-        for(var item in log_stack) {
-          insert_log(item);
+        for(var i = 0; i < log_stack.length; i++) {
+          insert_log(log_stack[i]);
         }
       }
       

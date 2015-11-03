@@ -145,6 +145,34 @@ var window = function() {
   ee.call(this);
   var that = this;
   var loggerWindow = false;
+  
+  this.openLogWindow = function(_open) {
+    // Instantiating a satalite window to view log.
+    if (!loggerWindow) {
+      loggerWindow = new BrowserWindow({ width: 800, height: 400 });
+      loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
+      loggerWindow.on('closed', 
+        function() {
+          loggerWindow = false;
+          if (mainWindow.webContents) {
+            mainWindow.webContents.send('api', {
+                target: ["showLogWindow", "window"],
+                data:   false
+            });
+          }
+        }
+      );
+      //loggerWindow.setMenu(null);
+      mainWindow.webContents.send('api', {
+        target: ["showLogWindow", "window"],
+        data:   true
+      });
+      loggerWindow.show();
+    }
+    else {
+      loggerWindow.close();
+    }
+  };
 
   this.interface_spec = {
     type:  'window',
@@ -191,31 +219,7 @@ var window = function() {
         'showLogWindow': {
           args: [ ],
           func: function(me, data) {
-            // Instantiating a satalite window to view log.
-            if (!loggerWindow) {
-              loggerWindow = new BrowserWindow({ width: 800, height: 400 });
-              loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
-              loggerWindow.on('closed', 
-                function() {
-                  loggerWindow = false;
-                  if (mainWindow.webContents) {
-                    mainWindow.webContents.send('api', {
-                        target: ["showLogWindow", "window"],
-                        data:   false
-                    });
-                  }
-                }
-              );
-              //loggerWindow.setMenu(null);
-              mainWindow.webContents.send('api', {
-                target: ["showLogWindow", "window"],
-                data:   true
-              });
-              loggerWindow.show();
-            }
-            else {
-              loggerWindow.close();
-            }
+            me.openLogWindow(data);
           },
           hidden: true
         },
@@ -252,7 +256,8 @@ var window = function() {
       "mHub": {
         'log': function(me, msg, adjunctID) {
           if (loggerWindow) {
-            loggerWindow.webContents.send('log', message)
+            console.log(util.inspect(msg));
+            loggerWindow.webContents.send('log', msg)
           }
         }
       }
@@ -293,6 +298,11 @@ app.on('ready', function() {
     mainWindow.center();
   }
 
+  if (config.window_position) {
+    mainWindow.setPosition(config.window_position[0], config.window_position[1]);
+  }
+
+  
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
 
   mainWindow.on('closed', function() {

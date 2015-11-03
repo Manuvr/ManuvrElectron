@@ -26,22 +26,21 @@ body {
 }
 
 
-#logItem {
+div.logItem {
+}
+
+span.verbosityField {
+  margin-right: 3px;
+}
+
+span.datetimeField {
+  margin-right: 3px;
+}
+
+span.bodyField {
   margin: 3px;
 }
 
-#verbosityField {
-  margin: 3px;
-}
-
-#datetimeField {
-  margin: 3px;
-}
-
-#bodyField {
-  margin: 3px;
-}
-
-#originField {
-  margin: 3px;
+span.originField {
+  margin-right: 3px;
 }
