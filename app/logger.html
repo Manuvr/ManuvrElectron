@@ -4,78 +4,15 @@
     <meta charset="utf-8">
     <title>Manuvr Log</title>
     <link rel="stylesheet" href="logWindow.css">
-
-    <script>
-      var SCROLLBACK_SIZE = 1000; 
-      var log_stack = [];
-    
-      function clear_log() {
-        while(log_stack.length > 0) {
-          log_stack.shift();
-        }
-        var l_pane = document.getElementById('log_pane');
-        if (l_pane) {
-          l_pane.innerHTML = "";
-        }
-      }
-      
-      function insert_log(msg) {
-        msg.dt = new Date();
-        log_stack.push(msg);
-        if (log_stack.length > SCROLLBACK_SIZE) {
-          log_stack.shift();
-        }
-        var l_pane = document.getElementById('log_pane');
-        if (l_pane) {
-          var nu_log_line = document.createElement('div');
-            nu_log_line.className = 'logItem';
-          var v_field      = document.createElement('span');
-            v_field.innerHTML = msg.verbosity;
-            v_field.className = 'verbosityField';
-          var dt_field     = document.createElement('span');
-            dt_field.innerHTML = msg.dt;
-            dt_field.className = 'datetimeField';
-          var origin_field = document.createElement('span');
-            origin_field.innerHTML = msg.origin;
-            origin_field.className = 'originField';
-          var body_field   = document.createElement('span');
-            body_field.innerHTML = msg.body;
-            body_field.className = 'bodyField';
-          nu_log_line.appendChild(v_field);
-          nu_log_line.appendChild(dt_field);
-          nu_log_line.appendChild(origin_field);
-          nu_log_line.appendChild(body_field);
-          l_pane.appendChild(nu_log_line);
-        }
-      }
-      
-      function rerender_log() {
-        for(var i = 0; i < log_stack.length; i++) {
-          insert_log(log_stack[i]);
-        }
-      }
-      
-      var ipc = require('ipc');
-      ipc.on('log', 
-        function(msg) {
-          insert_log(msg);
-        }
-      );
-    </script>
   </head>
   
   <body>
     <!-- React attachment point -->
-    <div id="root">
-      <div id="control_pane">
-        <button type="button" onClick="clear_log();">Clear</button>
-        <button type="button" onClick="rerender_log();">Re-render</button>
-        <button type="button" onClick="insert_log({body: 'derplog', verbosity: 6, origin: 'test'});">test</button>
-      </div>
-      <div id="filter_pane">
-      </div>
-      <div id="log_pane">
-      </div>
-    </div>
+    <div id="logger_root"></div>
+    
+    <!-- LOADS IPC FROM ELECTRON -->
+    <script>  var ipc = require('ipc'); </script>
+    <!-- LOADS THE WEBPACK BUNDLE -->
+    <script src="http://localhost:8080/app/bundle.js"></script>
   </body>
 </html>

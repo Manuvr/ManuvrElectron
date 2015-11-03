@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Root from './containers/Root';
-
+import Logger from './containers/Logger';
 
 
 //Needed for onTouchTap
@@ -14,4 +14,12 @@ import Root from './containers/Root';
 let injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
-ReactDOM.render(<Root />, document.getElementById('root'));
+if (document.getElementById('root') !== null) {
+  ReactDOM.render(<Root />, document.getElementById('root'));
+}
+else if (document.getElementById('logger_root') !== null) {
+  ReactDOM.render(<Logger />, document.getElementById('logger_root'));
+}
+else {
+   alert('Don\'t know what to do now.');
+}

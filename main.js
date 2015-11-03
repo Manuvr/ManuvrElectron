@@ -126,6 +126,11 @@ function quit(exit_code) {
     }
     process.exit(); // An hero...
   });
+  
+  // Close any open satalite windows...
+  if (loggerWindow) {
+    loggerWindow.close();
+  }
 }
 
 
@@ -144,7 +149,6 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 var window = function() {
   ee.call(this);
   var that = this;
-  var loggerWindow = false;
   
   this.openLogWindow = function(_open) {
     // Instantiating a satalite window to view log.
@@ -154,7 +158,7 @@ var window = function() {
       loggerWindow.on('closed', 
         function() {
           loggerWindow = false;
-          if (mainWindow.webContents) {
+          if (mainWindow && mainWindow.webContents) {
             mainWindow.webContents.send('api', {
                 target: ["showLogWindow", "window"],
                 data:   false
@@ -259,6 +263,7 @@ var window = function() {
             console.log(util.inspect(msg));
             loggerWindow.webContents.send('log', msg)
           }
+          return false;
         }
       }
     }
@@ -307,10 +312,7 @@ app.on('ready', function() {
 
   mainWindow.on('closed', function() {
     mainWindow = null;
-    // Close any open satalite windows...
-    if (loggerWindow) {
-      loggerWindow.close();
-    }
+    quit();
   });
 
 
