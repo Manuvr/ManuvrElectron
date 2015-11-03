@@ -21,6 +21,18 @@ var mHub = require('MHB/lib/mHub.js');
 var messageHandler = require('MHB/lib/messageHandler.js')
 
 
+var SCROLLBACK_SIZE = 1000;
+var cached_logs = [];
+
+
+var pushToLog = function(msg) {
+  if (cached_logs.push(msg.data) > SCROLLBACK_SIZE) {
+    cached_logs.shift();
+  }
+  if (loggerWindow) {
+    loggerWindow.webContents.send('log', msg.data);
+  }
+}
 
 
 /** This object stores our presently-active config. This config is the default.
@@ -160,17 +172,19 @@ var window = function() {
           loggerWindow = false;
           if (mainWindow && mainWindow.webContents) {
             mainWindow.webContents.send('api', {
-                target: ["showLogWindow", "window"],
+                target: ["loggerWindowOpen", "window"],
                 data:   false
             });
           }
         }
       );
+      
       //loggerWindow.setMenu(null);
       mainWindow.webContents.send('api', {
-        target: ["showLogWindow", "window"],
+        target: ["loggerWindowOpen", "window"],
         data:   true
       });
+      
       loggerWindow.show();
     }
     else {
@@ -259,10 +273,7 @@ var window = function() {
     taps: {
       "mHub": {
         'log': function(me, msg, adjunctID) {
-          if (loggerWindow) {
-            console.log(util.inspect(msg));
-            loggerWindow.webContents.send('log', msg)
-          }
+          pushToLog(msg);
           return false;
         }
       }
@@ -339,6 +350,13 @@ app.on('ready', function() {
   });
 
   // Listener to take input from the user back into MHB.
+  ipc.on('loggerReady', function(event, message) {
+    if (loggerWindow) {
+      loggerWindow.webContents.send('fullLog', cached_logs);
+    }
+  });
+
+  // Listener to take input from the user back into MHB.
   window.on('output', function(message) {
       message.target.push('window');
       if (message.target[0] === '_adjunctUpdate') {
@@ -358,5 +376,6 @@ app.on('ready', function() {
   });
 
   mainWindow.show();
+  window.openLogWindow(true);
   //window.emit('input', {target:['ready']});
 });

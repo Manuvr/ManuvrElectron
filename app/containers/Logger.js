@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import LogItem from '../components/LogItem';
 
 class Logger extends Component {
 
@@ -11,27 +12,37 @@ class Logger extends Component {
     };
     
     
-    this.render = this.render.bind(this);
-    this.ipcInput = this.ipcInput.bind(this);
-    this.clearLog = this.clearLog.bind(this);
-    this.compCb = this.compCb.bind(this);
+    this.render           = this.render.bind(this);
+    this.provideSingleLog = this.provideSingleLog.bind(this);
+    this.setInitLogStack  = this.setInitLogStack.bind(this);
+    this.clearLog         = this.clearLog.bind(this);
+    this.compCb           = this.compCb.bind(this);
   }
 
   componentDidMount() {
-    ipc.on('log', this.ipcInput);
+    ipc.on('log', this.provideSingleLog);
+    ipc.on('fullLog', this.setInitLogStack);
+    ipc.send('loggerReady', true);
   };
 
-  clearLog() {
+  clearLog(test) {
     this.setState({
         logStack: []
     });
   };
 
   // emits coming in.  capable of setting state.  Should ONLY touch state.interface
-  ipcInput(data) {
+  setInitLogStack(data) {
     this.setState({
-        logStack: this.state.logStack.concat(data)
-    });
+        logStack: data
+    })
+  }
+
+  // emits coming in.  capable of setting state.  Should ONLY touch state.interface
+  provideSingleLog(msg) {
+    this.setState({
+        logStack: this.state.logStack.concat(msg.data)
+    })
   }
 
   // actions from our components... mostly will emit, but capable of state setting
@@ -51,8 +62,8 @@ class Logger extends Component {
     return (
       <div>
         <div id="control_pane">
-          <button type="button">Clear</button>
-          <button type="button">Re-render</button>
+          <button type="button" onClick={this.clearLog}>Clear</button>
+          <button type="button">Does Nothing</button>
         </div>
         <div id="filter_pane">
         </div>
