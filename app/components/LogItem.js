@@ -15,20 +15,20 @@ class LogItem extends Component {
     const { verbosity, logTime, body, origin } = this.props;
     
     return (
-        <div>
-          <span>
+        <tr>
+          <td>
             {verbosity}
-          </span>
-          <span>
+          </td>
+          <td>
             {logTime}
-          </span>
-          <span>
+          </td>
+          <td>
             {origin}
-          </span>
-          <span>
+          </td>
+          <td>
             {body}
-          </span>
-        </div>
+          </td>
+        </tr>
     );
   }
 }

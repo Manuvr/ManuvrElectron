@@ -1,7 +1,30 @@
 import React, { Component, PropTypes } from 'react';
 import LogItem from '../components/LogItem';
 
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button, ButtonToolbar, Table } from 'react-bootstrap';
+
+
+var containerStyle = {
+  backgroundImage:  'url(media/manuvr_transparent_1024.png)',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center'
+};
+
+var opacityOverlayStyle = {
+  backgroundColor: '#ffffff',
+  opacity: 0.9
+};
+
+var redButtonStyle = {
+  color: 'red'
+};
+
+var logPaneStyle = {
+  backgroundColor: '#ffffff',
+  opacity: 0.9,
+  height: '1024px'
+};
+
 
 class Logger extends Component {
 
@@ -62,17 +85,29 @@ class Logger extends Component {
 
 
     return (
-      <div>
-        <div id="control_pane">
+      <div style={containerStyle}>
+        <div id="control_pane" style={opacityOverlayStyle}>
           <ButtonToolbar>
-            <Button bsStyle="primary" onClick={this.clearLog}>Clear Log</Button>
+            <Button style={redButtonStyle} onClick={this.clearLog}>Clear Log</Button>
             <Button>Something Else</Button>
           </ButtonToolbar>
         </div>
-        <div id="filter_pane">
+        <div id="filter_pane" style={opacityOverlayStyle}>
         </div>
-        <div id="log_pane">
-          {output}
+        <div id="log_pane" style={logPaneStyle}>
+          <Table responsive>
+            <thead>
+              <tr>
+                <th>Verbosity</th>
+                <th>Time</th>
+                <th>Origin</th>
+                <th>Body</th>
+              </tr>
+            </thead>
+            <tbody>
+              {output}
+            </tbody>
+          </Table>
         </div>
        </div>
     );

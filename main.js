@@ -165,7 +165,7 @@ var window = function() {
   this.openLogWindow = function(_open) {
     // Instantiating a satalite window to view log.
     if (!loggerWindow) {
-      loggerWindow = new BrowserWindow({ width: 800, height: 400 });
+      loggerWindow = new BrowserWindow({ width: 1050, height: 800 });
       loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
       loggerWindow.on('closed', 
         function() {
