@@ -45,7 +45,7 @@ var Adjunct = React.createClass({
 
     let compList = [];
 
-    let title = (<h1>{name}</h1>)
+    let title = (<h1>{name} -{config.hasOwnProperty('type') ? config.type : 'UNSET'}</h1>)
     let tabHead = (<div />)
 
     if (adjuncts !== undefined && Object.keys(adjuncts).length > 0) {
@@ -55,7 +55,11 @@ var Adjunct = React.createClass({
             <Adjunct key={key} name={key} config={value} callback={layerCallback} />
           </Tab>)
       });
-      tabHead = (<Tabs valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange}}><Tab key="wut" label="--hide adjuncts--" value="none"></Tab>{compList}</Tabs>);
+      tabHead = (
+        <Tabs valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange}}>
+        <Tab key="wut" label="--hide adjuncts--" value="none"></Tab>
+        {compList}
+      </Tabs>);
     }
 
     // if(compList.length > 0) {
@@ -65,9 +69,7 @@ var Adjunct = React.createClass({
     return (
       <div>
         <Card initiallyExpanded={true}>
-          <CardHeader
-            avatar={title}
-            showExpandableButton={true}>
+          <CardHeader avatar={title} showExpandableButton={true}>
           </CardHeader>
           <CardText expandable={true}>
             <SchemaMaster

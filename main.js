@@ -3,6 +3,7 @@ var BrowserWindow = require('browser-window');
 var ipc           = require('ipc');
 var fs            = require('fs');
 var util          = require('util');
+var _throttle     = require('lodash.throttle');
 var inherits = require('util').inherits;
 var ee = require('events').EventEmitter;
 
@@ -156,8 +157,9 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 
 
 /****************************************************************************************************
- * This is where we setup the front-end of things...                                                 *
- ****************************************************************************************************/
+* This is where we setup the front-end of things...                                                 *
+****************************************************************************************************/
+
 var window = function() {
   ee.call(this);
   var that = this;
@@ -166,8 +168,8 @@ var window = function() {
     // Instantiating a satalite window to view log.
     if (!loggerWindow) {
       loggerWindow = new BrowserWindow({
-        'width':        1050,
-        'height':       800,
+        'width':  (config.logwindow_size) ? config.logwindow_size[0] : 800,
+        'height': (config.logwindow_size) ? config.logwindow_size[1] : 600,
         'skip-taskbar': true
       });
       //loggerWindow.setMenu(null);
@@ -183,6 +185,27 @@ var window = function() {
           }
         }
       );
+
+      loggerWindow.on('resize',
+        _throttle(function() {
+          config.logwindow_size = loggerWindow.getSize();
+          config.dirty = true;
+        }, 500)
+      );
+
+      loggerWindow.on('move',
+        _throttle(function() {
+          config.logwindow_position = loggerWindow.getPosition();
+          config.dirty = true;
+        }, 500)
+      );
+
+      if (config.logwindow_position) {
+        loggerWindow.setPosition(config.logwindow_position[0], config.logwindow_position[1]);
+      }
+      else {
+        loggerWindow.center();
+      }
 
       //loggerWindow.setMenu(null);
       mainWindow.webContents.send('api', {
@@ -307,6 +330,7 @@ app.on('window-all-closed', function() {
   quit('SIGQUIT');
 });
 
+
 app.on('ready', function() {
   mainWindow = new BrowserWindow(
     {
@@ -327,11 +351,6 @@ app.on('ready', function() {
     mainWindow.center();
   }
 
-  if (config.window_position) {
-    mainWindow.setPosition(config.window_position[0], config.window_position[1]);
-  }
-
-
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
 
   mainWindow.on('closed', function() {
@@ -340,15 +359,19 @@ app.on('ready', function() {
   });
 
 
-  mainWindow.on('resize', function(event) {
-    config.window_size = mainWindow.getSize();
-    config.dirty = true;
-  });
+  mainWindow.on('resize',
+    _throttle(function() {
+      config.window_size = mainWindow.getSize();
+      config.dirty = true;
+    }, 500)
+  );
 
-  mainWindow.on('move', function(event) {
-    config.window_position = mainWindow.getPosition();
-    config.dirty = true;
-  });
+  mainWindow.on('move',
+    _throttle(function(){
+      config.window_position = mainWindow.getPosition();
+      config.dirty = true;
+    }, 500)
+  );
 
 
   var dom_loaded = false;

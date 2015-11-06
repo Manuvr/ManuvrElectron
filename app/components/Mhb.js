@@ -30,7 +30,6 @@ class Mhb extends Component {
 
     return (
       <div>
-        <AppBar title="Manuvr Debug" iconElementRight={<FlatButton label="???" />} />
         <SelfDefineMaster config={config} callback={layerCallback} />
           <br/><br/>
 
