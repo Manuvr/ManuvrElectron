@@ -88,7 +88,7 @@ class Logger extends Component {
       <div style={containerStyle}>
         <div id="control_pane" style={opacityOverlayStyle}>
           <ButtonToolbar>
-            <Button style={redButtonStyle} onClick={this.clearLog}>Clear Log</Button>
+            <Button style={redButtonStyle} onClick={this.clearLog} bsStyle="primary">Clear Log</Button>
             <Button>Something Else</Button>
           </ButtonToolbar>
         </div>
