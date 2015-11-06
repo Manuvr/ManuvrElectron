@@ -196,7 +196,7 @@ var window = function() {
     type:  'window',
     schema: {
       state: {
-        'toggleDevTools': {
+        'devToolsOpen': {
           label: 'Dev tools Open',
           type: 'boolean',
           value:  false
@@ -210,14 +210,14 @@ var window = function() {
       inputs: {
         'quit': {
           label: "Quit",
-          args: [ { label: '?', type: 'boolean' } ],
+          args: [],
           func: function(me, data) {
             quit();
           }
         },
         'toggleDevTools': {
-          label: "Toggle Dev Tools",
-          args: [{ label: 'OpenTools', type: 'boolean' } ],
+          label: "Toggle dev tools",
+          args: [],
           func: function(me, data) {
             var toggle;
             if (mainWindow.webContents.isDevToolsOpened()) {
@@ -234,12 +234,12 @@ var window = function() {
             })
           }
         },
-        'showLogWindow': {
+        'toggleLogWindow': {
+          label: "Toggle log window",
           args: [ ],
           func: function(me, data) {
             me.openLogWindow(data);
           },
-          hidden: true
         },
         'ready' : {
           label: "ready",
@@ -256,10 +256,10 @@ var window = function() {
         }
       },
       outputs: {
-        'toggleDevTools': {
+        'devToolsOpen': {
           label: 'Dev tools Open',
           type: 'boolean',
-          state: 'toggleDevTools'
+          state: 'devToolsOpen'
         },
         'loggerWindowOpen': {
           label: 'Log window Open',
