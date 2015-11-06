@@ -28,7 +28,9 @@ class SchemaType extends Component {
       compList.push("???: " + {vals})
     } else {
       _forOwn(vals, function(value, key) {
+        if((value.hasOwnProperty("hidden") && !value.hidden) || (!value.hasOwnProperty("hidden"))) {
           compList.push(<SchemaElement key={key} type={name} name={key} def={value} callback={layerCallback}/>)
+        }
       })
     }
 

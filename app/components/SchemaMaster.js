@@ -27,15 +27,16 @@ class SchemaMaster extends Component {
     let compList = [];
 
     _forOwn(schema, function(value, key) {
-      if(key === "inputs" || key === "state")
-      compList.push(
-        <Cell key={key + "a"}><SchemaType
-          key={key}
-          name={key}
-          vals={value}
-          callback={layerCallback}
-        /></Cell>
-      );
+      if(key === "inputs" || key === "state" ) {
+        compList.push(
+          <Cell key={key + "a"}><SchemaType
+            key={key}
+            name={key}
+            vals={value}
+            callback={layerCallback}
+          /></Cell>
+        );
+      }
     })
 
     return (
