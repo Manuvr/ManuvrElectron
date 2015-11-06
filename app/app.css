@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 import 'react-flexr/styles.css'
+import 'bootstrap/dist/css/bootstrap.css'
 
 html {
   -webkit-box-sizing: border-box;
