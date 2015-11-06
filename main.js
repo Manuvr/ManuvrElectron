@@ -17,7 +17,7 @@ var loggerWindow = null;
 // This is the client's version information.
 var packageJSON = require('./package.json');
 
-var mHub = require('MHB/lib/mHub.js');
+var mHub = require('./node_modules/MHB/lib/mHub.js');
 var messageHandler = require('MHB/lib/messageHandler.js')
 
 
@@ -210,6 +210,13 @@ var window = function() {
       inputs: {
         'quit': {
           label: "Quit",
+          args: [],
+          func: function(me, data) {
+            quit();
+          }
+        },
+        'showHiddenSchema': {
+          label: "Show schema elements marked hidden",
           args: [],
           func: function(me, data) {
             quit();
