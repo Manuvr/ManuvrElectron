@@ -123,7 +123,7 @@ function quit(exit_code) {
   if (loggerWindow) {
     loggerWindow.close();
   }
-  
+
   if (exit_code) {
     console.log('Exiting with reason: ' + exit_code);
   }
@@ -138,7 +138,7 @@ function quit(exit_code) {
     }
     process.exit(); // An hero...
   });
-  
+
   // Close any open satalite windows...
   if (loggerWindow) {
     loggerWindow.close();
@@ -161,13 +161,18 @@ process.on('SIGTERM', function() { quit('SIGTERM'); });
 var window = function() {
   ee.call(this);
   var that = this;
-  
+
   this.openLogWindow = function(_open) {
     // Instantiating a satalite window to view log.
     if (!loggerWindow) {
-      loggerWindow = new BrowserWindow({ width: 1050, height: 800 });
+      loggerWindow = new BrowserWindow({
+        'width':        1050,
+        'height':       800,
+        'skip-taskbar': true
+      });
+      loggerWindow.setMenu(null);
       loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
-      loggerWindow.on('closed', 
+      loggerWindow.on('closed',
         function() {
           loggerWindow = false;
           if (mainWindow && mainWindow.webContents) {
@@ -178,13 +183,13 @@ var window = function() {
           }
         }
       );
-      
+
       //loggerWindow.setMenu(null);
       mainWindow.webContents.send('api', {
         target: ["loggerWindowOpen", "window"],
         data:   true
       });
-      
+
       loggerWindow.show();
     }
     else {
@@ -305,14 +310,15 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   mainWindow = new BrowserWindow(
     {
-      width:  (config.window_size) ? config.window_size[0] : 800,
-      height: (config.window_size) ? config.window_size[1] : 600,
-
-      icon: './app/media/manuvr_transparent.png',
-      title: 'Manuvr Host Bridge',
+      'width':  (config.window_size) ? config.window_size[0] : 800,
+      'height': (config.window_size) ? config.window_size[1] : 600,
+      'title-bar-style': 'hidden',
+      'icon': './app/media/manuvr_transparent.png',
+      'title': 'Manuvr Host Bridge',
       'subpixel-font-scaling': true
     }
   );
+  mainWindow.setMenu(null);
 
   if (config.window_position) {
     mainWindow.setPosition(config.window_position[0], config.window_position[1]);
@@ -325,7 +331,7 @@ app.on('ready', function() {
     mainWindow.setPosition(config.window_position[0], config.window_position[1]);
   }
 
-  
+
   mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
 
   mainWindow.on('closed', function() {
