@@ -166,10 +166,18 @@ var window = function() {
 
   this.openLogWindow = function(_open) {
     // Instantiating a satalite window to view log.
+    if (_open ^ !loggerWindow) {
+      // If the logger window state and the desired open state match,
+      //   do nothing and return.
+      return;
+    }
     if (!loggerWindow) {
       loggerWindow = new BrowserWindow({
         'width':  (config.logwindow_size) ? config.logwindow_size[0] : 800,
         'height': (config.logwindow_size) ? config.logwindow_size[1] : 600,
+        'icon': './app/media/manuvr_transparent.png',
+        'title': 'Manuvr Logger',
+        'subpixel-font-scaling': true,
         'skip-taskbar': true
       });
       //loggerWindow.setMenu(null);
@@ -213,10 +221,14 @@ var window = function() {
         data:   true
       });
 
+      config.logWindowOpen = true;
+      config.dirty = true;
       loggerWindow.show();
     }
     else {
       loggerWindow.close();
+      config.logWindowOpen = false;
+      config.dirty = true;
     }
   };
 
@@ -267,13 +279,15 @@ var window = function() {
               target: ["toggleDevTools", "window"],
               data:   toggle
             })
+            config.devToolsOpen = toggle;
+            config.dirty = true;
           }
         },
         'toggleLogWindow': {
           label: "Toggle log window",
           args: [ ],
           func: function(me, data) {
-            me.openLogWindow(data);
+            me.openLogWindow(!loggerWindow);
           },
         },
         'ready' : {
@@ -412,6 +426,7 @@ app.on('ready', function() {
   });
 
   mainWindow.show();
-  window.openLogWindow(true);
+  if (config.logWindowOpen) window.openLogWindow(true);
+  //if (config.devToolsOpen) window.toggleDevTools(true);
   //window.emit('input', {target:['ready']});
 });
