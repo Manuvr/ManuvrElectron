@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import LogItem from '../components/LogItem';
 
-import { Button, ButtonToolbar, Table } from 'react-bootstrap';
+import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon } from 'react-bootstrap';
 
 
 var containerStyle = {
@@ -14,6 +14,7 @@ var opacityOverlayStyle = {
   backgroundColor: '#ffffff',
   opacity: 0.9
 };
+
 
 var redButtonStyle = {
   color: 'red'
@@ -66,7 +67,7 @@ class Logger extends Component {
   // emits coming in.  capable of setting state.  Should ONLY touch state.interface
   provideSingleLog(msg) {
     this.setState({
-        logStack: this.state.logStack.concat(msg.data)
+        logStack: this.state.logStack.concat(msg)
     })
   }
 
@@ -83,13 +84,21 @@ class Logger extends Component {
         );
     });
 
-
     return (
       <div style={containerStyle}>
         <div id="control_pane" style={opacityOverlayStyle}>
           <ButtonToolbar>
-            <Button style={redButtonStyle} onClick={this.clearLog} bsStyle="primary">Clear Log</Button>
-            <Button>Something Else</Button>
+            <Button onClick={this.clearLog}><Glyphicon glyph="trash" /></Button>
+            <ButtonGroup>
+              <Button>0</Button>
+              <Button>1</Button>
+              <Button>2</Button>
+              <Button>3</Button>
+              <Button>4</Button>
+              <Button>5</Button>
+              <Button>6</Button>
+              <Button>7</Button>
+            </ButtonGroup>
           </ButtonToolbar>
         </div>
         <div id="filter_pane" style={opacityOverlayStyle}>

@@ -170,7 +170,7 @@ var window = function() {
         'height':       800,
         'skip-taskbar': true
       });
-      loggerWindow.setMenu(null);
+      //loggerWindow.setMenu(null);
       loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
       loggerWindow.on('closed',
         function() {
