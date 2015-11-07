@@ -433,6 +433,6 @@ app.on('ready', function() {
   mainWindow.show();
   if (config.logWindowOpen) window.openLogWindow(true);
   //if (config.devToolsOpen) window.toggleDevTools(true);
-  mainWindow.webContents.openDevTools({detach: true});
+  //mainWindow.webContents.openDevTools({detach: true});
   //window.emit('input', {target:['ready']});
 });
