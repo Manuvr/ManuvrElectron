@@ -70,22 +70,15 @@ class Window extends Component {
 
     // TODO: Floppy-saved should reflect when the schema is dirty, and eligible for re-persisting (saving) the state.
     return (
-      <div>
-        <ButtonGroup justified>
-        <ButtonGroup>
-        <Button onClick={this.globalPersist} bsSize="xsmall"><Glyphicon glyph="floppy-saved" /></Button>
+        <ButtonGroup  >
+        <Button onClick={this.globalPersist} bsSize="small"><Glyphicon glyph="floppy-saved" /></Button>
+
+        <Button onClick={this.toggleLog} bsSize="small"><Glyphicon glyph="info-sign" />  {(config.outputs.loggerWindowOpen.value) ? 'Close' : 'Open'} Log</Button>
+
+        <Button onClick={this.toggleTools} bsSize="small"><Glyphicon glyph="wrench" />  {(config.outputs.devToolsOpen.value) ? 'Close' : 'Open'} Tools</Button>
+
+        <Button onClick={this.changeViewMode} bsSize="small"><Glyphicon glyph="cog" />  {(config.outputs.showingHiddenSchema.value) ? 'Hide' : 'Show'} hidden</Button>
         </ButtonGroup>
-        <ButtonGroup>
-        <Button onClick={this.toggleLog} bsSize="xsmall"><Glyphicon glyph="info-sign" />  {(config.outputs.loggerWindowOpen.value) ? 'Close' : 'Open'} Log</Button>
-        </ButtonGroup>
-        <ButtonGroup>
-        <Button onClick={this.toggleTools} bsSize="xsmall"><Glyphicon glyph="wrench" />  {(config.outputs.devToolsOpen.value) ? 'Close' : 'Open'} Tools</Button>
-        </ButtonGroup>
-        <ButtonGroup>
-        <Button onClick={this.changeViewMode} bsSize="xsmall"><Glyphicon glyph="cog" />  {(config.outputs.showingHiddenSchema.value) ? 'Hide' : 'Show'} hidden</Button>
-        </ButtonGroup>
-        </ButtonGroup>
-    </div>
     );
     //return (
     //  <div>

@@ -37,7 +37,7 @@ class DebugApp extends Component {
 
   render() {
     return (
-        <Mhb config={this.state.interface} cb={this.compCb} />
+        <Mhb config={this.state} cb={this.compCb} />
     );
   }
 }

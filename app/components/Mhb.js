@@ -12,7 +12,7 @@ import FlatButton from 'material-ui/lib/flat-button';
 import { Card, CardHeader, CardText, CardActions } from 'material-ui/lib/card';
 import { IconButton } from 'material-ui/lib/icon-button'
 
-import {Grid, Row, Col, Button} from 'react-bootstrap';
+import {Grid, Row, Col, Button, Image} from 'react-bootstrap';
 
 class Mhb extends Component {
 
@@ -33,8 +33,18 @@ class Mhb extends Component {
 
     let topStyle = {
       backgroundColor: 'purple',
+      color: 'White',
+      textAlign: 'left',
+      verticalAlign: 'middle',
+      height: 90
+    }
+
+    let windowButtonStyle = {
+      backgroundColor: 'purple',
       color: 'white',
-      textAlign: 'center'
+      textAlign: 'right',
+      verticalAlign: 'middle',
+      height: 90
     }
 
     let menuStyle = {
@@ -44,21 +54,26 @@ class Mhb extends Component {
       height: '500px'
     }
 
+    let imgStyle = {
+      backgroundColor: 'white',
+      padding: 5
+    }
+
     var windowObj = "derp"
-    if(config.window.hasOwnProperty("schema")) {
-      windowObj = (<Window config={config.window.schema} callback={layerCallback} />)
+    if(config.interface.window.hasOwnProperty("schema")) {
+      windowObj = (<Window config={config.interface.window.schema} callback={layerCallback} />)
     }
 
     return (
       <div>
         <Grid fluid={true}>
-          <Row className="show-grid" style={topStyle}>
-            <Col xs={12}>
-              <h5>Manuvr Debug Tool</h5>
+          <Row className="show-grid" >
+            <Col xs={7} style={topStyle}>
+              <h1><Image src="media/manuvr_transparent.png" height="60" rounded style={imgStyle} />&nbsp; Manuvr</h1>
             </Col>
-          </Row>
-          <Row className="show-grid">
-            {windowObj}
+            <Col xs={5} style={windowButtonStyle}>
+              {windowObj}
+            </Col>
           </Row>
 
           <Row className="show-grid" style={ { height: '100%' } }>
@@ -72,9 +87,7 @@ class Mhb extends Component {
           </Row>
 
         </Grid>
-        <br />
-        OLD GARBAGE
-        <br />
+
         <Card initiallyExpanded={false}>
         <CardHeader
           title="Old Self-Define"
