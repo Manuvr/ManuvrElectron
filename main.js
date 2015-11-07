@@ -347,7 +347,6 @@ app.on('ready', function() {
     {
       'width':  (config.window_size) ? config.window_size[0] : 800,
       'height': (config.window_size) ? config.window_size[1] : 600,
-      'title-bar-style': 'hidden',
       'icon': './app/media/manuvr_transparent.png',
       'title': 'Manuvr Host Bridge',
       'subpixel-font-scaling': true
