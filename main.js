@@ -7,6 +7,8 @@ var _throttle     = require('lodash.throttle');
 var inherits = require('util').inherits;
 var ee = require('events').EventEmitter;
 
+const electronLocalshortcut = require('electron-localshortcut');
+
 
 // I changed this....
 var _has          = require('lodash').has;
@@ -46,6 +48,7 @@ var config = {
   logPath: __dirname+'/logs/',
   verbosity:        7
 };
+
 
 
 /**
@@ -121,7 +124,9 @@ loadConfig();
  * This function does not return.
  */
 function quit(exit_code) {
+  electronLocalshortcut.unregisterAll(mainWindow);
   if (loggerWindow) {
+    electronLocalshortcut.unregisterAll(loggerWindow);
     loggerWindow.close();
   }
 
@@ -236,15 +241,20 @@ var window = function() {
     type:  'window',
     schema: {
       state: {
+        'showingHiddenSchema': {
+          label: 'Showing hidden schema',
+          type: 'boolean',
+          value:  false
+        },
         'devToolsOpen': {
           label: 'Dev tools Open',
           type: 'boolean',
-          value:  false
+          value:  config.devToolsOpen
         },
         'logWindowOpen': {
           label: 'Log window Open',
           type: 'boolean',
-          value:  false
+          value:  config.logWindowOpen
         }
       },
       inputs: {
@@ -255,11 +265,10 @@ var window = function() {
             quit();
           }
         },
-        'showHiddenSchema': {
+        'toggleHiddenSchema': {
           label: "Show schema elements marked hidden",
           args: [],
           func: function(me, data) {
-            quit();
           }
         },
         'toggleDevTools': {
@@ -305,6 +314,10 @@ var window = function() {
         }
       },
       outputs: {
+        'showingHiddenSchema': {
+          type: 'boolean',
+          state: 'showingHiddenSchema'
+        },
         'devToolsOpen': {
           label: 'Dev tools Open',
           type: 'boolean',
@@ -390,6 +403,15 @@ app.on('ready', function() {
 
   var dom_loaded = false;
 
+
+  if (electronLocalshortcut.isRegistered(mainWindow, 'Ctrl+R')) {
+    electronLocalshortcut.unregister(mainWindow, 'Ctrl+R');
+  }
+
+  electronLocalshortcut.register(mainWindow, 'Ctrl+R', function() {
+    mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
+  });
+
   // Listener to take input from the user back into MHB.
   ipc.on('api', function(event, message) {
       if(message.target[message.target.length - 1] === "window") {
@@ -428,5 +450,6 @@ app.on('ready', function() {
   mainWindow.show();
   if (config.logWindowOpen) window.openLogWindow(true);
   //if (config.devToolsOpen) window.toggleDevTools(true);
+  mainWindow.webContents.openDevTools({detach: true});
   //window.emit('input', {target:['ready']});
 });
