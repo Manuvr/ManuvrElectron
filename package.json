@@ -33,7 +33,6 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prestart": "npm run dev 2>1 &",
     "start": "electron .",
     "stats": "find ./app ./main.js -type f \\( -name \\*.js \\) -exec wc -l {} +",
     "dev": "webpack-dev-server --config webpack.config.js"
