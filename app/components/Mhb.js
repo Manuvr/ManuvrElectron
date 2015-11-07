@@ -26,7 +26,6 @@ class Mhb extends Component {
     this.props.cb(object)
   }
 
-
   render() {
     const { config, callback } = this.props;
 
@@ -70,6 +69,28 @@ class Mhb extends Component {
           </Row>
 
         </Grid>
+        <br />
+        OLD GARBAGE
+        <br />
+        <Card initiallyExpanded={false}>
+        <CardHeader
+          title="Old Self-Define"
+          showExpandableButton={true}>
+        </CardHeader>
+        <CardText expandable={true}>
+        <SelfDefineMaster config={config} callback={layerCallback} />
+        </CardText>
+        </Card>
+
+        <Card initiallyExpanded={false}>
+          <CardHeader
+            title="Current JSON interface state"
+            showExpandableButton={true}>
+          </CardHeader>
+          <CardText expandable={true}>
+            <pre >{JSON.stringify(config, null, 2)}</pre>
+          </CardText>
+        </Card>
 
       </div>
 
@@ -82,11 +103,7 @@ class Mhb extends Component {
 export default Mhb;
 
 //   (
-//     <AppBar title="Manuvr Debug"
-//             style={style}
-//             iconElementLeft={ <div /> }
-//             iconElementRight={ <div /> }
-//     />
+//
 //     <SelfDefineMaster config={config} callback={layerCallback} />
 //       <br/><br/>
 //
