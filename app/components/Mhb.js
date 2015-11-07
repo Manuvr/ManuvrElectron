@@ -41,7 +41,7 @@ class Mhb extends Component {
       backgroundColor: 'LightGrey',
       color: 'white',
       textAlign: 'center',
-      height: '100%'
+      height: '500px'
     }
 
     var windowObj = "derp"
@@ -54,10 +54,13 @@ class Mhb extends Component {
         <Grid fluid={true}>
           <Row className="show-grid" style={topStyle}>
             <Col xs={12}>
-              <h5>Window Top Barrrrrr</h5>
-              {windowObj}
+              <h5>Manuvr Debug Tool</h5>
             </Col>
           </Row>
+          <Row className="show-grid">
+            {windowObj}
+          </Row>
+
           <Row className="show-grid" style={ { height: '100%' } }>
             <Col xs={2} style={menuStyle}>
               Menu test

@@ -252,6 +252,7 @@ var window = function() {
           label: "Show schema elements marked hidden",
           args: [],
           func: function(me, data) {
+
           }
         },
         'toggleDevTools': {
