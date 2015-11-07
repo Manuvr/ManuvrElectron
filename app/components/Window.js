@@ -72,9 +72,9 @@ class Window extends Component {
     return (
       <div>
         <Button onClick={this.globalPersist}><Glyphicon glyph="floppy-saved" /></Button>
-        <Button onClick={this.toggleLog}><Glyphicon glyph="info-sign" />  {(config.state.logWindowOpen.value) ? 'Close' : 'Open'} Log</Button>
-        <Button onClick={this.toggleTools}><Glyphicon glyph="wrench" />  {(config.state.devToolsOpen.value) ? 'Close' : 'Open'} Tools</Button>
-        <Button onClick={this.changeViewMode}><Glyphicon glyph="cog" />  {(config.state.showingHiddenSchema.value) ? 'Hide' : 'Show'} hidden</Button>
+        <Button onClick={this.toggleLog}><Glyphicon glyph="info-sign" />  {(config.outputs.loggerWindowOpen.value) ? 'Close' : 'Open'} Log</Button>
+        <Button onClick={this.toggleTools}><Glyphicon glyph="wrench" />  {(config.outputs.devToolsOpen.value) ? 'Close' : 'Open'} Tools</Button>
+        <Button onClick={this.changeViewMode}><Glyphicon glyph="cog" />  {(config.outputs.showingHiddenSchema.value) ? 'Hide' : 'Show'} hidden</Button>
       </div>
     );
     //return (

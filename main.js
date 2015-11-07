@@ -240,23 +240,6 @@ var window = function() {
   this.interface_spec = {
     type:  'window',
     schema: {
-      state: {
-        'showingHiddenSchema': {
-          label: 'Showing hidden schema',
-          type: 'boolean',
-          value:  false
-        },
-        'devToolsOpen': {
-          label: 'Dev tools Open',
-          type: 'boolean',
-          value:  config.devToolsOpen
-        },
-        'logWindowOpen': {
-          label: 'Log window Open',
-          type: 'boolean',
-          value:  config.logWindowOpen
-        }
-      },
       inputs: {
         'quit': {
           label: "Quit",
@@ -316,17 +299,17 @@ var window = function() {
       outputs: {
         'showingHiddenSchema': {
           type: 'boolean',
-          state: 'showingHiddenSchema'
+          value:  false
         },
         'devToolsOpen': {
           label: 'Dev tools Open',
           type: 'boolean',
-          state: 'devToolsOpen'
+          value:  config.devToolsOpen
         },
         'loggerWindowOpen': {
           label: 'Log window Open',
           type: 'boolean',
-          state: 'logWindowOpen'
+          value:  config.logWindowOpen
         }
       }
     },

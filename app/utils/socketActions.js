@@ -38,13 +38,15 @@ export default function socketActions(msgObj, intSpec) {
         + "\" from \""
         + msgObj.target[1]
         + "\" : "
-        + msgObj.data )
+        + msgObj.data);
+
+      _set(retObj, path.concat("schema", "outputs", val, "value"), msgObj.data);
 
       // checks if state needs to be updated... if not, no object is returned.
-      var outState = _get(intSpec.interface, path.concat("schema", "outputs", val, "state"));
-      if(outState !== undefined  && _has(intSpec.interface, path.concat("schema", "state", outState))){
-        _set(retObj, path.concat("schema", "state", outState, "value"), msgObj.data);
-      }
+      // var outState = _get(intSpec.interface, path.concat("schema", "outputs", val, "state"));
+      // if(outState !== undefined  && _has(intSpec.interface, path.concat("schema", "state", outState))){
+      //   _set(retObj, path.concat("schema", "state", outState, "value"), msgObj.data);
+      // }
   }
 
   //Emit? Log? Console?
