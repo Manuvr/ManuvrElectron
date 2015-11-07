@@ -285,7 +285,7 @@ var window = function() {
               mainWindow.webContents.openDevTools({detach: true});
             }
             mainWindow.webContents.send('api', {
-              target: ["toggleDevTools", "window"],
+              target: ["devToolsOpen", "window"],
               data:   toggle
             })
             config.devToolsOpen = toggle;
@@ -450,6 +450,6 @@ app.on('ready', function() {
   mainWindow.show();
   if (config.logWindowOpen) window.openLogWindow(true);
   //if (config.devToolsOpen) window.toggleDevTools(true);
-  mainWindow.webContents.openDevTools({detach: true});
+  //mainWindow.webContents.openDevTools({detach: true});
   //window.emit('input', {target:['ready']});
 });
