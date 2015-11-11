@@ -91,13 +91,12 @@ class SchemaElement extends Component {
       }
         break;
       case ("outputs"):
-        compList.push(<div key="out">{displayLabel}: {def.type}</div>);
-        break;
-      case ("state"):
         let stateString = (def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
         //compList.push(<div>{def.label ? def.label : name}: {def.value.toString()}</div>)
         compList.push(<Paper key="state"><strong style={{color: "grey"}}> {displayLabel}: </strong>{stateString}</Paper>)
         break;
+      case ("state"):
+        //no moar state
       default:
         compList.push(<Paper zDepth={2} key="wat"><strong style={{color: "grey"}}>{displayLabel}: </strong>{def}</Paper>)
         break;

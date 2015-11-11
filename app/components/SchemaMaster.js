@@ -27,7 +27,7 @@ class SchemaMaster extends Component {
     let compList = [];
 
     _forOwn(schema, function(value, key) {
-      if(key === "inputs" || key === "state" ) {
+      if(key === "inputs" || key === "outputs" ) {
         compList.push(
           <Cell key={key + "a"}>
             <SchemaType
