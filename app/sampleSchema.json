@@ -1,0 +1,519 @@
+{
+  "default": {
+    "default": {},
+    "log": {
+      "cache": 500,
+      "data": []
+    },
+    "uiState": {},
+    "interface": {
+      "window": {
+        "adjuncts": {
+          "mHub": {
+            "adjuncts": {
+              "WebSocket.js": {
+                "adjuncts": {},
+                "name": "WebSocketFactory",
+                "schema": {
+                  "inputs": {
+                    "connect": {
+                      "args": [
+                        {
+                          "label": "Remote Address",
+                          "type": "string"
+                        },
+                        {
+                          "label": "Port",
+                          "type": "number"
+                        }
+                      ],
+                      "hidden": false,
+                      "label": "Connect"
+                    },
+                    "listen": {
+                      "args": [
+                        {
+                          "label": "Listen",
+                          "type": "boolean"
+                        },
+                        {
+                          "label": "Local Address",
+                          "type": "string"
+                        },
+                        {
+                          "label": "Port",
+                          "type": "number"
+                        }
+                      ],
+                      "hidden": false,
+                      "label": "Listen"
+                    },
+                    "scan": {
+                      "args": [
+                        {
+                          "label": "Scan",
+                          "type": "boolean"
+                        }
+                      ],
+                      "hidden": false,
+                      "label": "Scan"
+                    }
+                  },
+                  "outputs": {
+                    "connected": {
+                      "label": "Instanced Transport",
+                      "type": "object",
+                      "value": false
+                    },
+                    "listening": {
+                      "label": "Listening",
+                      "type": "boolean",
+                      "value": false
+                    },
+                    "scanResult": {
+                      "label": [
+                        "Address"
+                      ],
+                      "type": "array",
+                      "value": []
+                    }
+                  }
+                },
+                "type": "mTransport"
+              },
+              "loopback.js": {
+                "adjuncts": {},
+                "name": "LoopbackFactory",
+                "schema": {
+                  "inputs": {
+                    "scan": {
+                      "args": [
+                        {
+                          "label": "Scan",
+                          "type": "boolean"
+                        }
+                      ],
+                      "hidden": false,
+                      "label": "Scan"
+                    }
+                  },
+                  "outputs": {
+                    "connected": {
+                      "label": "Instanced Transport",
+                      "type": "object",
+                      "value": false
+                    },
+                    "listening": {
+                      "label": "Listening",
+                      "type": "boolean",
+                      "value": true
+                    },
+                    "scanResult": {
+                      "label": [
+                        "Address"
+                      ],
+                      "type": "array",
+                      "value": []
+                    }
+                  }
+                },
+                "type": "mTransport"
+              },
+              "mtSerialPort.js": {
+                "adjuncts": {},
+                "name": "SerialPortFactory",
+                "schema": {
+                  "inputs": {
+                    "scan": {
+                      "args": [
+                        {
+                          "label": "Scan",
+                          "type": "boolean"
+                        }
+                      ],
+                      "hidden": false,
+                      "label": "Scan"
+                    }
+                  },
+                  "outputs": {
+                    "connected": {
+                      "label": "Instanced Transport",
+                      "type": "object",
+                      "value": false
+                    },
+                    "scanResult": {
+                      "label": [
+                        "Address"
+                      ],
+                      "type": "array",
+                      "value": []
+                    }
+                  }
+                },
+                "type": "mTransport"
+              }
+            },
+            "schema": {
+              "inputs": {
+                "assignEngine": {
+                  "args": [
+                    {
+                      "label": "Session Name",
+                      "type": "string"
+                    },
+                    {
+                      "label": "Engine Name",
+                      "type": "string"
+                    }
+                  ],
+                  "label": "Assign Engine"
+                },
+                "newSession": {
+                  "args": [
+                    {
+                      "label": "Transport Name",
+                      "type": "string"
+                    },
+                    {
+                      "label": "Session Name",
+                      "type": "string"
+                    }
+                  ],
+                  "label": "Create Session"
+                },
+                "quit": {
+                  "args": [],
+                  "hidden": true,
+                  "label": "Quit"
+                }
+              },
+              "outputs": {
+                "_adjunctUpdate": {
+                  "value": {}
+                },
+                "log": {
+                  "value": {
+                    "body": "Loaded 1 engines.",
+                    "dt": 1447204098.013,
+                    "origin": "mHub",
+                    "verbosity": 7
+                  }
+                },
+                "shutdownComplete": {
+                  "type": "boolean",
+                  "value": false
+                }
+              }
+            },
+            "type": "mHub"
+          }
+        },
+        "schema": {
+          "inputs": {
+            "quit": {
+              "args": [],
+              "label": "Quit"
+            },
+            "ready": {
+              "args": [
+                {
+                  "label": "Ready",
+                  "type": "boolean"
+                }
+              ],
+              "hidden": true,
+              "label": "ready"
+            },
+            "toggleDevTools": {
+              "args": [],
+              "label": "Toggle dev tools"
+            },
+            "toggleHiddenSchema": {
+              "args": [],
+              "label": "Show schema elements marked hidden"
+            },
+            "toggleLogWindow": {
+              "args": [],
+              "label": "Toggle log window"
+            }
+          },
+          "outputs": {
+            "_adjunctUpdate": {
+              "value": {}
+            },
+            "devToolsOpen": {
+              "label": "Dev tools Open",
+              "type": "boolean"
+            },
+            "loggerWindowOpen": {
+              "label": "Log window Open",
+              "type": "boolean"
+            },
+            "showingHiddenSchema": {
+              "type": "boolean",
+              "value": false
+            }
+          }
+        },
+        "type": "window"
+      }
+    }
+  },
+  "log": {
+    "cache": 500,
+    "data": []
+  },
+  "uiState": {},
+  "interface": {
+    "window": {
+      "adjuncts": {
+        "mHub": {
+          "adjuncts": {
+            "WebSocket.js": {
+              "adjuncts": {},
+              "name": "WebSocketFactory",
+              "schema": {
+                "inputs": {
+                  "connect": {
+                    "args": [
+                      {
+                        "label": "Remote Address",
+                        "type": "string"
+                      },
+                      {
+                        "label": "Port",
+                        "type": "number"
+                      }
+                    ],
+                    "hidden": false,
+                    "label": "Connect"
+                  },
+                  "listen": {
+                    "args": [
+                      {
+                        "label": "Listen",
+                        "type": "boolean"
+                      },
+                      {
+                        "label": "Local Address",
+                        "type": "string"
+                      },
+                      {
+                        "label": "Port",
+                        "type": "number"
+                      }
+                    ],
+                    "hidden": false,
+                    "label": "Listen"
+                  },
+                  "scan": {
+                    "args": [
+                      {
+                        "label": "Scan",
+                        "type": "boolean"
+                      }
+                    ],
+                    "hidden": false,
+                    "label": "Scan"
+                  }
+                },
+                "outputs": {
+                  "connected": {
+                    "label": "Instanced Transport",
+                    "type": "object",
+                    "value": false
+                  },
+                  "listening": {
+                    "label": "Listening",
+                    "type": "boolean",
+                    "value": false
+                  },
+                  "scanResult": {
+                    "label": [
+                      "Address"
+                    ],
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              },
+              "type": "mTransport"
+            },
+            "loopback.js": {
+              "adjuncts": {},
+              "name": "LoopbackFactory",
+              "schema": {
+                "inputs": {
+                  "scan": {
+                    "args": [
+                      {
+                        "label": "Scan",
+                        "type": "boolean"
+                      }
+                    ],
+                    "hidden": false,
+                    "label": "Scan"
+                  }
+                },
+                "outputs": {
+                  "connected": {
+                    "label": "Instanced Transport",
+                    "type": "object",
+                    "value": false
+                  },
+                  "listening": {
+                    "label": "Listening",
+                    "type": "boolean",
+                    "value": true
+                  },
+                  "scanResult": {
+                    "label": [
+                      "Address"
+                    ],
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              },
+              "type": "mTransport"
+            },
+            "mtSerialPort.js": {
+              "adjuncts": {},
+              "name": "SerialPortFactory",
+              "schema": {
+                "inputs": {
+                  "scan": {
+                    "args": [
+                      {
+                        "label": "Scan",
+                        "type": "boolean"
+                      }
+                    ],
+                    "hidden": false,
+                    "label": "Scan"
+                  }
+                },
+                "outputs": {
+                  "connected": {
+                    "label": "Instanced Transport",
+                    "type": "object",
+                    "value": false
+                  },
+                  "scanResult": {
+                    "label": [
+                      "Address"
+                    ],
+                    "type": "array",
+                    "value": []
+                  }
+                }
+              },
+              "type": "mTransport"
+            }
+          },
+          "schema": {
+            "inputs": {
+              "assignEngine": {
+                "args": [
+                  {
+                    "label": "Session Name",
+                    "type": "string"
+                  },
+                  {
+                    "label": "Engine Name",
+                    "type": "string"
+                  }
+                ],
+                "label": "Assign Engine"
+              },
+              "newSession": {
+                "args": [
+                  {
+                    "label": "Transport Name",
+                    "type": "string"
+                  },
+                  {
+                    "label": "Session Name",
+                    "type": "string"
+                  }
+                ],
+                "label": "Create Session"
+              },
+              "quit": {
+                "args": [],
+                "hidden": true,
+                "label": "Quit"
+              }
+            },
+            "outputs": {
+              "_adjunctUpdate": {
+                "value": {}
+              },
+              "log": {
+                "value": {
+                  "body": "Loaded 1 engines.",
+                  "dt": 1447204098.013,
+                  "origin": "mHub",
+                  "verbosity": 7
+                }
+              },
+              "shutdownComplete": {
+                "type": "boolean",
+                "value": false
+              }
+            }
+          },
+          "type": "mHub"
+        }
+      },
+      "schema": {
+        "inputs": {
+          "quit": {
+            "args": [],
+            "label": "Quit"
+          },
+          "ready": {
+            "args": [
+              {
+                "label": "Ready",
+                "type": "boolean"
+              }
+            ],
+            "hidden": true,
+            "label": "ready"
+          },
+          "toggleDevTools": {
+            "args": [],
+            "label": "Toggle dev tools"
+          },
+          "toggleHiddenSchema": {
+            "args": [],
+            "label": "Show schema elements marked hidden"
+          },
+          "toggleLogWindow": {
+            "args": [],
+            "label": "Toggle log window"
+          }
+        },
+        "outputs": {
+          "_adjunctUpdate": {
+            "value": {}
+          },
+          "devToolsOpen": {
+            "label": "Dev tools Open",
+            "type": "boolean"
+          },
+          "loggerWindowOpen": {
+            "label": "Log window Open",
+            "type": "boolean"
+          },
+          "showingHiddenSchema": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      },
+      "type": "window"
+    }
+  }
+}
