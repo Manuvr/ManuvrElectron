@@ -13,16 +13,38 @@ class LogItem extends Component {
 
   render() {
     const { verbosity, logTime, body, origin } = this.props;
-    
+    var row_color = '#ffffff';
+
+    switch (verbosity) {
+      case 0:
+      case 1:
+        row_color = '#ff6666';
+        break;
+      case 2:
+        row_color = '#ff9999';
+        break;
+      case 3:
+        row_color = '#ffff99';
+        break;
+      case 4:
+        row_color = '#99ff99';
+        break;
+      case 5:
+        row_color = '#66ff66';
+        break;
+      case 6:
+        row_color = '#9999ff';
+        break;
+    }
+
+    let row_style = {backgroundColor: row_color};
+
     return (
         <tr>
-          <td>
-            {verbosity}
-          </td>
-          <td>
+          <td style={row_style}>
             {logTime}
           </td>
-          <td>
+          <td style={row_style}>
             {origin}
           </td>
           <td>

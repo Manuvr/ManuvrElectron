@@ -15,11 +15,6 @@ var opacityOverlayStyle = {
   opacity: 0.9
 };
 
-
-var redButtonStyle = {
-  color: 'red'
-};
-
 var logPaneStyle = {
   backgroundColor: '#ffffff',
   opacity: 0.9,
@@ -31,18 +26,19 @@ class Logger extends Component {
 
   constructor() {
     super();
-    // This is !@#$ing stupid.
+
     this.state = {
       scrollbackSize:  1000,
+      verb_filter:  7,
       logStack:  []
     };
-
 
     this.render           = this.render.bind(this);
     this.provideSingleLog = this.provideSingleLog.bind(this);
     this.setInitLogStack  = this.setInitLogStack.bind(this);
     this.clearLog         = this.clearLog.bind(this);
     this.compCb           = this.compCb.bind(this);
+    this.setVerbosity     = this.setVerbosity.bind(this);
   }
 
   componentDidMount() {
@@ -51,7 +47,7 @@ class Logger extends Component {
     ipc.send('loggerReady', true);
   };
 
-  clearLog(test) {
+  clearLog() {
     this.setState({
         logStack: []
     });
@@ -76,12 +72,22 @@ class Logger extends Component {
     //this.setState(uiActions(cbObject, this.state));
   };
 
+  setVerbosity(nu_verb) {
+    this.setState({
+        verb_filter: nu_verb
+    })
+  };
+
   render() {
     var output = [];
+    var vf = this.state.verb_filter;
     this.state.logStack.forEach(function(element, index) {
+      if (element.verbosity <= vf) {
+        console.log(JSON.stringify(element));
         output.push(
           <LogItem key={index} verbosity={element.verbosity} logTime={element.dt} body={element.body} origin={element.origin} />
         );
+      }
     });
 
     return (
@@ -90,14 +96,14 @@ class Logger extends Component {
           <ButtonToolbar>
             <Button onClick={this.clearLog}><Glyphicon glyph="trash" /></Button>
             <ButtonGroup>
-              <Button>0</Button>
-              <Button>1</Button>
-              <Button>2</Button>
-              <Button>3</Button>
-              <Button>4</Button>
-              <Button>5</Button>
-              <Button>6</Button>
-              <Button>7</Button>
+              <Button onClick={this.setVerbosity.bind(this, 0)}>0</Button>
+              <Button onClick={this.setVerbosity.bind(this, 1)}>1</Button>
+              <Button onClick={this.setVerbosity.bind(this, 2)}>2</Button>
+              <Button onClick={this.setVerbosity.bind(this, 3)}>3</Button>
+              <Button onClick={this.setVerbosity.bind(this, 4)}>4</Button>
+              <Button onClick={this.setVerbosity.bind(this, 5)}>5</Button>
+              <Button onClick={this.setVerbosity.bind(this, 6)}>6</Button>
+              <Button onClick={this.setVerbosity.bind(this, 7)}>7</Button>
             </ButtonGroup>
           </ButtonToolbar>
         </div>
