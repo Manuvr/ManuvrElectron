@@ -15,7 +15,7 @@ class LogItem extends Component {
     const { verbosity, logTime, body, origin } = this.props;
     var row_color = '#ffffff';
 
-    switch (this.verbosity) {
+    switch (verbosity) {
       case 0:
       case 1:
         row_color = '#ff6666';
@@ -37,12 +37,14 @@ class LogItem extends Component {
         break;
     }
 
+    let row_style = {backgroundColor: row_color};
+
     return (
         <tr>
-          <td backgroundColor='{row_color}'>
+          <td style={row_style}>
             {logTime}
           </td>
-          <td backgroundColor='{row_color}'>
+          <td style={row_style}>
             {origin}
           </td>
           <td>
