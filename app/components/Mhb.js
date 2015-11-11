@@ -5,6 +5,8 @@ import { map as _map } from 'lodash';
 
 import SelfDefineMaster from './SelfDefineMaster';
 import Window from './Window';
+import LeftWindow from './LeftWindow';
+import CenterWindow from './CenterWindow';
 
 // styling
 import AppBar from 'material-ui/lib/app-bar';
@@ -78,11 +80,10 @@ class Mhb extends Component {
 
           <Row className="show-grid" style={ { height: '100%' } }>
             <Col xs={2} style={menuStyle}>
-              Menu test
+              <LeftWindow config={config} callback={layerCallback} />
             </Col>
             <Col xs={10}>
-              <div>This is the main window</div>
-              <Button bsStyle="primary">Primary</Button>
+              <CenterWindow config={config} callback={layerCallback} />
             </Col>
           </Row>
 
@@ -94,7 +95,7 @@ class Mhb extends Component {
           showExpandableButton={true}>
         </CardHeader>
         <CardText expandable={true}>
-        <SelfDefineMaster config={config} callback={layerCallback} />
+        <SelfDefineMaster config={config.interface} callback={layerCallback} />
         </CardText>
         </Card>
 
@@ -104,7 +105,7 @@ class Mhb extends Component {
             showExpandableButton={true}>
           </CardHeader>
           <CardText expandable={true}>
-            <pre >{JSON.stringify(config, null, 2)}</pre>
+            <pre >{JSON.stringify(config.interface, null, 2)}</pre>
           </CardText>
         </Card>
 
