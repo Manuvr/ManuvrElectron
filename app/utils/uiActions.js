@@ -24,6 +24,14 @@ export default function uiActions(cbObject, currentState) {
             //console.log(cbObject.data.path)
             retObj.showHidden = cbObject.data.value;
             break;
+          case "showJsonTree":
+            //console.log(cbObject.data.path)
+            retObj.showJsonTree = cbObject.data.value;
+            break;
+          case "showDebug":
+            //console.log(cbObject.data.path)
+            retObj.showDebug = cbObject.data.value;
+            break;
           default:
             console.log("badly formatted 'local'")
           break;

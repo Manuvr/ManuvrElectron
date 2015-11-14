@@ -7,13 +7,11 @@
   </head>
   <body>
     <!-- React attachment point -->
-    <div id="root" style="height : 85%"></div>
+    <div id="root" style="height : 100%"></div>
     <!--<script src="http://localhost:8080/webpack-dev-server.js"></script>-->
-
     <!-- LOADS IPC FROM ELECTRON -->
-    <script>  var ipc = require('ipc'); </script>
+    <script> var ipc = require('ipc'); </script>
     <!-- LOADS THE WEBPACK BUNDLE -->
     <script src="http://localhost:8080/app/bundle.js"></script>
-
   </body>
 </html>

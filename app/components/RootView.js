@@ -29,7 +29,7 @@ class RootView extends Component {
 
     let topStyle = {
       backgroundColor: 'purple',
-      color: 'White',
+      color: 'white',
       textAlign: 'left',
       verticalAlign: 'middle',
       height: 90
@@ -44,7 +44,6 @@ class RootView extends Component {
     }
 
     let menuStyle = {
-      backgroundColor: 'LightGrey',
       color: 'black',
       textAlign: 'center',
       "height": "100%"
@@ -61,30 +60,27 @@ class RootView extends Component {
     }
 
     return (
-      <div style={{"height" : "100%"}}>
-        <Grid fluid={true} style={{"height" : "100%"}}>
+      <div >
+        <Grid fluid={true} >
           <Row className="show-grid" >
-            <Col xs={7} style={topStyle}>
-              <h1><Image src="media/manuvr_transparent.png" height="60" rounded style={imgStyle} />&nbsp; Manuvr</h1>
+            <Col xs={4} style={topStyle}>
+              <h1 style={{ marginTop: 10}}><Image src="media/manuvr_transparent.png" height="60" rounded style={imgStyle} /><span className="manuvr">&nbsp;manu<span style={{ color: "Violet"}}>vr</span></span></h1>
             </Col>
-            <Col xs={5} style={windowButtonStyle}>
+            <Col xs={8} style={windowButtonStyle}>
               {windowObj}
             </Col>
           </Row>
-
-          <Row className="show-grid" style={{"height" : "100%"}}>
+          <Row className="show-grid" >
             <Col xs={3} style={menuStyle}>
-              <LeftWindow config={config} callback={layerCallback} style={{"height" : "100%"}} />
+              <br />
+              <LeftWindow config={config} callback={layerCallback}  />
             </Col>
             <Col xs={9}>
-              <CenterWindow config={config} callback={layerCallback} style={{"height" : "100%"}} />
+              <CenterWindow config={config} callback={layerCallback} />
             </Col>
           </Row>
-
         </Grid>
-
       </div>
-
     )
 
   }
