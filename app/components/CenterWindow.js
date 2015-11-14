@@ -3,6 +3,7 @@ import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon } from 'react-boot
 import { get as _get } from 'lodash';
 
 import MHub from './MHub'
+import LoopbackFactory from './LoopbackFactory'
 
 
 class CenterWindow extends Component {
@@ -40,6 +41,12 @@ class CenterWindow extends Component {
       switch(adjType) {
         case "mHub":
           return (<MHub config={config} callback={callback} key="mHub"/>)
+          break;
+        case "mTransportFactory":
+          switch (currentAdj.name) {
+            case 'LoopbackFactory': return(<LoopbackFactory config={config} callback={callback} />);
+            default:                return(<div>Unimplemented transport component.</div>);
+          }
           break;
         default:
           return (

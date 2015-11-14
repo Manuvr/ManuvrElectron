@@ -7,9 +7,8 @@ class LoopbackFactory extends Component {
     super();
 
     this.state = {
-      data: []
+      scanResult: []
     }
-    this.scan = this.scan.bind(this);
     this.render = this.render.bind(this);
   }
 
@@ -22,7 +21,9 @@ class LoopbackFactory extends Component {
     var output = [];
     this.state.scanResult.forEach(function(element, index) {
       output.push(
-        <a>{element}</a><br />
+        <a>{element}</a>, /* lol
+        jsx */
+        <br />
       );
     });
 
@@ -31,7 +32,7 @@ class LoopbackFactory extends Component {
         <div><b>Scan results:</b>
           {output}
         </div>
-        <Button onClick={this.scan} bsSize="small"><Glyphicon glyph="wrench" />  {(config.outputs.devToolsOpen.value) ? 'Close' : 'Open'} Scan</Button>
+        <Button bsSize="small"><Glyphicon glyph="wrench" />Scan</Button>
       </div>
     );
   }
