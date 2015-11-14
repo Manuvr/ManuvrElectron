@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon, Grid, Row, Col } from 'react-bootstrap';
 
-import { forOwn as _forOwn, has as _has } from 'lodash';
+import { forOwn as _forOwn, has as _has, get as _get } from 'lodash';
 
 import Inputs from './Inputs';
 import Outputs from './Outputs';
@@ -37,16 +37,20 @@ class GenericAdj extends Component {
 
     if(_has(adj, ["schema", "inputs"])) {
       _forOwn(adj.schema.inputs, function(val, key){
-        inputs.push(
-          <form className="form-horizontal">
-          <Inputs key={key} name={key} def={val} callback={sub} />
-          </form>)
+        if(_get(val, ["hidden"]) !== true) {
+          inputs.push(
+            <form className="form-horizontal">
+            <Inputs key={key} name={key} def={val} callback={sub} />
+            </form>)
+          }
       })
     }
 
     if(_has(adj, ["schema", "outputs"])) {
       _forOwn(adj.schema.outputs, function(val, key){
-        outputs.push(<Outputs key={key} name={key} def={val} />)
+        if(_get(val, ["hidden"]) !== true) {
+          outputs.push(<Outputs key={key} name={key} def={val} />)
+        }
       })
     }
 

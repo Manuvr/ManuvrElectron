@@ -51,13 +51,6 @@ class CenterWindow extends Component {
           }
           break;
         default:
-          // return (
-          //   <div>
-          //     path: {config.uiState.mainWindow}<br/>
-          //     type: {currentAdj.type}
-          //   </div>
-          // )
-
           return (<GenericAdj adj={currentAdj} uiState={config.uiState} callback={callback} />)
           break;
       }

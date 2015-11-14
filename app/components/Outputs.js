@@ -26,7 +26,7 @@ class Inputs extends Component {
 
     let displayLabel = def.label ? def.label : name;
 
-    let stateString = (typeof def.value !== "" && def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
+    let stateString = (typeof def.value !== "object" && def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
     compList.push(<Input key="state" type="text" addonBefore={displayLabel} placeholder={stateString} disabled/>)
 
 
