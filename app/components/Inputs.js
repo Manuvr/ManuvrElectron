@@ -22,7 +22,7 @@ class Inputs extends Component {
     this.props.callback(
       {
         target: [this.props.name],
-        data: this.state.data
+        data: this.state.data ? this.state.data : false
       }
     )
   }
@@ -73,17 +73,21 @@ class Inputs extends Component {
               wrapperClassName="col-xs-offset-6 col-xs-6"
               key={index}
               type="checkbox"
-              checked={state.data[index]}
+              value={state.data[index]}
               label={localLabel}
-              onCheck={handleCheck.bind(this, index)} />
+              onChange={handleCheck.bind(this, index)}
+               />
           )
+          if(state.data[index] === undefined) {
+            state.data[index] = false;
+          }
         } else  {
           compList.push(
             <Input
             labelClassName="col-xs-6" wrapperClassName="col-xs-6"
             type="text"
             key={index}
-            value={state.data[index]}
+            checked={state.data[index]}
             onChange={handleChange.bind(this, index)}
             placeholder={currVal.type}
             label={localLabel} />);

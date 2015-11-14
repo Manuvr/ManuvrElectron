@@ -66,7 +66,7 @@ class LeftWindow extends Component {
 
 
     return (
-      <div>
+      <div style={{"height" : "100%"}}>
         { treePush(adjTreeReduce(config.interface, [])) }
       </div>
     );

@@ -16,7 +16,8 @@ class CenterWindow extends Component {
     super();
 
     this.state = {
-      data: []
+      data: [],
+      open: true
     }
     this.render = this.render.bind(this);
   }
@@ -70,13 +71,26 @@ class CenterWindow extends Component {
 
     return (
       <div>
+      <span>
       <Button bsSize="xsmall" onClick={ ()=> this.setState({ open: !this.state.open })}>
         Show Generic Debug
       </Button>
+
+      <Button bsSize="xsmall" onClick={ ()=> this.setState({ open2: !this.state.open2 })}>
+        Show Json Tree
+      </Button>
+      </span>
       <Collapse in={this.state.open}>
         <div>
           <Well>
             {generic}
+          </Well>
+        </div>
+      </Collapse>
+      <Collapse in={this.state.open2}>
+        <div>
+          <Well>
+            {JSON.stringify(config, null, 2)}
           </Well>
         </div>
       </Collapse>

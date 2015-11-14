@@ -53,7 +53,7 @@ class Mhb extends Component {
       backgroundColor: 'LightGrey',
       color: 'black',
       textAlign: 'center',
-      height: '500px'
+      "height": "100%"
     }
 
     let imgStyle = {
@@ -67,8 +67,8 @@ class Mhb extends Component {
     }
 
     return (
-      <div>
-        <Grid fluid={true}>
+      <div style={{"height" : "100%"}}>
+        <Grid fluid={true} style={{"height" : "100%"}}>
           <Row className="show-grid" >
             <Col xs={7} style={topStyle}>
               <h1><Image src="media/manuvr_transparent.png" height="60" rounded style={imgStyle} />&nbsp; Manuvr</h1>
@@ -78,36 +78,16 @@ class Mhb extends Component {
             </Col>
           </Row>
 
-          <Row className="show-grid" style={ { height: '100%' } }>
+          <Row className="show-grid" style={{"height" : "100%"}}>
             <Col xs={3} style={menuStyle}>
-              <LeftWindow config={config} callback={layerCallback} />
+              <LeftWindow config={config} callback={layerCallback} style={{"height" : "100%"}} />
             </Col>
             <Col xs={9}>
-              <CenterWindow config={config} callback={layerCallback} />
+              <CenterWindow config={config} callback={layerCallback} style={{"height" : "100%"}} />
             </Col>
           </Row>
 
         </Grid>
-
-        <Card initiallyExpanded={false}>
-        <CardHeader
-          title="Old Self-Define"
-          showExpandableButton={true}>
-        </CardHeader>
-        <CardText expandable={true}>
-        <SelfDefineMaster config={config.interface} callback={layerCallback} />
-        </CardText>
-        </Card>
-
-        <Card initiallyExpanded={false}>
-          <CardHeader
-            title="Current JSON interface state"
-            showExpandableButton={true}>
-          </CardHeader>
-          <CardText expandable={true}>
-            <pre >{JSON.stringify(config, null, 2)}</pre>
-          </CardText>
-        </Card>
 
       </div>
 

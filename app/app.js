@@ -15,7 +15,7 @@ let injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
 if (document.getElementById('root') !== null) {
-  ReactDOM.render(<Root />, document.getElementById('root'));
+  ReactDOM.render(<Root style={{"height" : "100%"}} />, document.getElementById('root'));
 }
 else if (document.getElementById('logger_root') !== null) {
   ReactDOM.render(<Logger />, document.getElementById('logger_root'));

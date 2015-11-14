@@ -26,12 +26,17 @@ class Inputs extends Component {
 
     let displayLabel = def.label ? def.label : name;
 
-    let stateString = (typeof def.value !== "object" && def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
-    compList.push(<Input key="state" type="text" addonBefore={displayLabel} placeholder={stateString} disabled/>)
+    var style = "success";
 
+    if(!def.hasOwnProperty("type")){
+      style = "error"
+    }
+
+    let stateString = (typeof def.value !== "object" && def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
+    compList.push(<Input bsStyle={style} key="state" type="text" addonBefore={displayLabel} placeholder={stateString} disabled/>)
 
     return (
-      <form className="form-horizontal">{compList}</form>
+      <div className="form-horizontal">{compList}</div>
     )
   }
 }
