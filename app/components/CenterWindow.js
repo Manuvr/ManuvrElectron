@@ -52,7 +52,7 @@ class CenterWindow extends Component {
         case "mTransportFactory":
           switch (currentAdj.name) {
             case 'LoopbackFactory':         return(<LoopbackFactory config={config} callback={callback} />);
-            case 'Websocket':               return(<WebsocketFactory config={config} callback={callback} />);
+            case 'WebSocketFactory':        return(<WebsocketFactory config={config} callback={callback} />);
             case 'SerialPortFactory':       return(<SerialPortFactory config={config} callback={callback} />);
             case 'BluetoothSerialFactory':  return(<BluetoothSerialFactory config={config} callback={callback} />);
             default:                        return(<div>Unimplemented transport component.</div>);
