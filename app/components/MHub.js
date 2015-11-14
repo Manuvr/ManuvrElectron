@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon } from 'react-bootstrap';
 
+import MSession from './MSession';
+
 
 class MHub extends Component {
 
