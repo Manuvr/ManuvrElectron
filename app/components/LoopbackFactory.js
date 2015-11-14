@@ -9,6 +9,7 @@ class LoopbackFactory extends Component {
     this.state = {
       data: []
     }
+    this.scan = this.scan.bind(this);
     this.render = this.render.bind(this);
   }
 
@@ -18,10 +19,19 @@ class LoopbackFactory extends Component {
 
   render() {
     const { config, callback } = this.props;
+    var output = [];
+    this.state.scanResult.forEach(function(element, index) {
+      output.push(
+        <a>{element}</a><br />
+      );
+    });
 
     return (
       <div>
-        omg, yu no finish component?
+        <div><b>Scan results:</b>
+          {output}
+        </div>
+        <Button onClick={this.scan} bsSize="small"><Glyphicon glyph="wrench" />  {(config.outputs.devToolsOpen.value) ? 'Close' : 'Open'} Scan</Button>
       </div>
     );
   }

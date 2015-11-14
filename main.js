@@ -169,6 +169,28 @@ var window = function() {
   ee.call(this);
   var that = this;
 
+
+  this.openDevTools = function(_open) {
+    // Instantiating a satalite window to view log.
+    if (_open ^ !mainWindow.webContents.isDevToolsOpened()) {
+      // If the present state and the desired state match,
+      //   do nothing and return.
+      return;
+    }
+    if (_open) {
+      mainWindow.webContents.openDevTools({detach: true});
+    }
+    else {
+      mainWindow.webContents.closeDevTools();
+    }
+    mainWindow.webContents.send('api', {
+      target: ["devToolsOpen", "window"],
+      data:   _open
+    })
+    config.devToolsOpen = _open;
+    config.dirty = true;
+  }
+
   this.openLogWindow = function(_open) {
     // Instantiating a satalite window to view log.
     if (_open ^ !loggerWindow) {
@@ -259,21 +281,7 @@ var window = function() {
           label: "Toggle dev tools",
           args: [],
           func: function(me, data) {
-            var toggle;
-            if (mainWindow.webContents.isDevToolsOpened()) {
-              toggle = false;
-              mainWindow.webContents.closeDevTools();
-            }
-            else {
-              toggle = true;
-              mainWindow.webContents.openDevTools({detach: true});
-            }
-            mainWindow.webContents.send('api', {
-              target: ["devToolsOpen", "window"],
-              data:   toggle
-            })
-            config.devToolsOpen = toggle;
-            config.dirty = true;
+            me.openDevTools(!mainWindow.webContents.isDevToolsOpened());
           }
         },
         'toggleLogWindow': {
@@ -432,7 +440,6 @@ app.on('ready', function() {
 
   mainWindow.show();
   if (config.logWindowOpen) window.openLogWindow(true);
-  //if (config.devToolsOpen) window.toggleDevTools(true);
-  //mainWindow.webContents.openDevTools({detach: true});
+  if (config.devToolsOpen) window.toggleDevTools(true);
   //window.emit('input', {target:['ready']});
 });
