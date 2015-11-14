@@ -39,7 +39,7 @@ class GenericAdj extends Component {
       _forOwn(adj.schema.inputs, function(val, key){
         if(_get(val, ["hidden"]) !== true) {
           inputs.push(
-            <form className="form-horizontal">
+            <form key={key}className="form-horizontal">
             <Inputs key={key} name={key} def={val} callback={sub} />
             </form>)
           }
