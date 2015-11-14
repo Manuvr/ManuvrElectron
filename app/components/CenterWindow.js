@@ -3,8 +3,9 @@ import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon } from 'react-boot
 import { get as _get } from 'lodash';
 
 import MHub from './MHub'
+import GenericAdj from './GenericAdj'
 import LoopbackFactory from './LoopbackFactory'
-
+import WebsocketFactory from './WebsocketFactory'
 
 class CenterWindow extends Component {
 
@@ -45,16 +46,19 @@ class CenterWindow extends Component {
         case "mTransportFactory":
           switch (currentAdj.name) {
             case 'LoopbackFactory': return(<LoopbackFactory config={config} callback={callback} />);
+            case 'WebsocketFactory': return(<WebsocketFactory config={config} callback={callback} />);
             default:                return(<div>Unimplemented transport component.</div>);
           }
           break;
         default:
-          return (
-            <div>
-              path: {config.uiState.mainWindow}<br/>
-              type: {currentAdj.type}
-            </div>
-          )
+          // return (
+          //   <div>
+          //     path: {config.uiState.mainWindow}<br/>
+          //     type: {currentAdj.type}
+          //   </div>
+          // )
+
+          return (<GenericAdj adj={currentAdj} uiState={config.uiState} callback={callback} />)
           break;
       }
     }
