@@ -49,26 +49,14 @@ class LeftWindow extends Component {
 
     var treePush = function(arr) {
       var out = [];
-      for(var x in arr) {
-        // ELEMENTS
-        out.push(<li key={x} onClick={setMain.bind(this, arr[x].path)}> { arr[x].text } </li>);
-        if(arr[x].hasOwnProperty("nodes")){
-            out.push(treePush(arr[x].nodes));
-        }
-      }
-        // UL WRAPPERS
-      return (<ul key={arr[0].text}> {out} </ul>);
-    }
-
-    var push2 = function(arr) {
-      var out = [];
       out = arr.map(function(c, i, a){
         var tmp = [];
+        var act = c.text === config.uiState.mainWindow[config.uiState.mainWindow.length - 1] ? "success" : "default";
         if(c.hasOwnProperty("nodes")){
-          tmp.push(push2(c.nodes))
+          tmp.push(treePush(c.nodes))
         }
         return(
-          <ListGroupItem key={c.text}>
+          <ListGroupItem key={c.text} bsStyle={act} style={{ color: 'black'}}>
             <h4 onClick={setMain.bind(this, c.path)}>{c.text}</h4>
             {tmp}
           </ListGroupItem>)
@@ -79,7 +67,7 @@ class LeftWindow extends Component {
 
     return (
       <div>
-        { push2(adjTreeReduce(config.interface, [])) }
+        { treePush(adjTreeReduce(config.interface, [])) }
       </div>
     );
   }

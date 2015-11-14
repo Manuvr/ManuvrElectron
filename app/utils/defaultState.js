@@ -11,7 +11,7 @@ export default {
 
   // this can store whatever ui info we need later
   uiState: {
-    mainWindow: []
+    mainWindow: ["window"]
   },
 
   // our interface spec from the host

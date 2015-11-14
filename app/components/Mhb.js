@@ -118,20 +118,3 @@ class Mhb extends Component {
 }
 
 export default Mhb;
-
-//   (
-//
-//     <SelfDefineMaster config={config} callback={layerCallback} />
-//       <br/><br/>
-//
-//       <Card initiallyExpanded={false}>
-//         <CardHeader
-//           title="Current JSON interface state"
-//           showExpandableButton={true}>
-//         </CardHeader>
-//         <CardText expandable={true}>
-//           <pre >{JSON.stringify(config, null, 2)}</pre>
-//         </CardText>
-//       </Card>
-//   </div>
-// )

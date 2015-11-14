@@ -17,7 +17,6 @@ class CenterWindow extends Component {
   componentDidMount() {
   };
 
-
   render() {
     const { config, callback } = this.props;
 
@@ -35,9 +34,8 @@ class CenterWindow extends Component {
 
     return (
       <div>
-        Main Window<br />
-        {config.uiState.mainWindow}<br/>
-        {getElemFromPath(config.uiState.mainWindow, "type")}
+        path: {config.uiState.mainWindow}<br/>
+        type: {getElemFromPath(config.uiState.mainWindow, "type")}
       </div>
     );
   }
