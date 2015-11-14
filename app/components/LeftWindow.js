@@ -40,7 +40,7 @@ class LeftWindow extends Component {
     var adjTreeReduce = function(adjDef, path) {
       var tmp = [];
       for(var key in adjDef) {
-        if(config.uiState.showHidden || _get(adjDef, ["hidden"]) !== true) {
+        if(config.uiState.showHidden || _get(adjDef[key], ["hidden"]) !== true) {
           tmp.push({ text: key });
           tmp[tmp.length - 1].path = path.slice();
           tmp[tmp.length - 1].path.push(key)
@@ -69,7 +69,7 @@ class LeftWindow extends Component {
             {tmp}
           </ListGroupItem>)
       })
-      return(<ListGroup key={arr[0].text}> {out} </ListGroup>)
+      return(<ListGroup key={arr}> {out} </ListGroup>)
     }
 
 
