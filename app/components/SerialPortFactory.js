@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon } from 'react-bootstrap';
 
-class WebsocketFactory extends Component {
+class SerialPortFactory extends Component {
 
   constructor() {
     super();
@@ -50,4 +50,4 @@ class WebsocketFactory extends Component {
   }
 }
 
-export default WebsocketFactory;
+export default SerialPortFactory;
