@@ -11,11 +11,15 @@ export default {
 
   // this can store whatever ui info we need later
   uiState: {
-
+    mainWindow: []
   },
 
   // our interface spec from the host
   interface: {
-    "window": {}
+    "window": {
+      adjuncts: {
+        "mHub": {}
+      }
+    }
   }
 }

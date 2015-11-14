@@ -20,7 +20,7 @@ class LoopbackFactory extends Component {
     const { config, callback } = this.props;
 
     return (
-      <div >
+      <div>
         omg, yu no finish component?
       </div>
     );

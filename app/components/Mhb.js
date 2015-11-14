@@ -51,7 +51,7 @@ class Mhb extends Component {
 
     let menuStyle = {
       backgroundColor: 'LightGrey',
-      color: 'white',
+      color: 'black',
       textAlign: 'center',
       height: '500px'
     }
@@ -79,10 +79,10 @@ class Mhb extends Component {
           </Row>
 
           <Row className="show-grid" style={ { height: '100%' } }>
-            <Col xs={2} style={menuStyle}>
+            <Col xs={3} style={menuStyle}>
               <LeftWindow config={config} callback={layerCallback} />
             </Col>
-            <Col xs={10}>
+            <Col xs={7}>
               <CenterWindow config={config} callback={layerCallback} />
             </Col>
           </Row>
@@ -105,7 +105,7 @@ class Mhb extends Component {
             showExpandableButton={true}>
           </CardHeader>
           <CardText expandable={true}>
-            <pre >{JSON.stringify(config.interface, null, 2)}</pre>
+            <pre >{JSON.stringify(config, null, 2)}</pre>
           </CardText>
         </Card>
 
