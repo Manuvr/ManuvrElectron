@@ -6,6 +6,9 @@ import MHub from './MHub'
 import GenericAdj from './GenericAdj'
 import LoopbackFactory from './LoopbackFactory'
 import WebsocketFactory from './WebsocketFactory'
+import BluetoothSerialFactory from './BluetoothSerialFactory'
+import SerialPortFactory from './SerialPortFactory'
+import MSession from './MSession'
 
 class CenterWindow extends Component {
 
@@ -43,11 +46,16 @@ class CenterWindow extends Component {
         case "mHub":
           return (<MHub config={config} callback={callback} key="mHub"/>)
           break;
+        case "mSession":
+          return (<MSession config={config} callback={callback} key="{currentAdj.name}"/>)
+          break;
         case "mTransportFactory":
           switch (currentAdj.name) {
-            case 'LoopbackFactory': return(<LoopbackFactory config={config} callback={callback} />);
-            case 'WebsocketFactory': return(<WebsocketFactory config={config} callback={callback} />);
-            default:                return(<div>Unimplemented transport component.</div>);
+            case 'LoopbackFactory':         return(<LoopbackFactory config={config} callback={callback} />);
+            case 'Websocket':               return(<WebsocketFactory config={config} callback={callback} />);
+            case 'SerialPortFactory':       return(<SerialPortFactory config={config} callback={callback} />);
+            case 'BluetoothSerialFactory':  return(<BluetoothSerialFactory config={config} callback={callback} />);
+            default:                        return(<div>Unimplemented transport component.</div>);
           }
           break;
         default:
