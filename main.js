@@ -440,6 +440,6 @@ app.on('ready', function() {
 
   mainWindow.show();
   if (config.logWindowOpen) window.openLogWindow(true);
-  if (config.devToolsOpen) window.toggleDevTools(true);
+  if (config.devToolsOpen) window.openDevTools(true);
   //window.emit('input', {target:['ready']});
 });
