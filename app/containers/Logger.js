@@ -113,7 +113,6 @@ class Logger extends Component {
           <Table responsive>
             <thead>
               <tr>
-                <th>Verbosity</th>
                 <th>Time</th>
                 <th>Origin</th>
                 <th>Body</th>
