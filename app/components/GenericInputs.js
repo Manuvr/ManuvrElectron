@@ -5,7 +5,7 @@ import { Input, Button, Panel, Grid, Col } from 'react-bootstrap';
 
 // input types: boolean, string, number
 
-class Inputs extends Component {
+class GenericInputs extends Component {
 
   constructor() {
     super();
@@ -102,4 +102,4 @@ class Inputs extends Component {
   }
 }
 
-export default Inputs;
+export default GenericInputs;

@@ -20,6 +20,10 @@ export default function uiActions(cbObject, currentState) {
             //console.log(cbObject.data.path)
             retObj.mainWindow = cbObject.data.path;
             break;
+          case "showHidden":
+            //console.log(cbObject.data.path)
+            retObj.showHidden = cbObject.data.value;
+            break;
           default:
             console.log("badly formatted 'local'")
           break;

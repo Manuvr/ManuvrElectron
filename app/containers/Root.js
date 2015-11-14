@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Mhb from '../components/Mhb';
+import RootView from '../components/RootView';
 
 import socketActions from '../utils/socketActions.js';
 import uiActions from '../utils/uiActions.js';
@@ -37,7 +37,7 @@ class DebugApp extends Component {
 
   render() {
     return (
-        <Mhb config={this.state} cb={this.compCb} style={{"height" : "100%"}}/>
+        <RootView config={this.state} cb={this.compCb} style={{"height" : "100%"}}/>
     );
   }
 }

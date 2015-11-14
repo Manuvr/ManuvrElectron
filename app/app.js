@@ -11,8 +11,6 @@ import Logger from './containers/Logger';
 //Check this repo:
 //https://github.com/zilverline/react-tap-event-plugin
 
-let injectTapEventPlugin = require("react-tap-event-plugin");
-injectTapEventPlugin();
 
 if (document.getElementById('root') !== null) {
   ReactDOM.render(<Root style={{"height" : "100%"}} />, document.getElementById('root'));

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon } from 'react-bootstrap';
-import Mhb from './Mhb';
 
 class Window extends Component {
 
@@ -48,8 +47,10 @@ class Window extends Component {
     //   of the interface_spec. Rework this in a manner that works everywhere.
     this.props.callback(
       {
-        target: ['toggleHiddenSchema', 'window'],
-        data: {}
+        target: ['__local', 'showHidden'],
+        data: {
+          value: !this.props.uiState.showHidden
+        }
       }
     )
   };
@@ -66,7 +67,7 @@ class Window extends Component {
   }
 
   render() {
-    const { config, callback } = this.props;
+    const { config, callback, uiState } = this.props;
 
     // TODO: Floppy-saved should reflect when the schema is dirty, and eligible for re-persisting (saving) the state.
     return (
@@ -77,7 +78,7 @@ class Window extends Component {
 
         <Button onClick={this.toggleTools} bsSize="small"><Glyphicon glyph="wrench" />  {(config.outputs.devToolsOpen.value) ? 'Close' : 'Open'} Tools</Button>
 
-        <Button onClick={this.changeViewMode} bsSize="small"><Glyphicon glyph="cog" />  {(config.outputs.showingHiddenSchema.value) ? 'Hide' : 'Show'} hidden</Button>
+        <Button onClick={this.changeViewMode} bsSize="small"><Glyphicon glyph="cog" />  {(uiState.showHidden) ? 'Hide' : 'Show'} hidden</Button>
         </ButtonGroup>
     );
     //return (

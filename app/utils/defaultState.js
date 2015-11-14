@@ -11,7 +11,8 @@ export default {
 
   // this can store whatever ui info we need later
   uiState: {
-    mainWindow: ["window", "mHub"]
+    mainWindow: ["window", "mHub"],
+    showHidden: false
   },
 
   // our interface spec from the host

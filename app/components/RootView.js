@@ -3,20 +3,14 @@ import { map as _map } from 'lodash';
 
 // styling and components
 
-import SelfDefineMaster from './SelfDefineMaster';
 import Window from './Window';
 import LeftWindow from './LeftWindow';
 import CenterWindow from './CenterWindow';
 
-// styling
-import AppBar from 'material-ui/lib/app-bar';
-import FlatButton from 'material-ui/lib/flat-button';
-import { Card, CardHeader, CardText, CardActions } from 'material-ui/lib/card';
-import { IconButton } from 'material-ui/lib/icon-button'
 
 import {Grid, Row, Col, Button, Image} from 'react-bootstrap';
 
-class Mhb extends Component {
+class RootView extends Component {
 
   constructor() {
     super();
@@ -63,7 +57,7 @@ class Mhb extends Component {
 
     var windowObj = "derp"
     if(config.interface.window.hasOwnProperty("schema")) {
-      windowObj = (<Window config={config.interface.window.schema} callback={layerCallback} />)
+      windowObj = (<Window config={config.interface.window.schema} uiState={config.uiState} callback={layerCallback} />)
     }
 
     return (
@@ -97,4 +91,4 @@ class Mhb extends Component {
 
 }
 
-export default Mhb;
+export default RootView;

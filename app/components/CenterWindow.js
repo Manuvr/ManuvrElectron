@@ -90,7 +90,7 @@ class CenterWindow extends Component {
       <Collapse in={this.state.open2}>
         <div>
           <Well>
-            {JSON.stringify(config, null, 2)}
+            <pre>{JSON.stringify(config, null, 2)}</pre>
           </Well>
         </div>
       </Collapse>

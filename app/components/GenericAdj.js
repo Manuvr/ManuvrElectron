@@ -3,9 +3,8 @@ import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon, Grid, Row, Col } 
 
 import { forOwn as _forOwn, has as _has, get as _get } from 'lodash';
 
-import Inputs from './Inputs';
-import Outputs from './Outputs';
-
+import GenericInputs from './GenericInputs';
+import GenericOutputs from './GenericOutputs';
 
 class GenericAdj extends Component {
 
@@ -37,10 +36,10 @@ class GenericAdj extends Component {
 
     if(_has(adj, ["schema", "inputs"])) {
       _forOwn(adj.schema.inputs, function(val, key){
-        if(_get(val, ["hidden"]) !== true) {
+        if(_get(val, ["hidden"]) !== true || uiState.showHidden) {
           inputs.push(
             <form key={key}className="form-horizontal">
-            <Inputs key={key} name={key} def={val} callback={sub} />
+            <GenericInputs key={key} name={key} def={val} callback={sub} />
             </form>)
           }
       })
@@ -48,8 +47,8 @@ class GenericAdj extends Component {
 
     if(_has(adj, ["schema", "outputs"])) {
       _forOwn(adj.schema.outputs, function(val, key){
-        if(_get(val, ["hidden"]) !== true) {
-          outputs.push(<Outputs key={key} name={key} def={val} />)
+        if(_get(val, ["hidden"]) !== true || uiState.showHidden) {
+          outputs.push(<GenericOutputs key={key} name={key} def={val} />)
         }
       })
     }
