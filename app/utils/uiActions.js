@@ -3,9 +3,9 @@ import {merge as _merge, set as _set, get as _get, has as _has, forEachRight as 
 export default function uiActions(cbObject, currentState) {
   // DO NOT MANIPULATE CURRENTSTATE
   console.log("ui out: \""
-    + cbObject.target[0]
-    + "\" to \""
-    + cbObject.target[1]
+    + cbObject.target.reduce(function(p, c, i, a){
+      return p + ", " + c
+    })
     + "\" : "
     + cbObject.data);
 

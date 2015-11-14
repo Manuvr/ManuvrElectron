@@ -34,9 +34,9 @@ export default function socketActions(msgObj, intSpec) {
       //logging all output type packets....
       //console.log("Received: " + JSON.stringify(msgObj, null, 2));
       console.log("ui in: \""
-        + msgObj.target[0]
-        + "\" from \""
-        + msgObj.target[1]
+        + msgObj.target.reduce(function(p, c, i, a){
+          return p + ", " + c
+        })
         + "\" : "
         + msgObj.data);
 

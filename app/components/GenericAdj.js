@@ -23,7 +23,7 @@ class GenericAdj extends Component {
   };
 
   submit(x){
-    x.target = x.target.concat(this.props.uiState.mainWindow.reverse())
+    x.target = x.target.concat(this.props.uiState.mainWindow.slice().reverse())
     this.props.callback(x)
   };
 
