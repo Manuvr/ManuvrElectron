@@ -30,12 +30,14 @@ class CenterWindow extends Component {
       return newPath
     }
 
-    var getElemFromPath = function(path, elem) {
-      return _get(config.interface, pathBuild(path).concat([elem]))
+    var getAdjFromPath = function(path) {
+      return _get(config.interface, pathBuild(path))
     }
 
-    var loadComponent = function(type) {
-      switch(type) {
+    var currentAdj = getAdjFromPath(config.uiState.mainWindow);
+
+    var loadComponent = function(adjType) {
+      switch(adjType) {
         case "mHub":
           return (<MHub config={config} callback={callback} key="mHub"/>)
           break;
@@ -43,7 +45,7 @@ class CenterWindow extends Component {
           return (
             <div>
               path: {config.uiState.mainWindow}<br/>
-              type: {getElemFromPath(config.uiState.mainWindow, "type")}
+              type: {currentAdj.type}
             </div>
           )
           break;
@@ -52,7 +54,7 @@ class CenterWindow extends Component {
 
     return (
       <div>
-        {loadComponent(getElemFromPath(config.uiState.mainWindow, "type"))}
+        {loadComponent(currentAdj.type)}
       </div>
     );
   }
