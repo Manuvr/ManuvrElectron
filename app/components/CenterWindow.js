@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon } from 'react-bootstrap';
 import { get as _get } from 'lodash';
 
+import MHub from './MHub'
+
 
 class CenterWindow extends Component {
 
@@ -32,10 +34,25 @@ class CenterWindow extends Component {
       return _get(config.interface, pathBuild(path).concat([elem]))
     }
 
+    var loadComponent = function(type) {
+      switch(type) {
+        case "mHub":
+          return (<MHub config={config} callback={callback} key="mHub"/>)
+          break;
+        default:
+          return (
+            <div>
+              path: {config.uiState.mainWindow}<br/>
+              type: {getElemFromPath(config.uiState.mainWindow, "type")}
+            </div>
+          )
+          break;
+      }
+    }
+
     return (
       <div>
-        path: {config.uiState.mainWindow}<br/>
-        type: {getElemFromPath(config.uiState.mainWindow, "type")}
+        {loadComponent(getElemFromPath(config.uiState.mainWindow, "type"))}
       </div>
     );
   }

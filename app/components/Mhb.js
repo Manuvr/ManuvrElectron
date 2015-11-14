@@ -79,10 +79,10 @@ class Mhb extends Component {
           </Row>
 
           <Row className="show-grid" style={ { height: '100%' } }>
-            <Col xs={3} style={menuStyle}>
+            <Col xs={2} style={menuStyle}>
               <LeftWindow config={config} callback={layerCallback} />
             </Col>
-            <Col xs={7}>
+            <Col xs={8}>
               <CenterWindow config={config} callback={layerCallback} />
             </Col>
           </Row>

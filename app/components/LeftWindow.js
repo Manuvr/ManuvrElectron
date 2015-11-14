@@ -51,13 +51,13 @@ class LeftWindow extends Component {
       var out = [];
       out = arr.map(function(c, i, a){
         var tmp = [];
-        var act = c.text === config.uiState.mainWindow[config.uiState.mainWindow.length - 1] ? "success" : "default";
+        var act = c.text === config.uiState.mainWindow[config.uiState.mainWindow.length - 1] ? "success" : "warning";
         if(c.hasOwnProperty("nodes")){
           tmp.push(treePush(c.nodes))
         }
         return(
           <ListGroupItem key={c.text} bsStyle={act} style={{ color: 'black'}}>
-            <h4 onClick={setMain.bind(this, c.path)}>{c.text}</h4>
+            <h5 onClick={setMain.bind(this, c.path)}>{c.text}</h5>
             {tmp}
           </ListGroupItem>)
       })

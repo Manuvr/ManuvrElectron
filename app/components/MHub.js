@@ -11,6 +11,7 @@ class MHub extends Component {
       data: []
     }
     this.render = this.render.bind(this);
+    this.handleClick = this.handleClick.bind(this)
   }
 
 //newSession
@@ -20,6 +21,10 @@ class MHub extends Component {
   componentDidMount() {
   };
 
+  handleClick(){
+    console.log("clicked!")
+  }
+
 
   render() {
     const { config, callback } = this.props;
@@ -27,8 +32,9 @@ class MHub extends Component {
     // TODO: Floppy-saved should reflect when the schema is dirty, and eligible for re-persisting (saving) the state.
     return (
       <div>
-        <Button onClick={}><Glyphicon glyph="equalizer" />  Engines</Button>
-        <Button onClick={}><Glyphicon glyph="link" />   Transports</Button>
+        HEYO.
+        <Button onClick={this.handleClick}><Glyphicon glyph="equalizer" />  Engines</Button>
+        <Button onClick={this.handleClick}><Glyphicon glyph="link" />   Transports</Button>
       </div>
     );
   }
