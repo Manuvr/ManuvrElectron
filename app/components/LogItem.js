@@ -42,7 +42,7 @@ class LogItem extends Component {
     return (
         <tr>
           <td style={row_style}>
-            {logTime}
+            {logTime.substring(0, 8)}
           </td>
           <td style={row_style}>
             {origin}

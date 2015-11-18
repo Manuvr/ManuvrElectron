@@ -84,7 +84,7 @@ class Logger extends Component {
     this.state.logStack.forEach(function(element, index) {
       if (element.verbosity <= vf) {
         console.log(JSON.stringify(element));
-        output.push(
+        output.unshift(
           <LogItem key={index} verbosity={element.verbosity} logTime={element.dt} body={element.body} origin={element.origin} />
         );
       }
