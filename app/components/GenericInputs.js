@@ -9,6 +9,7 @@ class GenericInputs extends Component {
 
   constructor() {
     super();
+
     this.state = {
       data: []
     }
@@ -16,6 +17,23 @@ class GenericInputs extends Component {
     this.render        = this.render.bind(this);
     this.handleChange  = this.handleChange.bind(this);
     this.handleCheck  = this.handleCheck.bind(this);
+  }
+
+  componentDidMount() {
+    console.log("HERP")
+    if(this.props.hasOwnProperty('def') && Array.isArray(this.props.def.args) && this.state.data.length === 0) {
+      console.log("DERP")
+      var defVals = []
+      this.props.def.args.map(function(c, i, a){
+        if(c.hasOwnProperty('def')){
+          defVals[i] = c.def;
+        } else {
+          defVals[i] = ""
+        }
+      })
+      console.log(defVals)
+      this.setState({ data: defVals} )
+    }
   }
 
   layerCallback() {
@@ -87,7 +105,7 @@ class GenericInputs extends Component {
             labelClassName="col-xs-6" wrapperClassName="col-xs-6"
             type="text"
             key={index}
-            checked={state.data[index]}
+            value={state.data[index]}
             onChange={handleChange.bind(this, index)}
             placeholder={currVal.type}
             label={localLabel} />);
