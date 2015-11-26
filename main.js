@@ -3,7 +3,7 @@ var BrowserWindow = require('browser-window');
 var ipc           = require('ipc');
 var fs            = require('fs');
 var util          = require('util');
-var _throttle     = require('lodash.throttle');
+var _throttle     = require('lodash').throttle;
 var inherits = require('util').inherits;
 var ee = require('events').EventEmitter;
 
