@@ -20,9 +20,7 @@ class GenericInputs extends Component {
   }
 
   componentDidMount() {
-    console.log("HERP")
-    if(this.props.hasOwnProperty('def') && Array.isArray(this.props.def.args) && this.state.data.length === 0) {
-      console.log("DERP")
+    if(this.props.hasOwnProperty('def') && Array.isArray(this.props.def.args) && this.state.data.length < 2) {
       var defVals = []
       this.props.def.args.map(function(c, i, a){
         if(c.hasOwnProperty('def')){
@@ -31,7 +29,6 @@ class GenericInputs extends Component {
           defVals[i] = ""
         }
       })
-      console.log(defVals)
       this.setState({ data: defVals} )
     }
   }
