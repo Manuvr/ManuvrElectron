@@ -40,6 +40,7 @@ class GenericInputs extends Component {
         data: this.state.data ? this.state.data : false
       }
     )
+    this.setState( { data: [] })
   }
 
   handleChange(id, e) {
