@@ -325,10 +325,14 @@ var window = function() {
     adjuncts: {
     },
     taps: {
-      "mHub": {
-        'log': function(me, msg, adjunctID) {
-          pushToLog(msg);
-          return false;
+      names: {
+      },
+      types: {
+        "mHub": {
+          'log': function(me, msg, adjunctID) {
+            pushToLog(msg);
+            return false;
+          }
         }
       }
     }
