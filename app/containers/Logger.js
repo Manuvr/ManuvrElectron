@@ -54,14 +54,14 @@ class Logger extends Component {
   };
 
   // emits coming in.  capable of setting state.  Should ONLY touch state.interface
-  setInitLogStack(data) {
+  setInitLogStack(chan, data) {
     this.setState({
         logStack: data
     })
   }
 
   // emits coming in.  capable of setting state.  Should ONLY touch state.interface
-  provideSingleLog(msg) {
+  provideSingleLog(chan, msg) {
     this.setState({
         logStack: this.state.logStack.concat(msg)
     })

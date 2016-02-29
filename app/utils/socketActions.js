@@ -1,6 +1,7 @@
 import {merge as _merge, set as _set, get as _get, has as _has, forEachRight as _forEachRight} from 'lodash'
 
 var buildPath = function(target) {
+  console.log(target)
   var tempArray = []
   if(target.length > 2) {
     _forEachRight(target.slice(2, target.length), function(n){

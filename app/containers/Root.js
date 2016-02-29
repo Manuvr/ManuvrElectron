@@ -26,7 +26,7 @@ class DebugApp extends Component {
   };
 
   // emits coming in.  capable of setting state.  Should ONLY touch state.interface
-  ipcInput(data) {
+  ipcInput(chan, data) {
       this.setState(socketActions(data, this.state));
   }
 

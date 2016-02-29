@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon, ListGroupItem, ListGroup } from 'react-bootstrap';
+import { Button, ButtonToolbar, ButtonGroup, Table, Glyphicon, ListGroupItem, ListGroup }
+  from 'react-bootstrap';
 import {  get as _get } from 'lodash';
 
 function arraysEqual(a1,a2) {
@@ -52,12 +53,12 @@ class LeftWindow extends Component {
       return tmp
     };
 
-    var treePush = function(arr, pass) {
+    const treePush = function(arr, pass) {
       pass = pass === undefined ? [] : pass;
-      var out = [];
+      let out = [];
       out = arr.map(function(c, i, a){
-        var tmp = [];
-        var myPass = pass.concat([c.text])
+        let tmp = [];
+        let myPass = pass.concat([c.text])
         let style = { backgroundColor: "white", color: "black", padding: 4, topMargin: 1, bottomMargin: 1, borderColor: "Grey" }
         style.backgroundColor = arraysEqual(myPass, config.uiState.mainWindow) === true ? "LightGreen" : "LightGrey";
         if(c.hasOwnProperty("nodes")){

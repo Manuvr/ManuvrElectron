@@ -10,7 +10,7 @@
     <div id="root" style="height : 100%"></div>
     <!--<script src="http://localhost:8080/webpack-dev-server.js"></script>-->
     <!-- LOADS IPC FROM ELECTRON -->
-    <script> var ipc = require('ipc'); </script>
+    <script> var ipc = require('electron').ipcRenderer; </script>
     <!-- LOADS THE WEBPACK BUNDLE -->
     <script src="http://localhost:8080/app/bundle.js"></script>
   </body>
