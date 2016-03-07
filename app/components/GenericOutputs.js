@@ -33,7 +33,7 @@ class GenericOutputs extends Component {
     }
 
     let stateString = (typeof def.value !== "object" && def.value !== undefined && def.value !== null && def.value.toString() !== "" ? def.value.toString() : "(undefined)");
-    compList.push(<Input bsStyle={style} key="state" type="text" addonBefore={displayLabel} placeholder={stateString} disabled/>)
+    compList.push(<Input bsStyle={style} key="state" type="text" addonBefore={displayLabel} value={stateString} disabled></Input>)
 
     return (
       <div className="form-horizontal">{compList}</div>
