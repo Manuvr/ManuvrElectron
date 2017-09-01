@@ -1,13 +1,16 @@
-var app           = require('app');
-var BrowserWindow = require('browser-window');
-var ipc           = require('ipc');
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  MenuItem
+} = require('electron');
+
 var fs            = require('fs');
 var util          = require('util');
 var _throttle     = require('lodash').throttle;
 var inherits = require('util').inherits;
 var ee = require('events').EventEmitter;
-
-const electronLocalshortcut = require('electron-localshortcut');
 
 
 // I changed this....
@@ -124,9 +127,9 @@ loadConfig();
  * This function does not return.
  */
 function quit(exit_code) {
-  electronLocalshortcut.unregisterAll(mainWindow);
+  //electronLocalshortcut.unregisterAll(mainWindow);
   if (loggerWindow) {
-    electronLocalshortcut.unregisterAll(loggerWindow);
+    //electronLocalshortcut.unregisterAll(loggerWindow);
     loggerWindow.close();
   }
 
@@ -208,7 +211,7 @@ var window = function() {
         'skip-taskbar': true
       });
       //loggerWindow.setMenu(null);
-      loggerWindow.loadUrl('file://'+__dirname+'/app/logger.html');
+      loggerWindow.loadURL('file://'+__dirname+'/app/logger.html');
       loggerWindow.on('closed',
         function() {
           loggerWindow = false;
@@ -373,7 +376,7 @@ app.on('ready', function() {
     mainWindow.center();
   }
 
-  mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
+  mainWindow.loadURL('file://'+__dirname+'/app/app.html');
 
   mainWindow.on('closed', function() {
     mainWindow = null;
@@ -397,18 +400,23 @@ app.on('ready', function() {
 
 
   var dom_loaded = false;
+  //const menu = new Menu();
+  //menu.append(new MenuItem({
+  //  label: 'Print',
+  //  accelerator: 'CmdOrCtrl+P',
+  //  click: () => { console.log('time to print stuff') }
+  //}))
 
+  //if (electronLocalshortcut.isRegistered(mainWindow, 'Ctrl+R')) {
+  //  electronLocalshortcut.unregister(mainWindow, 'Ctrl+R');
+  //}
 
-  if (electronLocalshortcut.isRegistered(mainWindow, 'Ctrl+R')) {
-    electronLocalshortcut.unregister(mainWindow, 'Ctrl+R');
-  }
-
-  electronLocalshortcut.register(mainWindow, 'Ctrl+R', function() {
-    mainWindow.loadUrl('file://'+__dirname+'/app/app.html');
-  });
+  //electronLocalshortcut.register(mainWindow, 'Ctrl+R', function() {
+    mainWindow.loadURL('file://'+__dirname+'/app/app.html');
+  //});
 
   // Listener to take input from the user back into MHB.
-  ipc.on('api', function(event, message) {
+  ipcMain.on('api', function(event, message) {
       if(message.target[message.target.length - 1] === "window") {
         message.target.pop();
       }
@@ -417,7 +425,7 @@ app.on('ready', function() {
   });
 
   // Listener to take input from the user back into MHB.
-  ipc.on('loggerReady', function(event, message) {
+  ipcMain.on('loggerReady', function(event, message) {
     if (loggerWindow) {
       loggerWindow.webContents.send('fullLog', cached_logs);
     }
